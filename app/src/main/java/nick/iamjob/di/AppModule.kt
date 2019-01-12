@@ -4,8 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.content.res.Resources
 import android.net.ConnectivityManager
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
 import dagger.Module
 import dagger.Provides
 import nick.core.di.AppScope
@@ -18,14 +16,6 @@ import nick.networking.di.RemoteDataModule
     ]
 )
 class AppModule {
-
-    @AppScope
-    @Provides
-    fun processLifecycleOwner(): LifecycleOwner = ProcessLifecycleOwner.get()
-
-    @AppScope
-    @Provides
-    fun processLifecycle(lifecycleOwner: LifecycleOwner) = lifecycleOwner.lifecycle
 
     @AppScope
     @Provides
