@@ -1,7 +1,8 @@
-package nick.iamjob
+package nick.iamjob.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import nick.iamjob.R
 
 class MainActivity : AppCompatActivity() {
 
