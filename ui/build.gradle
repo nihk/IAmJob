@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation project(':core')
+
+    api "androidx.core:core-ktx:$androidx_core_version"
+    api "androidx.activity:activity-ktx:$androidx_activity_version"
+    api "androidx.fragment:fragment-ktx:$androidx_fragment_version"
+    api "androidx.appcompat:appcompat:$androidx_appcompat_version"
+    api "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    api "com.google.android.material:material:$material_version"
+    api "com.github.chrisbanes:PhotoView:$photoview_version"
+    api "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    api "com.afollestad.material-dialogs:core:$material_dialogs_version"
+}
