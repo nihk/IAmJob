@@ -1,8 +1,8 @@
-package nick.data
+package nick.data.model
 
 import com.squareup.moshi.Json
 
-data class JobItem(
+data class Position(
     val id: String,
     val type: String,
     val url: String,

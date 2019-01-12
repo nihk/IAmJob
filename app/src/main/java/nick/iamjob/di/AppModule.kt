@@ -9,8 +9,14 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import dagger.Module
 import dagger.Provides
 import nick.core.di.AppScope
+import nick.networking.di.RemoteDataModule
 
-@Module
+@Module(
+    includes = [
+        ViewModelModule::class,
+        RemoteDataModule::class
+    ]
+)
 class AppModule {
 
     @AppScope
