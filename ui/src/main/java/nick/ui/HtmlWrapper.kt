@@ -3,10 +3,10 @@ package nick.ui
 import android.os.Build
 import android.text.Html
 import android.text.Spanned
+import nick.core.di.AppScope
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@AppScope
 class HtmlWrapper @Inject constructor() {
 
     fun fromHtml(text: String): Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

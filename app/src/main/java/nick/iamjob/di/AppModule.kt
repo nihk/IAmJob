@@ -8,28 +8,28 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import nick.core.di.AppScope
 
 @Module
 class AppModule {
 
-    @Singleton
+    @AppScope
     @Provides
     fun processLifecycleOwner(): LifecycleOwner = ProcessLifecycleOwner.get()
 
-    @Singleton
+    @AppScope
     @Provides
     fun processLifecycle(lifecycleOwner: LifecycleOwner) = lifecycleOwner.lifecycle
 
-    @Singleton
+    @AppScope
     @Provides
     fun applicationContext(application: Application): Context = application.applicationContext
 
-    @Singleton
+    @AppScope
     @Provides
     fun applicationResources(application: Application): Resources = application.resources
 
-    @Singleton
+    @AppScope
     @Provides
     fun connectivityManager(applicationContext: Context) =
         applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

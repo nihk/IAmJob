@@ -1,9 +1,9 @@
 package nick.core.util
 
+import nick.core.di.AppScope
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@AppScope
 class CurrentTime @Inject constructor() {
 
     fun inMillis() = System.currentTimeMillis()
