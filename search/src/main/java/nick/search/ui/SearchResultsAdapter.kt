@@ -5,13 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import nick.data.model.Position
 import nick.search.R
+import nick.search.util.OnPositionClicked
 
-class SearchResultsAdapter : ListAdapter<Position, PositionViewHolder>(PositionDiffCallback) {
+class SearchResultsAdapter(
+    private val onPositionClicked: OnPositionClicked
+) : ListAdapter<Position, PositionViewHolder>(PositionDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         LayoutInflater.from(parent.context)
             .inflate(R.layout.item_position, parent, false)
-            .let { PositionViewHolder(it) }
+            .let { PositionViewHolder(it, onPositionClicked) }
 
     override fun onBindViewHolder(holder: PositionViewHolder, position: Int) {
         holder.bind(getItem(position))

@@ -7,7 +7,7 @@ import androidx.room.*
 data class SavedPosition(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COL_ID)
-    val id: Long,
+    val id: Long = 0L,
     @Embedded(prefix = COL_POSITION_PREFIX)
     val position: Position
 ) {

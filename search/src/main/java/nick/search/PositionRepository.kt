@@ -2,17 +2,21 @@ package nick.search
 
 import io.reactivex.Completable
 import nick.data.dao.PositionsDao
+import nick.data.dao.SavedPositionsDao
 import nick.data.model.Position
+import nick.data.model.SavedPosition
 import nick.data.model.Search
 import nick.networking.service.GitHubJobsService
 import javax.inject.Inject
 
-class SearchRepository @Inject constructor(
+class PositionRepository @Inject constructor(
     private val service: GitHubJobsService,
-    private val dao: PositionsDao
+    private val positionsDao: PositionsDao,
+    private val savedPositionsDao: SavedPositionsDao
 ) {
 
-    val positions = dao.queryAll()
+    val positions = positionsDao.queryAll()
+    val savedPositions = savedPositionsDao.queryAll()
 
     fun search(search: Search): Completable = with(search) {
         service.fetchPositions(
@@ -29,8 +33,14 @@ class SearchRepository @Inject constructor(
     }
 
     fun deleteAllPositions(): Completable =
-        Completable.fromAction { dao.deleteAll() }
+        Completable.fromAction { positionsDao.deleteAll() }
 
     fun insertPositions(positions: List<Position>): Completable =
-        Completable.fromAction { dao.insertEntities(positions) }
+        Completable.fromAction { positionsDao.insertEntities(positions) }
+
+    fun insertSavedPosition(savedPosition: SavedPosition): Completable =
+        Completable.fromAction { savedPositionsDao.insertEntity(savedPosition) }
+
+    fun deleteSavedPosition(savedPosition: SavedPosition): Completable =
+        Completable.fromAction { savedPositionsDao.deleteEntity(savedPosition) }
 }
