@@ -13,9 +13,9 @@ class MainActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val host = supportFragmentManager.findFragmentById(R.id.i_am_job_host)
-                as? NavHostFragment ?: return
-
-        bottom_navigation.setupWithNavController(host.navController)
+        (supportFragmentManager.findFragmentById(R.id.i_am_job_host)
+                as? NavHostFragment)?.let {
+            bottom_navigation.setupWithNavController(it.navController)
+        }
     }
 }

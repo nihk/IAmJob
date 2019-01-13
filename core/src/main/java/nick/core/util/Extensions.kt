@@ -17,25 +17,23 @@ fun <T> Single<T>.applySchedulers(): Single<T> =
 
 
 fun View.visibleOrGone(shouldBeVisible: Boolean) {
-    if (shouldBeVisible) {
-        if (visibility != View.VISIBLE) {
-            visibility = View.VISIBLE
-        }
-    } else {
-        if (visibility != View.GONE) {
-            visibility = View.GONE
-        }
-    }
+    setVisibility(this, shouldBeVisible, View.GONE)
 }
 
 fun View.visibleOrInvisible(shouldBeVisible: Boolean) {
-    if (shouldBeVisible) {
-        if (visibility != View.VISIBLE) {
-            visibility = View.VISIBLE
-        }
-    } else {
-        if (visibility != View.INVISIBLE) {
-            visibility = View.INVISIBLE
+    setVisibility(this, shouldBeVisible, View.INVISIBLE)
+}
+
+private fun setVisibility(view: View, shouldBeVisible: Boolean, notVisibleState: Int) {
+    with(view) {
+        if (shouldBeVisible) {
+            if (visibility != View.VISIBLE) {
+                visibility = View.VISIBLE
+            }
+        } else {
+            if (visibility != notVisibleState) {
+                visibility = notVisibleState
+            }
         }
     }
 }

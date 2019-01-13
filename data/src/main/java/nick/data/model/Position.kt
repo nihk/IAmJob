@@ -1,7 +1,10 @@
 package nick.data.model
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Position(
     val id: String,
     val type: String,
@@ -18,4 +21,4 @@ data class Position(
     val howToApply: String,
     @Json(name = "company_logo")
     val companyLogo: String
-)
+) : Parcelable

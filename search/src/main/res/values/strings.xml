@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">search</string>
+    <string name="key_search">search</string>
 </resources>

@@ -14,11 +14,11 @@ interface GitHubJobsService {
 
     @GET("positions")
     fun fetchPositions(
-        @Query("search") search: String?,
+        @Query("description") description: String?,
         @Query("location") location: String?,
-        @Query("full_time") fullTime: Boolean?,
         @Query("lat") latitude: Double?,
         @Query("long") longitude: Double?,
+        @Query("full_time") fullTime: Boolean?,
         @Query("page") page: Int? = 0
     ): Single<List<Position>>
 
