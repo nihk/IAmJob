@@ -8,12 +8,14 @@ import dagger.Module
 import dagger.Provides
 import nick.core.di.ApplicationScope
 import nick.core.di.ApplicationContext
+import nick.data.di.DataModule
 import nick.networking.di.RemoteDataModule
 
 @Module(
     includes = [
         ViewModelModule::class,
-        RemoteDataModule::class
+        RemoteDataModule::class,
+        DataModule::class
     ]
 )
 class ApplicationModule {

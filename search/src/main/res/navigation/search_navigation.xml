@@ -9,18 +9,6 @@
         android:name="nick.search.ui.SearchFragment"
         android:label="SearchFragment">
         <action
-            android:id="@+id/to_search_results"
-            app:destination="@id/search_results" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/search_results"
-        android:name="nick.search.ui.SearchResultsFragment"
-        android:label="SearchResultsFragment">
-        <argument
-            android:name="search"
-            app:argType="nick.data.model.Search" />
-        <action
             android:id="@+id/to_position"
             app:destination="@id/position" />
     </fragment>
@@ -36,7 +24,7 @@
 
     <fragment
         android:id="@+id/saved_dest"
-        android:name="nick.search.ui.SavedResultsFragment"
+        android:name="nick.search.ui.SavedPositionsFragment"
         android:label="SavedResultsFragment" >
         <action
             android:id="@+id/to_position"

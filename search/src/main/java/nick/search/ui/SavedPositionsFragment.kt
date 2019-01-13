@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import nick.search.R
 import nick.ui.BaseFragment
 
-class PositionFragment : BaseFragment() {
+class SavedPositionsFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_position, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_saved_positions, container, false)
 }

@@ -12,7 +12,7 @@ interface GitHubJobsService {
         const val BASE_URL = "https://jobs.github.com/"
     }
 
-    @GET("positions")
+    @GET("positions.json")
     fun fetchPositions(
         @Query("description") description: String?,
         @Query("location") location: String?,
