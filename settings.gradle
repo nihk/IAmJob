@@ -1,1 +1,1 @@
-include ':app', ':core', ':data', ':networking', ':ui'
+include ':iamjob', ':core', ':data', ':networking', ':ui', ':search'

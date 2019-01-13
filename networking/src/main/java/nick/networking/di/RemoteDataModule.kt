@@ -2,7 +2,7 @@ package nick.networking.di
 
 import dagger.Module
 import dagger.Provides
-import nick.core.di.AppScope
+import nick.core.di.ApplicationScope
 import nick.networking.service.GitHubJobsService
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -17,17 +17,17 @@ object RemoteDataModule {
     @JvmStatic
     fun retrofitBuilder() = Retrofit.Builder()
 
-    @AppScope
+    @ApplicationScope
     @Provides
     @JvmStatic
     fun moshiConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create()
 
-    @AppScope
+    @ApplicationScope
     @Provides
     @JvmStatic
     fun rxJava2CallAdapterFactory(): RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.create()
 
-    @AppScope
+    @ApplicationScope
     @Provides
     @JvmStatic
     fun gitHubJobsService(

@@ -5,12 +5,12 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
-import nick.core.di.AppScope
+import nick.core.di.ApplicationScope
 
 @Module
 object DataModule {
 
-    @AppScope
+    @ApplicationScope
     @Provides
     @JvmStatic
     fun sharedPreferences(applicationContext: Context): SharedPreferences =
