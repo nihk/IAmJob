@@ -7,7 +7,7 @@ import nick.data.model.Position
 import nick.search.R
 import nick.search.util.OnPositionClicked
 
-class SearchResultsAdapter(
+class PositionsAdapter(
     private val onPositionClicked: OnPositionClicked
 ) : ListAdapter<Position, PositionViewHolder>(PositionDiffCallback) {
 

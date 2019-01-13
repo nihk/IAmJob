@@ -14,8 +14,8 @@ import nick.search.util.PositionsLoadingState
 import timber.log.Timber
 import javax.inject.Inject
 
-class PositionViewModel @Inject constructor(
-    private val repository: PositionRepository
+class PositionsViewModel @Inject constructor(
+    private val repository: PositionsRepository
 ) : BaseRxViewModel() {
 
     private val _loadingState = MutableLiveData<PositionsLoadingState>()

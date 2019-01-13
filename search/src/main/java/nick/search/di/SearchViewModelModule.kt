@@ -5,13 +5,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import nick.core.di.ViewModelKey
-import nick.search.PositionViewModel
+import nick.search.PositionsViewModel
 
 @Module
 abstract class SearchViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(PositionViewModel::class)
-    abstract fun positionViewModel(positionViewModel: PositionViewModel): ViewModel
+    @ViewModelKey(PositionsViewModel::class)
+    abstract fun positionsViewModel(positionsViewModel: PositionsViewModel): ViewModel
 }

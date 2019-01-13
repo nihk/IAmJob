@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_search.*
 import nick.core.util.visibleOrGone
-import nick.search.PositionViewModel
+import nick.search.PositionsViewModel
 import nick.search.R
 import nick.search.util.OnPositionClicked
 import nick.search.util.PositionAction
@@ -22,11 +22,11 @@ class SearchFragment
     : BaseFragment()
     , OnPositionClicked {
 
-    private val viewModel: PositionViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory).get(PositionViewModel::class.java)
+    private val viewModel: PositionsViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
     }
 
-    private val adapter = SearchResultsAdapter(this)
+    private val adapter = PositionsAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

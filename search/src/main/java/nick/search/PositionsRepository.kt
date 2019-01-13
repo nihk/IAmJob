@@ -9,7 +9,7 @@ import nick.data.model.Search
 import nick.networking.service.GitHubJobsService
 import javax.inject.Inject
 
-class PositionRepository @Inject constructor(
+class PositionsRepository @Inject constructor(
     private val service: GitHubJobsService,
     private val positionsDao: PositionsDao,
     private val savedPositionsDao: SavedPositionsDao
