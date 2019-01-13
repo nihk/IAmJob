@@ -1,7 +1,7 @@
 package nick.search
 
 import io.reactivex.Completable
-import nick.data.dao.PositionDao
+import nick.data.dao.PositionsDao
 import nick.data.model.Position
 import nick.data.model.Search
 import nick.networking.service.GitHubJobsService
@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class SearchRepository @Inject constructor(
     private val service: GitHubJobsService,
-    private val dao: PositionDao
+    private val dao: PositionsDao
 ) {
 
     val positions = dao.queryAll()

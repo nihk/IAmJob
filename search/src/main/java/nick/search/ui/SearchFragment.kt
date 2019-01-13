@@ -13,6 +13,7 @@ import nick.search.R
 import nick.search.SearchViewModel
 import nick.ui.BaseFragment
 
+// TODO: Scrolling down needs to slide search fields and bottom nav out of view
 class SearchFragment : BaseFragment() {
 
     private val viewModel: SearchViewModel by lazy {

@@ -6,7 +6,7 @@ import androidx.room.Query
 import nick.data.model.Position
 
 @Dao
-interface PositionDao : BaseDao<Position> {
+interface PositionsDao : BaseDao<Position> {
 
     @Query("SELECT * FROM ${Position.TABLE_NAME}")
     fun queryAll(): LiveData<List<Position>>
