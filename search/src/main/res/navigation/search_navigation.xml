@@ -2,10 +2,10 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation"
-    app:startDestination="@id/search_dest">
+    app:startDestination="@id/jobs_dest">
 
     <fragment
-        android:id="@+id/search_dest"
+        android:id="@+id/jobs_dest"
         android:name="nick.search.ui.SearchFragment"
         android:label="SearchFragment">
         <action

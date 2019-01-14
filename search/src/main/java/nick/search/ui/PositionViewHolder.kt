@@ -18,7 +18,13 @@ class PositionViewHolder(
         itemView.company.text = position.company
         itemView.location.text = position.location
         itemView.save_position.isEnabled = true
-        setUiSavedState(position)
+        itemView.save_position.setImageResource(
+            if (position.isSaved) {
+                R.drawable.ic_saved_filled
+            } else {
+                R.drawable.ic_saved
+            }
+        )
 
         itemView.setOnClickListener {
             onPositionClicked.handleAction(PositionAction.MoreDetails(position))
@@ -28,15 +34,5 @@ class PositionViewHolder(
             onPositionClicked.handleAction(PositionAction.SaveOrUnsave(position))
             itemView.save_position.isEnabled = false
         }
-    }
-
-    private fun setUiSavedState(position: Position) {
-        itemView.save_position.setImageResource(
-            if (position.isSaved) {
-                R.drawable.ic_saved_filled
-            } else {
-                R.drawable.ic_saved
-            }
-        )
     }
 }

@@ -7,6 +7,11 @@ import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import nick.iamjob.R
 
+// UI should ideally look something like:
+// https://blog.usejournal.com/android-material-design-components-backdrop-96a3044a3b2
+// todo: tint status bar to be translucent
+// todo: screen should draw under status bar
+// todo: swipe to refresh search page
 class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

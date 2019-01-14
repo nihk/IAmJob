@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">IAmJob</string>
-    <string name="search">Search</string>
+    <string name="jobs">Jobs</string>
     <string name="saved">Saved</string>
 </resources>

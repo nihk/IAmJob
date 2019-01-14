@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/search_dest"
-        android:icon="@drawable/ic_search"
-        android:title="@string/search" />
+        android:id="@+id/jobs_dest"
+        android:icon="@drawable/ic_jobs"
+        android:title="@string/jobs" />
     <item
         android:id="@+id/saved_dest"
         android:icon="@drawable/ic_saved"
