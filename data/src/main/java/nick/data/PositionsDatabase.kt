@@ -2,20 +2,17 @@ package nick.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import nick.data.dao.EphemeralPositionsDao
-import nick.data.dao.SavedPositionsDao
-import nick.data.model.EphemeralPosition
-import nick.data.model.SavedPosition
+import nick.data.dao.PositionsDao
+import nick.data.model.Position
 
 @Database(
-    entities = [EphemeralPosition::class, SavedPosition::class],
+    entities = [Position::class],
     version = 1,
     exportSchema = false
 )
 abstract class PositionsDatabase : RoomDatabase() {
-
-    abstract fun ephemeralPositionsDao(): EphemeralPositionsDao
-    abstract fun savedPositionsDao(): SavedPositionsDao
+    
+    abstract fun positionsDao(): PositionsDao
 
     companion object {
         const val DATABASE_NAME = "positions.db"

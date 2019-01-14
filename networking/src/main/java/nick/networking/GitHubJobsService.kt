@@ -1,4 +1,4 @@
-package nick.networking.service
+package nick.networking
 
 import io.reactivex.Single
 import nick.data.model.Position

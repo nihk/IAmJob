@@ -3,20 +3,20 @@ package nick.search.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import nick.data.model.EphemeralPosition
+import nick.data.model.Position
 import nick.search.R
 import nick.search.util.OnPositionClicked
 
-class EphemeralPositionsAdapter(
+class PositionsAdapter(
     private val onPositionClicked: OnPositionClicked
-) : ListAdapter<EphemeralPosition, EphemeralPositionViewHolder>(EphemeralPositionDiffCallback) {
+) : ListAdapter<Position, PositionViewHolder>(PositionDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_ephemeral_position, parent, false)
-            .let { EphemeralPositionViewHolder(it, onPositionClicked) }
+            .inflate(R.layout.item_position, parent, false)
+            .let { PositionViewHolder(it, onPositionClicked) }
 
-    override fun onBindViewHolder(holder: EphemeralPositionViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PositionViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }

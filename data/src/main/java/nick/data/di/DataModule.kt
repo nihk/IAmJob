@@ -38,10 +38,5 @@ object DataModule {
     @ApplicationScope
     @Provides
     @JvmStatic
-    fun ephemeralPositionsDao(database: PositionsDatabase) = database.ephemeralPositionsDao()
-
-    @ApplicationScope
-    @Provides
-    @JvmStatic
-    fun savedPositionsDao(database: PositionsDatabase) = database.savedPositionsDao()
+    fun positionsDao(database: PositionsDatabase) = database.positionsDao()
 }

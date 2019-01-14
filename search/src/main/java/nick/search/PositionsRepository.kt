@@ -1,26 +1,19 @@
 package nick.search
 
 import io.reactivex.Completable
-import nick.data.dao.EphemeralPositionsDao
-import nick.data.dao.SavedPositionsDao
-import nick.data.model.EphemeralPosition
-import nick.data.model.SavedPosition
+import nick.data.dao.PositionsDao
+import nick.data.model.Position
 import nick.data.model.Search
-import nick.networking.service.GitHubJobsService
+import nick.networking.GitHubJobsService
 import javax.inject.Inject
 
-// FIXME: New idea -- only have one Position POJO. It will have a field for a timestamp of when it was fetched.
-// only show jobs in the SearchFragment if it matches that timestamp. If any of the previously saved positions
-// are found from the remote call, update their timestamp
-// On new items, only delete those that aren't saved
 class PositionsRepository @Inject constructor(
     private val service: GitHubJobsService,
-    private val ephemeralPositionsDao: EphemeralPositionsDao,
-    private val savedPositionsDao: SavedPositionsDao
+    private val positionsDao: PositionsDao
 ) {
 
-    val positions = ephemeralPositionsDao.queryAll()
-    val savedPositions = savedPositionsDao.queryAll()
+    val positions = positionsDao.queryAllFresh()
+    val savedPositions = positionsDao.queryAllSaved()
 
     fun search(search: Search): Completable = with(search) {
         service.fetchPositions(
@@ -31,51 +24,32 @@ class PositionsRepository @Inject constructor(
             isFullTime,
             page
         ).flatMapCompletable { fetchedPositions ->
-
-            val savedPositions = savedPositionsDao.queryAllBlocking().toMutableList()
-
-            // Update saved positions with any changes that happened remotely
-            savedPositions.forEachIndexed { index, savedPosition ->
-                fetchedPositions.find {
-                    savedPosition.id == it.id
-                }?.let {
-                    savedPositions.set(index, SavedPosition(it, savedPosition.isSaved, savedPosition.hasApplied))
-                }
+            // Mark all saved positions as stale -- we don't want them showing up in search results
+            // if they're not part of that result set
+            val savedPositions = positionsDao.queryAllSavedBlocking().map {
+                it.copy(isFresh = false)
             }
 
-            // Now convert the fetched positions into ephemeral positions that reflect saved position states
-            val ephemeralPositions = fetchedPositions.toMutableList()
-                .map { fetchedPosition ->
-                    val savedPosition: SavedPosition? = savedPositions.find { savedPosition ->
-                        savedPosition.id == fetchedPosition.id
-                    }
-
-                    EphemeralPosition(
-                        fetchedPosition,
-                        isSaved = savedPosition?.isSaved == true,
-                        hasApplied = savedPosition?.hasApplied == true
-                    )
+            val reconciledPositions = fetchedPositions.toMutableList().map { fetchedPosition ->
+                val foundSavedPosition: Position? = savedPositions.find { savedPosition ->
+                    savedPosition.id == fetchedPosition.id
                 }
 
+                fetchedPosition.copy(
+                    isSaved = foundSavedPosition?.isSaved == true,
+                    hasApplied = foundSavedPosition?.hasApplied == true,
+                    isFresh = true
+                )
+            }
 
-            // fetch all saved positions, then map incoming data to PositionUiState if possible, delete everything(?), then insert
-            deleteAllEphemeralPositions()
-                .andThen(insertEphemeralPositions(ephemeralPositions))
+            // This will also update any saved rows that were marked as isFresh == true
+            deleteAllUnsavedThenInsert(reconciledPositions)
         }
     }
 
-    fun deleteAllEphemeralPositions(): Completable =
-        Completable.fromAction { ephemeralPositionsDao.deleteAll() }
+    private fun deleteAllUnsavedThenInsert(positions: List<Position>): Completable =
+        Completable.fromAction { positionsDao.deleteAllUnsavedThenInsert(positions) }
 
-    fun insertEphemeralPositions(ephemeralPositions: List<EphemeralPosition>): Completable =
-        Completable.fromAction { ephemeralPositionsDao.insert(ephemeralPositions) }
-
-    fun insertSavedPosition(savedPosition: SavedPosition): Completable =
-        Completable.fromAction { savedPositionsDao.insert(savedPosition) }
-
-    fun deleteSavedPosition(id: String): Completable =
-        Completable.fromAction { savedPositionsDao.deleteById(id) }
-
-    fun updateEphemeralPosition(ephemeralPosition: EphemeralPosition): Completable =
-        Completable.fromAction { ephemeralPositionsDao.update(ephemeralPosition) }
+    fun updatePosition(position: Position): Completable =
+        Completable.fromAction { positionsDao.update(position) }
 }

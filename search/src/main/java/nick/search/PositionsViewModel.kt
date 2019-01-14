@@ -7,8 +7,7 @@ import io.reactivex.disposables.Disposable
 import nick.core.util.BaseRxViewModel
 import nick.core.util.Event
 import nick.core.util.applySchedulers
-import nick.data.model.EphemeralPosition
-import nick.data.model.SavedPosition
+import nick.data.model.Position
 import nick.data.model.Search
 import nick.search.util.PositionsLoadingState
 import timber.log.Timber
@@ -21,8 +20,9 @@ class PositionsViewModel @Inject constructor(
     private val _loadingState = MutableLiveData<PositionsLoadingState>()
     private val _error = MutableLiveData<Event<Throwable>>()
 
-    val ephemeralPositions = repository.positions
-    val savedPositions = repository.savedPositions
+    // TODO: One source of truth using Transformations
+    val positions: LiveData<List<Position>> = repository.positions
+    val savedPositions: LiveData<List<Position>> = repository.savedPositions
     val loadingState: LiveData<PositionsLoadingState> get() = _loadingState
     val error: LiveData<Event<Throwable>> get() = _error
 
@@ -48,17 +48,8 @@ class PositionsViewModel @Inject constructor(
             })
     }
 
-    fun saveOrUnsavePosition(ephemeralPosition: EphemeralPosition) {
-        val completable = if (ephemeralPosition.isSaved) {
-            repository.deleteSavedPosition(ephemeralPosition.id)
-        } else {
-            val savedPosition =
-                SavedPosition(ephemeralPosition.copy(isSaved = ephemeralPosition.isSaved.not()))
-            repository.insertSavedPosition(savedPosition)
-        }
-
-        completable
-            .andThen(repository.updateEphemeralPosition(ephemeralPosition.copy(isSaved = ephemeralPosition.isSaved.not())))
+    fun saveOrUnsavePosition(position: Position) {
+        repository.updatePosition(position.copy(isSaved = position.isSaved.not()))
             .applySchedulers()
             .subscribe(object : CompletableObserver {
 

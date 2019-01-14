@@ -1,8 +1,8 @@
 package nick.search.util
 
-import nick.data.model.EphemeralPosition
+import nick.data.model.Position
 
-sealed class PositionAction(val ephemeralPosition: EphemeralPosition) {
-    class SaveOrUnsave(ephemeralPosition: EphemeralPosition) : PositionAction(ephemeralPosition)
-    class MoreDetails(ephemeralPosition: EphemeralPosition) : PositionAction(ephemeralPosition)
+sealed class PositionAction(val position: Position) {
+    class SaveOrUnsave(position: Position) : PositionAction(position)
+    class MoreDetails(position: Position) : PositionAction(position)
 }

@@ -1,9 +1,9 @@
-package nick.networking.di
+package nick.networking
 
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import nick.core.di.ApplicationScope
-import nick.networking.service.GitHubJobsService
 import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -20,7 +20,15 @@ object RemoteDataModule {
     @ApplicationScope
     @Provides
     @JvmStatic
-    fun moshiConverterFactory(): MoshiConverterFactory = MoshiConverterFactory.create()
+    fun moshi(positionJsonAdapter: PositionJsonAdapter): Moshi = Moshi.Builder()
+        .add(positionJsonAdapter)
+        .build()
+
+    @ApplicationScope
+    @Provides
+    @JvmStatic
+    fun moshiConverterFactory(moshi: Moshi): MoshiConverterFactory =
+        MoshiConverterFactory.create(moshi)
 
     @ApplicationScope
     @Provides

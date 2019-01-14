@@ -16,7 +16,6 @@ import nick.search.util.PositionAction
 import nick.search.util.PositionsLoadingState
 import nick.ui.BaseFragment
 
-// TODO: Need a UI-specific pojo for saved position states?
 // TODO: Scrolling down needs to slide search fields and bottom nav out of view
 class SearchFragment
     : BaseFragment()
@@ -26,7 +25,7 @@ class SearchFragment
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
     }
 
-    private val adapter = EphemeralPositionsAdapter(this)
+    private val adapter = PositionsAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +65,7 @@ class SearchFragment
             }
         })
 
-        viewModel.ephemeralPositions.observe(viewLifecycleOwner, Observer {
+        viewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
     }
@@ -74,11 +73,10 @@ class SearchFragment
     override fun handleAction(positionAction: PositionAction) {
         with(positionAction) {
             when (this) {
-                // FIXME: Need to handle race condition here from user fast clicking. debounce operator?
-                is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(ephemeralPosition)
-//                is PositionAction.MoreDetails -> {
-//                    findNavController().navigate(SearchFragmentDirections.toPosition(ephemeralPosition))
-//                }
+                is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)
+                is PositionAction.MoreDetails -> {
+                    findNavController().navigate(SearchFragmentDirections.toPosition(position))
+                }
             }
         }
     }

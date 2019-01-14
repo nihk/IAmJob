@@ -9,7 +9,7 @@ import dagger.Provides
 import nick.core.di.ApplicationScope
 import nick.core.di.ApplicationContext
 import nick.data.di.DataModule
-import nick.networking.di.RemoteDataModule
+import nick.networking.RemoteDataModule
 
 @Module(
     includes = [

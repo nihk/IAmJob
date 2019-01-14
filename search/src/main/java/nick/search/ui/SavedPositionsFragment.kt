@@ -23,7 +23,7 @@ class SavedPositionsFragment
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
     }
 
-    private val adapter = SavedPositionsAdapter(this)
+    private val adapter = PositionsAdapter(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +47,12 @@ class SavedPositionsFragment
 
     override fun handleAction(positionAction: PositionAction) {
         with (positionAction) {
-//            when (this) {
-//                is PositionAction.MoreDetails -> findNavController().navigate(
-//                    SavedPositionsFragmentDirections.toPosition(ephemeralPosition)
-//                )
-//            }
+            when (this) {
+                is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)
+                is PositionAction.MoreDetails -> findNavController().navigate(
+                    SavedPositionsFragmentDirections.toPosition(position)
+                )
+            }
         }
     }
 }
