@@ -47,11 +47,11 @@ class SavedPositionsFragment
 
     override fun handleAction(positionAction: PositionAction) {
         with (positionAction) {
-            when (this) {
-                is PositionAction.MoreDetails -> findNavController().navigate(
-                    SavedPositionsFragmentDirections.toPosition(position)
-                )
-            }
+//            when (this) {
+//                is PositionAction.MoreDetails -> findNavController().navigate(
+//                    SavedPositionsFragmentDirections.toPosition(ephemeralPosition)
+//                )
+//            }
         }
     }
 }

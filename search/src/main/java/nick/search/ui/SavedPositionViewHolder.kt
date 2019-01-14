@@ -13,9 +13,9 @@ class SavedPositionViewHolder(
 ) : RecyclerView.ViewHolder(view) {
 
     fun bind(savedPosition: SavedPosition) {
-        itemView.title.text = savedPosition.position.title
+        itemView.title.text = savedPosition.title
         itemView.setOnClickListener {
-            onPositionClicked.handleAction(PositionAction.MoreDetails(savedPosition.position))
+            onPositionClicked.handleAction(PositionAction.MoreDetails(TODO()))
         }
     }
 }

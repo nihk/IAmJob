@@ -5,8 +5,8 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
-@Entity(tableName = SavedPosition.TABLE_NAME)
-data class SavedPosition(
+@Entity(tableName = EphemeralPosition.TABLE_NAME)
+data class EphemeralPosition(
     @PrimaryKey @ColumnInfo(name = PositionColumnNames.COL_ID) val id: String,
     @ColumnInfo(name = PositionColumnNames.COL_TYPE) val type: String,
     @ColumnInfo(name = PositionColumnNames.COL_URL) val url: String,
@@ -39,24 +39,7 @@ data class SavedPosition(
         hasApplied = hasApplied
     )
 
-    @Ignore
-    constructor(e: EphemeralPosition) : this(
-        id = e.id,
-        type = e.type,
-        url = e.url,
-        createdAt = e.createdAt,
-        company = e.company,
-        companyUrl = e.companyUrl,
-        location = e.location,
-        title = e.title,
-        description = e.description,
-        howToApply = e.howToApply,
-        companyLogo = e.companyLogo,
-        isSaved = e.isSaved,
-        hasApplied = e.hasApplied
-    )
-
     companion object {
-        const val TABLE_NAME = "saved_positions"
+        const val TABLE_NAME = "ephemeral_positions"
     }
 }

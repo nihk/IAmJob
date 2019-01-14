@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -17,6 +16,7 @@ import nick.search.util.PositionAction
 import nick.search.util.PositionsLoadingState
 import nick.ui.BaseFragment
 
+// TODO: Need a UI-specific pojo for saved position states?
 // TODO: Scrolling down needs to slide search fields and bottom nav out of view
 class SearchFragment
     : BaseFragment()
@@ -26,7 +26,7 @@ class SearchFragment
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
     }
 
-    private val adapter = PositionsAdapter(this)
+    private val adapter = EphemeralPositionsAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,24 +54,19 @@ class SearchFragment
             when (it) {
                 is PositionsLoadingState.FetchingPositions -> progress_bar.visibleOrGone(true)
                 is PositionsLoadingState.DoneFetchingPositions -> progress_bar.visibleOrGone(false)
-                is PositionsLoadingState.SavingPosition -> Unit  // Do nothing
-                is PositionsLoadingState.DoneSavingPosition -> Toast.makeText(requireContext(), "Saved 'em", Toast.LENGTH_LONG).show()
+                is PositionsLoadingState.SavingOrUnsavingPosition -> Unit  // Do nothing... yet
+                is PositionsLoadingState.DoneSavingOrUnsavingPosition -> Unit // Do nothing... yet
             }
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 // TODO: UI error state, not just a Toast
-                Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG)
-                    .show()
+                toast(it.message)
             }
         })
 
-        viewModel.savedPositions.observe(viewLifecycleOwner, Observer {
-            // TODO: positions list needs to reflect these 'saved' states
-        })
-
-        viewModel.positions.observe(viewLifecycleOwner, Observer {
+        viewModel.ephemeralPositions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
     }
@@ -79,10 +74,11 @@ class SearchFragment
     override fun handleAction(positionAction: PositionAction) {
         with(positionAction) {
             when (this) {
-                is PositionAction.Save -> viewModel.savePosition(position, doSave)
-                is PositionAction.MoreDetails -> {
-                    findNavController().navigate(SearchFragmentDirections.toPosition(position))
-                }
+                // FIXME: Need to handle race condition here from user fast clicking. debounce operator?
+                is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(ephemeralPosition)
+//                is PositionAction.MoreDetails -> {
+//                    findNavController().navigate(SearchFragmentDirections.toPosition(ephemeralPosition))
+//                }
             }
         }
     }

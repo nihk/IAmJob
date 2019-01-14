@@ -17,9 +17,9 @@
         android:id="@+id/position"
         android:name="nick.search.ui.PositionFragment"
         android:label="PositionFragment">
-        <argument
-            android:name="position"
-            app:argType="nick.data.model.Position" />
+        <!--<argument-->
+            <!--android:name="ephemeralPosition"-->
+            <!--app:argType="nick.data.model.EphemeralPosition" />-->
     </fragment>
 
     <fragment

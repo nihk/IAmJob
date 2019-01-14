@@ -1,9 +1,8 @@
 package nick.search.util
 
-import nick.data.model.Position
+import nick.data.model.EphemeralPosition
 
-// TODO: Delete action?
-sealed class PositionAction(val position: Position) {
-    class Save(position: Position, val doSave: Boolean) : PositionAction(position)
-    class MoreDetails(position: Position) : PositionAction(position)
+sealed class PositionAction(val ephemeralPosition: EphemeralPosition) {
+    class SaveOrUnsave(ephemeralPosition: EphemeralPosition) : PositionAction(ephemeralPosition)
+    class MoreDetails(ephemeralPosition: EphemeralPosition) : PositionAction(ephemeralPosition)
 }
