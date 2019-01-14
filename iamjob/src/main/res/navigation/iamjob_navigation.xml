@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/iamjob_navigation"
-    app:startDestination="@+id/jobs_dest">
+    android:id="@+id/navigation"
+    app:startDestination="@id/jobs_dest">
 
-    <include app:graph="@navigation/search_navigation" />
+    <fragment
+        android:id="@+id/jobs_dest"
+        android:name="nick.iamjob.ui.JobsFragment"
+        android:label="SearchFragment">
+        <action
+            android:id="@+id/to_position"
+            app:destination="@id/position" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/position"
+        android:name="nick.iamjob.ui.PositionFragment"
+        android:label="PositionFragment">
+        <argument
+            android:name="position"
+            app:argType="nick.data.model.Position" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/saved_dest"
+        android:name="nick.iamjob.ui.SavedPositionsFragment"
+        android:label="SavedResultsFragment" >
+        <action
+            android:id="@+id/to_position"
+            app:destination="@id/position" />
+    </fragment>
 
 </navigation>

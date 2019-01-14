@@ -1,4 +1,4 @@
-package nick.search.ui
+package nick.iamjob.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,17 +7,17 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.android.synthetic.main.fragment_jobs.*
 import nick.core.util.visibleOrGone
-import nick.search.PositionsViewModel
-import nick.search.R
-import nick.search.util.OnPositionClicked
-import nick.search.util.PositionAction
-import nick.search.util.PositionsLoadingState
+import nick.iamjob.PositionsViewModel
+import nick.iamjob.R
+import nick.iamjob.util.OnPositionClicked
+import nick.iamjob.util.PositionAction
+import nick.iamjob.util.PositionsLoadingState
 import nick.ui.BaseFragment
 
 // TODO: Scrolling down needs to slide search fields and bottom nav out of view
-class SearchFragment
+class JobsFragment
     : BaseFragment()
     , OnPositionClicked {
 
@@ -39,7 +39,7 @@ class SearchFragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fragment_search, container, false)
+        inflater.inflate(R.layout.fragment_jobs, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +75,9 @@ class SearchFragment
             when (this) {
                 is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)
                 is PositionAction.MoreDetails -> {
-                    findNavController().navigate(SearchFragmentDirections.toPosition(position))
+                    findNavController().navigate(
+                        JobsFragmentDirections.toPosition(position)
+                    )
                 }
             }
         }

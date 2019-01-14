@@ -1,4 +1,4 @@
-package nick.search.util
+package nick.iamjob.util
 
 sealed class PositionsLoadingState {
     object SavingOrUnsavingPosition : PositionsLoadingState()

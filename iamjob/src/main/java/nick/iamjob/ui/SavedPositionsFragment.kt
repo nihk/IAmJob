@@ -1,4 +1,4 @@
-package nick.search.ui
+package nick.iamjob.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_saved_positions.*
 import nick.core.util.visibleOrGone
-import nick.search.PositionsViewModel
-import nick.search.R
-import nick.search.util.OnPositionClicked
-import nick.search.util.PositionAction
+import nick.iamjob.PositionsViewModel
+import nick.iamjob.R
+import nick.iamjob.util.OnPositionClicked
+import nick.iamjob.util.PositionAction
 import nick.ui.BaseFragment
 
 class SavedPositionsFragment

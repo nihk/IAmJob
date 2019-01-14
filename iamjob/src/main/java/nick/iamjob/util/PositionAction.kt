@@ -1,4 +1,4 @@
-package nick.search.util
+package nick.iamjob.util
 
 import nick.data.model.Position
 

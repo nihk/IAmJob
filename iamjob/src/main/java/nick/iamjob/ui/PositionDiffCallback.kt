@@ -1,4 +1,4 @@
-package nick.search.ui
+package nick.iamjob.ui
 
 import androidx.recyclerview.widget.DiffUtil
 import nick.data.model.Position

@@ -1,12 +1,12 @@
-package nick.search.ui
+package nick.iamjob.ui
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_position.view.*
 import nick.data.model.Position
-import nick.search.R
-import nick.search.util.OnPositionClicked
-import nick.search.util.PositionAction
+import nick.iamjob.R
+import nick.iamjob.util.OnPositionClicked
+import nick.iamjob.util.PositionAction
 
 class PositionViewHolder(
     view: View,

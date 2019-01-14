@@ -1,11 +1,20 @@
 package nick.iamjob.di
 
 import dagger.Module
-import nick.search.di.SearchUiModule
+import dagger.android.ContributesAndroidInjector
+import nick.iamjob.ui.PositionFragment
+import nick.iamjob.ui.SavedPositionsFragment
+import nick.iamjob.ui.JobsFragment
 
-@Module(
-    includes = [
-        SearchUiModule::class
-    ]
-)
-abstract class FragmentModule
+@Module
+abstract class FragmentModule {
+
+    @ContributesAndroidInjector
+    abstract fun searchFragment(): JobsFragment
+
+    @ContributesAndroidInjector
+    abstract fun positionFragment(): PositionFragment
+
+    @ContributesAndroidInjector
+    abstract fun savedPositionsFragment(): SavedPositionsFragment
+}

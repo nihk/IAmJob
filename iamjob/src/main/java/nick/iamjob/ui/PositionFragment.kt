@@ -1,10 +1,10 @@
-package nick.search.ui
+package nick.iamjob.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import nick.search.R
+import nick.iamjob.R
 import nick.ui.BaseFragment
 
 class PositionFragment : BaseFragment() {

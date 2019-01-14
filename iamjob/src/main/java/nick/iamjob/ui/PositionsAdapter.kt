@@ -1,11 +1,11 @@
-package nick.search.ui
+package nick.iamjob.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import nick.data.model.Position
-import nick.search.R
-import nick.search.util.OnPositionClicked
+import nick.iamjob.R
+import nick.iamjob.util.OnPositionClicked
 
 class PositionsAdapter(
     private val onPositionClicked: OnPositionClicked

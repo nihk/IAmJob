@@ -1,4 +1,4 @@
-package nick.search
+package nick.iamjob
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,7 @@ import nick.core.util.Event
 import nick.core.util.applySchedulers
 import nick.data.model.Position
 import nick.data.model.Search
-import nick.search.util.PositionsLoadingState
+import nick.iamjob.util.PositionsLoadingState
 import timber.log.Timber
 import javax.inject.Inject
 

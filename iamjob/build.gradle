@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
 
 android {
     compileSdkVersion 28
@@ -30,7 +31,6 @@ android {
 dependencies {
     implementation project(':core')
     implementation project(':ui')
-    implementation project(':search')
     implementation project(':data')
     implementation project(':networking')
 

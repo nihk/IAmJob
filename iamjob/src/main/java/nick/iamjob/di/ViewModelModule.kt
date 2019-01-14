@@ -1,13 +1,22 @@
 package nick.iamjob.di
 
+import androidx.lifecycle.ViewModel
+import dagger.Binds
 import dagger.Module
+import dagger.multibindings.IntoMap
 import nick.core.di.ViewModelFactoryModule
-import nick.search.di.SearchViewModelModule
+import nick.core.di.ViewModelKey
+import nick.iamjob.PositionsViewModel
 
 @Module(
     includes = [
-        ViewModelFactoryModule::class,
-        SearchViewModelModule::class
+        ViewModelFactoryModule::class
     ]
 )
-abstract class ViewModelModule
+abstract class ViewModelModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PositionsViewModel::class)
+    abstract fun positionsViewModel(positionsViewModel: PositionsViewModel): ViewModel
+}
