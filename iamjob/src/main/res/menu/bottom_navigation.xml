@@ -6,6 +6,6 @@
         android:title="@string/jobs" />
     <item
         android:id="@+id/saved_dest"
-        android:icon="@drawable/ic_saved"
+        android:icon="@drawable/ic_saved_filled"
         android:title="@string/saved" />
 </menu>

@@ -6,4 +6,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="bottom_nav_active_text_style">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="bottom_nav_inactive_text_style">
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>
