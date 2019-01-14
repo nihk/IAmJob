@@ -13,6 +13,7 @@ import nick.iamjob.PositionsViewModel
 import nick.iamjob.R
 import nick.iamjob.util.OnPositionClicked
 import nick.iamjob.util.PositionAction
+import nick.iamjob.util.PositionsQuery
 import nick.ui.BaseFragment
 
 class SavedPositionsFragment
@@ -39,10 +40,12 @@ class SavedPositionsFragment
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.savedPositions.observe(viewLifecycleOwner, Observer {
+        viewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
             progress_bar.visibleOrGone(false)
         })
+
+        viewModel.queryPositions(PositionsQuery.SavedPositions)
     }
 
     override fun handleAction(positionAction: PositionAction) {

@@ -12,6 +12,7 @@ import nick.iamjob.R
 // todo: tint status bar to be translucent
 // todo: screen should draw under status bar
 // todo: swipe to refresh search page
+// todo: open source license
 class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

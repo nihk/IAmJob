@@ -10,24 +10,24 @@ import nick.data.model.Position
 abstract class PositionsDao : BaseDao<Position> {
 
     companion object {
-        const val QUERY_ALL_SAVED = "SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 1"
+        const val QUERY_SAVED = "SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 1"
     }
 
     @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_FRESH} = 1")
-    abstract fun queryAllFresh(): LiveData<List<Position>>
+    abstract fun queryFresh(): LiveData<List<Position>>
 
-    @Query(QUERY_ALL_SAVED)
-    abstract fun queryAllSaved(): LiveData<List<Position>>
+    @Query(QUERY_SAVED)
+    abstract fun querySaved(): LiveData<List<Position>>
 
-    @Query(QUERY_ALL_SAVED)
-    abstract fun queryAllSavedBlocking(): List<Position>
+    @Query(QUERY_SAVED)
+    abstract fun querySavedBlocking(): List<Position>
 
     @Query("DELETE FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 0")
-    abstract fun deleteAllUnsaved()
+    abstract fun deleteUnsaved()
 
     @Transaction
     open fun deleteAllUnsavedThenInsert(positions: List<Position>) {
-        deleteAllUnsaved()
+        deleteUnsaved()
         insert(positions)
     }
 }

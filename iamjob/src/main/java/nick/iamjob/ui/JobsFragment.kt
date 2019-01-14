@@ -14,6 +14,7 @@ import nick.iamjob.R
 import nick.iamjob.util.OnPositionClicked
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
+import nick.iamjob.util.PositionsQuery
 import nick.ui.BaseFragment
 
 // TODO: Scrolling down needs to slide search fields and bottom nav out of view
@@ -53,14 +54,12 @@ class JobsFragment
             when (it) {
                 is PositionsLoadingState.FetchingPositions -> progress_bar.visibleOrGone(true)
                 is PositionsLoadingState.DoneFetchingPositions -> progress_bar.visibleOrGone(false)
-                is PositionsLoadingState.SavingOrUnsavingPosition -> Unit  // Do nothing... yet
-                is PositionsLoadingState.DoneSavingOrUnsavingPosition -> Unit // Do nothing... yet
             }
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
-                // TODO: UI error state, not just a Toast
+                // TODO: UI error state, not just a Toast. Snackbar?
                 toast(it.message)
             }
         })
@@ -74,11 +73,9 @@ class JobsFragment
         with(positionAction) {
             when (this) {
                 is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)
-                is PositionAction.MoreDetails -> {
-                    findNavController().navigate(
-                        JobsFragmentDirections.toPosition(position)
-                    )
-                }
+                is PositionAction.MoreDetails -> findNavController().navigate(
+                    JobsFragmentDirections.toPosition(position)
+                )
             }
         }
     }

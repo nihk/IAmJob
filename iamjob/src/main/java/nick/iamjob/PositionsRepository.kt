@@ -12,9 +12,6 @@ class PositionsRepository @Inject constructor(
     private val positionsDao: PositionsDao
 ) {
 
-    val positions = positionsDao.queryAllFresh()
-    val savedPositions = positionsDao.queryAllSaved()
-
     fun search(search: Search): Completable = with(search) {
         service.fetchPositions(
             description,
@@ -26,7 +23,7 @@ class PositionsRepository @Inject constructor(
         ).flatMapCompletable { fetchedPositions ->
             // Mark all saved positions as stale -- we don't want them showing up in search results
             // if they're not part of that result set
-            val savedPositions = positionsDao.queryAllSavedBlocking().map {
+            val savedPositions = positionsDao.querySavedBlocking().map {
                 it.copy(isFresh = false)
             }
 
@@ -52,4 +49,8 @@ class PositionsRepository @Inject constructor(
 
     fun updatePosition(position: Position): Completable =
         Completable.fromAction { positionsDao.update(position) }
+
+    fun querySavedPositions() = positionsDao.querySaved()
+
+    fun queryFreshPositions() = positionsDao.queryFresh()
 }
