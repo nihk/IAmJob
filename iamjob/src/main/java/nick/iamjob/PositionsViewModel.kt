@@ -52,6 +52,9 @@ class PositionsViewModel @Inject constructor(
                     Timber.e(e)
                     _loadingState.value = PositionsLoadingState.DoneFetchingPositions
                     _error.value = Event(e)
+
+                    // Display cached content if remote fetching failed
+                    queryPositions(PositionsQuery.FreshPositions)
                 }
             })
     }
