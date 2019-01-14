@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import nick.core.di.ViewModelFactoryModule
 import nick.core.di.ViewModelKey
-import nick.iamjob.PositionsViewModel
+import nick.iamjob.data.PositionsViewModel
 
 @Module(
     includes = [

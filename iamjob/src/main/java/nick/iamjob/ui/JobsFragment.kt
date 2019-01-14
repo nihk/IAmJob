@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_jobs.*
 import nick.core.util.visibleOrGone
-import nick.iamjob.PositionsViewModel
+import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.R
 import nick.iamjob.util.OnPositionClicked
 import nick.iamjob.util.PositionAction

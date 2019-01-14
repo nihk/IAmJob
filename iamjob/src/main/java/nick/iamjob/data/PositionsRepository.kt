@@ -1,4 +1,4 @@
-package nick.iamjob
+package nick.iamjob.data
 
 import io.reactivex.Completable
 import nick.data.dao.PositionsDao

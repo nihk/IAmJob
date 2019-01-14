@@ -1,4 +1,4 @@
-package nick.iamjob
+package nick.iamjob.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

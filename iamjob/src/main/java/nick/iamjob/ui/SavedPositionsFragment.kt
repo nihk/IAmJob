@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_saved_positions.*
 import nick.core.util.visibleOrGone
-import nick.iamjob.PositionsViewModel
+import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.R
 import nick.iamjob.util.OnPositionClicked
 import nick.iamjob.util.PositionAction

@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <!--TODO: Use material EditTexts-->
+    <!--TODO: Move this to the bottom-->
 
     <!--<EditText-->
     <!--android:id="@+id/description_input"-->
@@ -64,8 +65,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/status_bar_height"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
