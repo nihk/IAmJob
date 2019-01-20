@@ -11,14 +11,14 @@ import kotlinx.android.synthetic.main.fragment_saved_positions.*
 import nick.core.util.visibleOrGone
 import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.R
-import nick.iamjob.util.OnPositionClicked
+import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsQuery
 import nick.ui.BaseFragment
 
 class SavedPositionsFragment
     : BaseFragment()
-    , OnPositionClicked {
+    , OnPositionClickedListener {
 
     private val viewModel: PositionsViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
@@ -48,7 +48,7 @@ class SavedPositionsFragment
         viewModel.queryPositions(PositionsQuery.SavedPositions)
     }
 
-    override fun handleAction(positionAction: PositionAction) {
+    override fun onPositionClicked(positionAction: PositionAction) {
         with (positionAction) {
             when (this) {
                 is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)

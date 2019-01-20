@@ -13,14 +13,14 @@ import nick.core.util.visibleOrGone
 import nick.data.model.Search
 import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.R
-import nick.iamjob.util.OnPositionClicked
+import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
 import nick.ui.BaseFragment
 
 class JobsFragment
     : BaseFragment()
-    , OnPositionClicked {
+    , OnPositionClickedListener {
 
     private val viewModel: PositionsViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
@@ -92,7 +92,7 @@ class JobsFragment
         super.onDestroyView()
     }
 
-    override fun handleAction(positionAction: PositionAction) {
+    override fun onPositionClicked(positionAction: PositionAction) {
         with(positionAction) {
             when (this) {
                 is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)

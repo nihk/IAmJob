@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_position.view.*
 import nick.data.model.Position
 import nick.iamjob.R
-import nick.iamjob.util.OnPositionClicked
+import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
 
 class PositionViewHolder(
     view: View,
-    private val onPositionClicked: OnPositionClicked
+    private val onPositionClickedListener: OnPositionClickedListener
 ) : RecyclerView.ViewHolder(view) {
 
     fun bind(position: Position) {
@@ -43,11 +43,11 @@ class PositionViewHolder(
             )
 
             setOnClickListener {
-                onPositionClicked.handleAction(PositionAction.MoreDetails(position))
+                onPositionClickedListener.onPositionClicked(PositionAction.MoreDetails(position))
             }
 
             save_position.setOnClickListener {
-                onPositionClicked.handleAction(PositionAction.SaveOrUnsave(position))
+                onPositionClickedListener.onPositionClicked(PositionAction.SaveOrUnsave(position))
                 // To prevent click spamming
                 save_position.isEnabled = false
             }

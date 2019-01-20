@@ -5,16 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import nick.data.model.Position
 import nick.iamjob.R
-import nick.iamjob.util.OnPositionClicked
+import nick.iamjob.util.OnPositionClickedListener
 
 class PositionsAdapter(
-    private val onPositionClicked: OnPositionClicked
+    private val onPositionClickedListener: OnPositionClickedListener
 ) : ListAdapter<Position, PositionViewHolder>(PositionDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         LayoutInflater.from(parent.context)
             .inflate(R.layout.item_position, parent, false)
-            .let { PositionViewHolder(it, onPositionClicked) }
+            .let { PositionViewHolder(it, onPositionClickedListener) }
 
     override fun onBindViewHolder(holder: PositionViewHolder, position: Int) {
         holder.bind(getItem(position))
