@@ -11,20 +11,16 @@ abstract class PositionsDao : BaseDao<Position> {
 
     companion object {
         const val ORDER_BY_CREATED_AT = "ORDER BY ${Position.COL_CREATED_AT} DESC"
-        const val QUERY_SAVED_FRESH = "SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 1 AND ${Position.COL_IS_FRESH} = 1 $ORDER_BY_CREATED_AT"
     }
 
     @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_FRESH} = 1 $ORDER_BY_CREATED_AT")
     abstract fun queryFresh(): LiveData<List<Position>>
 
-    @Query(QUERY_SAVED_FRESH)
+    @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 1 AND ${Position.COL_IS_FRESH} = 1 $ORDER_BY_CREATED_AT")
     abstract fun querySavedFresh(): LiveData<List<Position>>
 
-    @Query(QUERY_SAVED_FRESH)
-    abstract fun querySavedFreshBlocking(): List<Position>
-
-    @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_HAS_VIEWED} = 1 AND ${Position.COL_IS_FRESH} = 1")
-    abstract fun queryHasViewedFreshBlocking(): List<Position>
+    @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE (${Position.COL_HAS_VIEWED} = 1 OR ${Position.COL_IS_SAVED} = 1) AND ${Position.COL_IS_FRESH} = 1")
+    abstract fun queryCachedFreshBlocking(): List<Position>
 
     @Query("DELETE FROM ${Position.TABLE_NAME} WHERE ${Position.COL_HAS_VIEWED} = 0 AND ${Position.COL_IS_SAVED} = 0")
     abstract fun deleteNonCachable()

@@ -21,4 +21,7 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract fun errorDialogFragment(): ErrorDialogFragment
+
+    @ContributesAndroidInjector
+    abstract fun filterPositionsDialogFragment(): FilterPositionsDialogFragment
 }

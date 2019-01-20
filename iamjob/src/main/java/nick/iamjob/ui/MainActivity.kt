@@ -11,9 +11,10 @@ import nick.iamjob.R
 // https://blog.usejournal.com/android-material-design-components-backdrop-96a3044a3b2
 // todo: swipe to blacklist forever job
 // todo: use WorkManager to poll API once per day and check for new results?
-// todo: error dialog: A wild error appeared! Here's what some guy wrote to explain this issue: e.message
 // todo: filter by created date/sort by created date?
 // todo: favorite searches
+// todo: long press PositionViewHolder to mark as unViewed (?)
+// todo: 'days ago' in PositionViewHolder. Color code for recency green -> red
 // todo: notifications tab to subscribe to favorite searches
 class MainActivity : DaggerAppCompatActivity() {
 

@@ -21,24 +21,17 @@ class PositionsRepository @Inject constructor(
             isFullTime,
             page
         ).flatMapCompletable { fetchedPositions ->
-            // Mark all saved positions as stale -- we don't want them showing up in search results
+            // Mark all cached positions as stale -- we don't want them showing up in search results
             // if they're not part of the remotely fetched result set
-            val savedPositions = positionsDao.querySavedFreshBlocking().map {
+            val cachedPositions = positionsDao.queryCachedFreshBlocking().map {
                 it.copy(isFresh = false)
             }
 
-            val hasViewedPositions = positionsDao.queryHasViewedFreshBlocking().map {
-                it.copy(isFresh = false)
-            }
-
-            // Apply saved position states to the newly fetched positions
+            // Apply cached position states to the newly fetched positions
             val reconciledPositions = fetchedPositions.toMutableList().map { fetchedPosition ->
-                val idMatchesFetchedPosition: (position: Position) -> Boolean = { position ->
+                val cachedPosition = cachedPositions.find { position ->
                     position.id == fetchedPosition.id
                 }
-
-                val cachedPosition = savedPositions.find(idMatchesFetchedPosition)
-                    ?: hasViewedPositions.find(idMatchesFetchedPosition)
 
                 fetchedPosition.copy(
                     isSaved = cachedPosition?.isSaved == true,
