@@ -9,7 +9,6 @@ import nick.iamjob.R
 
 // UI should ideally look something like:
 // https://blog.usejournal.com/android-material-design-components-backdrop-96a3044a3b2
-// todo: open source license
 // todo: swipe to blacklist forever job
 // todo: use WorkManager to poll API once per day and check for new results?
 // todo: Position.hasViewed, then grey out text if that is true

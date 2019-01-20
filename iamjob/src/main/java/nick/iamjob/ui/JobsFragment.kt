@@ -96,9 +96,12 @@ class JobsFragment
         with(positionAction) {
             when (this) {
                 is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)
-                is PositionAction.MoreDetails -> findNavController().navigate(
-                    JobsFragmentDirections.toPosition(position)
-                )
+                is PositionAction.MoreDetails -> {
+                    viewModel.setPositionViewed(position)
+                    findNavController().navigate(
+                        JobsFragmentDirections.toPosition(position)
+                    )
+                }
             }
         }
     }

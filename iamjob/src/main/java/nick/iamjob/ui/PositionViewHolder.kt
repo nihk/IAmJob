@@ -1,6 +1,8 @@
 package nick.iamjob.ui
 
 import android.view.View
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_position.view.*
 import nick.data.model.Position
@@ -14,25 +16,40 @@ class PositionViewHolder(
 ) : RecyclerView.ViewHolder(view) {
 
     fun bind(position: Position) {
-        itemView.title.text = position.title
-        itemView.company.text = position.company
-        itemView.location.text = position.location
-        itemView.save_position.isEnabled = true
-        itemView.save_position.setImageResource(
-            if (position.isSaved) {
-                R.drawable.ic_saved_filled
-            } else {
-                R.drawable.ic_saved
+        with(itemView) {
+            title.text = position.title
+            company.text = position.company
+            location.text = position.location
+
+            @ColorInt val textColor = ContextCompat.getColor(this.context,
+                if (position.hasViewed) {
+                    R.color.hasViewedText
+                } else {
+                    R.color.hasNotViewedText
+                }
+            )
+
+            title.setTextColor(textColor)
+            company.setTextColor(textColor)
+            location.setTextColor(textColor)
+
+            save_position.isEnabled = true
+            save_position.setImageResource(
+                if (position.isSaved) {
+                    R.drawable.ic_saved_filled
+                } else {
+                    R.drawable.ic_saved
+                }
+            )
+
+            setOnClickListener {
+                onPositionClicked.handleAction(PositionAction.MoreDetails(position))
             }
-        )
 
-        itemView.setOnClickListener {
-            onPositionClicked.handleAction(PositionAction.MoreDetails(position))
-        }
-
-        itemView.save_position.setOnClickListener {
-            onPositionClicked.handleAction(PositionAction.SaveOrUnsave(position))
-            itemView.save_position.isEnabled = false
+            save_position.setOnClickListener {
+                onPositionClicked.handleAction(PositionAction.SaveOrUnsave(position))
+                save_position.isEnabled = false
+            }
         }
     }
 }

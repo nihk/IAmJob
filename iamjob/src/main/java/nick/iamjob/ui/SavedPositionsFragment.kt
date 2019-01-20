@@ -52,9 +52,12 @@ class SavedPositionsFragment
         with (positionAction) {
             when (this) {
                 is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)
-                is PositionAction.MoreDetails -> findNavController().navigate(
-                    SavedPositionsFragmentDirections.toPosition(position)
-                )
+                is PositionAction.MoreDetails -> {
+                    viewModel.setPositionViewed(position)
+                    findNavController().navigate(
+                        SavedPositionsFragmentDirections.toPosition(position)
+                    )
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ package nick.iamjob.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.Disposable
 import nick.core.util.BaseRxViewModel
@@ -60,8 +61,20 @@ class PositionsViewModel @Inject constructor(
     }
 
     fun saveOrUnsavePosition(position: Position) {
-        repository.updatePosition(position.copy(isSaved = position.isSaved.not()))
-            .applySchedulers()
+        subscribeToUpdateAction(repository.updatePosition(position.copy(isSaved = position.isSaved.not())))
+    }
+
+    fun setPositionViewed(position: Position) {
+        if (position.hasViewed) {
+            // Already viewed; no need to update anything
+            return
+        }
+
+        subscribeToUpdateAction(repository.updatePosition(position.copy(hasViewed = true)))
+    }
+
+    private fun subscribeToUpdateAction(completable: Completable) {
+        completable.applySchedulers()
             .subscribe(object : CompletableObserver {
 
                 override fun onSubscribe(d: Disposable) {

@@ -22,6 +22,7 @@ data class Position(
     @ColumnInfo(name = COL_COMPANY_LOGO) val companyLogo: String?,
     @ColumnInfo(name = COL_IS_SAVED) val isSaved: Boolean,
     @ColumnInfo(name = COL_HAS_APPLIED) val hasApplied: Boolean,
+    @ColumnInfo(name = COL_HAS_VIEWED) val hasViewed: Boolean,
     /**
      * Saved Positions (i.e. Position.isSaved == true) will persist locally in the same table with
      * non-saved Positions, which are deleted from the table on each new search for more Positions.
@@ -48,6 +49,7 @@ data class Position(
         const val COL_COMPANY_LOGO = "company_logo"
         const val COL_IS_SAVED = "is_saved"
         const val COL_HAS_APPLIED = "has_applied"
+        const val COL_HAS_VIEWED = "has_viewed"
         const val COL_IS_FRESH = "is_fresh"
     }
 }

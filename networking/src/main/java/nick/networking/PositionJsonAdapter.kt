@@ -53,6 +53,7 @@ class PositionJsonAdapter @Inject constructor() {
                 companyLogo = companyLogo,
                 isSaved = false,
                 hasApplied = false,
+                hasViewed = false,
                 isFresh = true
             )
         }
