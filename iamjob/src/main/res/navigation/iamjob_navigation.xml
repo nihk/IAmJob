@@ -4,6 +4,8 @@
     android:id="@+id/navigation"
     app:startDestination="@id/jobs_dest">
 
+    <!-- These fragment IDs must always be the same as their respective item in @menu/bottom_navigation -->
+
     <fragment
         android:id="@+id/jobs_dest"
         android:name="nick.iamjob.ui.JobsFragment"
@@ -25,10 +27,15 @@
     <fragment
         android:id="@+id/saved_dest"
         android:name="nick.iamjob.ui.SavedPositionsFragment"
-        android:label="SavedResultsFragment" >
+        android:label="SavedResultsFragment">
         <action
             android:id="@+id/to_position"
             app:destination="@id/position" />
     </fragment>
+
+    <fragment
+        android:id="@+id/notifications_dest"
+        android:name="nick.iamjob.ui.NotificationsFragment"
+        android:label="NotificationsFragment" />
 
 </navigation>

@@ -13,6 +13,13 @@ import nick.iamjob.R
 // todo: screen should draw under status bar
 // todo: swipe to refresh search page
 // todo: open source license
+// todo: swipe to blacklist forever job
+// todo: use WorkManager to poll API once per day and check for new results?
+// todo: Position.hasViewed, then grey out text if that is true
+// todo: error dialog: A wild error appeared! Here's what some guy wrote to explain this issue: e.message
+// todo: filter by created date/sort by created date?
+// todo: favorite searches
+// todo: notifications tab to subscribe to favorite searches
 class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

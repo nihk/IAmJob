@@ -10,10 +10,11 @@ import nick.data.model.Position
 abstract class PositionsDao : BaseDao<Position> {
 
     companion object {
-        const val QUERY_SAVED = "SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 1"
+        const val ORDER_BY_CREATED_AT = "ORDER BY ${Position.COL_CREATED_AT} DESC"
+        const val QUERY_SAVED = "SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 1 $ORDER_BY_CREATED_AT"
     }
 
-    @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_FRESH} = 1")
+    @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_FRESH} = 1 $ORDER_BY_CREATED_AT")
     abstract fun queryFresh(): LiveData<List<Position>>
 
     @Query(QUERY_SAVED)

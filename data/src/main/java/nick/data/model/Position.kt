@@ -12,7 +12,7 @@ data class Position(
     @PrimaryKey @ColumnInfo(name = COL_ID) val id: String,
     @ColumnInfo(name = COL_TYPE) val type: String,
     @ColumnInfo(name = COL_URL) val url: String,
-    @ColumnInfo(name = COL_CREATED_AT) val createdAt: String?,
+    @ColumnInfo(name = COL_CREATED_AT) val createdAt: Long,
     @ColumnInfo(name = COL_COMPANY) val company: String,
     @ColumnInfo(name = COL_COMPANY_URL) val companyUrl: String?,
     @ColumnInfo(name = COL_LOCATION) val location: String,

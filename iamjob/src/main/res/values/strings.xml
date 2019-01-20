@@ -2,4 +2,5 @@
     <string name="app_name">IAmJob</string>
     <string name="jobs">Jobs</string>
     <string name="saved">Saved</string>
+    <string name="notifications">Notifications</string>
 </resources>

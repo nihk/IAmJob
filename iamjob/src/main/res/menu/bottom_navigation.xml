@@ -8,4 +8,8 @@
         android:id="@+id/saved_dest"
         android:icon="@drawable/ic_saved_filled"
         android:title="@string/saved" />
+    <item
+        android:id="@+id/notifications_dest"
+        android:icon="@drawable/ic_notifications"
+        android:title="@string/notifications" />
 </menu>
