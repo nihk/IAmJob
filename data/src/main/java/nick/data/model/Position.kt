@@ -24,12 +24,11 @@ data class Position(
     @ColumnInfo(name = COL_HAS_APPLIED) val hasApplied: Boolean,
     @ColumnInfo(name = COL_HAS_VIEWED) val hasViewed: Boolean,
     /**
-     * Saved Positions (i.e. Position.isSaved == true) will persist locally in the same table with
-     * non-saved Positions, which are deleted from the table on each new search for more Positions.
-     * A saved Position should show up in a list if it has the same Position.id
-     * as one of the incoming Positions that were fetched remotely. It should otherwise not
-     * show up in that list. This fields serves as a flag to distinguish whether it should
-     * be shown in a list of that "fresh" data.
+     * Positions in the database are ephemeral unless one of its states, e.g. isSaved, is set to true.
+     * That latter type of Position should show up in a newly fetched list of positions if it has the
+     * same Position.id as one of the incoming Positions that was fetched remotely. It should
+     * otherwise not show up in that list. This isFresh field serves as a flag to distinguish whether
+     * it should be shown in that list, based on the aforementioned logic.
      */
     @ColumnInfo(name = COL_IS_FRESH) val isFresh: Boolean
 ) : Parcelable {
