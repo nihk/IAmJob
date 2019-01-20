@@ -2,10 +2,7 @@ package nick.iamjob.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import nick.iamjob.ui.JobsFragment
-import nick.iamjob.ui.NotificationsFragment
-import nick.iamjob.ui.PositionFragment
-import nick.iamjob.ui.SavedPositionsFragment
+import nick.iamjob.ui.*
 
 @Module
 abstract class FragmentModule {
@@ -21,4 +18,7 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract fun notificationsFragment(): NotificationsFragment
+
+    @ContributesAndroidInjector
+    abstract fun errorDialogFragment(): ErrorDialogFragment
 }

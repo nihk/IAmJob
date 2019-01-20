@@ -21,7 +21,7 @@ class PositionViewHolder(
             company.text = position.company
             location.text = position.location
 
-            @ColorInt val textColor = ContextCompat.getColor(this.context,
+            @ColorInt val textColor = ContextCompat.getColor(context,
                 if (position.hasViewed) {
                     R.color.hasViewedText
                 } else {
@@ -48,6 +48,7 @@ class PositionViewHolder(
 
             save_position.setOnClickListener {
                 onPositionClicked.handleAction(PositionAction.SaveOrUnsave(position))
+                // To prevent click spamming
                 save_position.isEnabled = false
             }
         }

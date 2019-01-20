@@ -77,8 +77,8 @@ class JobsFragment
 
         viewModel.error.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
-                // TODO: UI error state, not just a Toast. Snackbar?
-                toast(it.message)
+                ErrorDialogFragment.create(it.message)
+                    .show(childFragmentManager, ErrorDialogFragment.TAG)
             }
         })
 

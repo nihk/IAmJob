@@ -11,7 +11,6 @@ import nick.iamjob.R
 // https://blog.usejournal.com/android-material-design-components-backdrop-96a3044a3b2
 // todo: swipe to blacklist forever job
 // todo: use WorkManager to poll API once per day and check for new results?
-// todo: Position.hasViewed, then grey out text if that is true
 // todo: error dialog: A wild error appeared! Here's what some guy wrote to explain this issue: e.message
 // todo: filter by created date/sort by created date?
 // todo: favorite searches
