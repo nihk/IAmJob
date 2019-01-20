@@ -3,6 +3,7 @@ package nick.data.model
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
+// TODO: Do I even want to use lat/lng anywhere?
 @Parcelize
 data class Location(
     val description: String? = null,

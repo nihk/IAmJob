@@ -40,7 +40,7 @@ class PositionsRepository @Inject constructor(
                 )
             }
 
-            // This will also update any saved rows that were marked as isFresh == true
+            // The insert part of this will also update any saved rows that were found in the fetched positions list
             deleteAllUnsavedThenInsert(reconciledPositions)
         }
     }

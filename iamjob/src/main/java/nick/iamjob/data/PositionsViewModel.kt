@@ -33,24 +33,24 @@ class PositionsViewModel @Inject constructor(
     val loadingState: LiveData<PositionsLoadingState> get() = _loadingState
     val error: LiveData<Event<Throwable>> get() = _error
 
-    fun search(search: Search = Search.EMPTY) {
+    fun search(search: Search, onLoading: PositionsLoadingState, onDoneLoading: PositionsLoadingState) {
         repository.search(search)
             .applySchedulers()
             .subscribe(object : CompletableObserver {
 
                 override fun onSubscribe(d: Disposable) {
                     addDisposable(d)
-                    _loadingState.value = PositionsLoadingState.FetchingPositions
+                    _loadingState.value = onLoading
                 }
 
                 override fun onComplete() {
-                    _loadingState.value = PositionsLoadingState.DoneFetchingPositions
+                    _loadingState.value = onDoneLoading
                     queryPositions(PositionsQuery.FreshPositions)
                 }
 
                 override fun onError(e: Throwable) {
                     Timber.e(e)
-                    _loadingState.value = PositionsLoadingState.DoneFetchingPositions
+                    _loadingState.value = onDoneLoading
                     _error.value = Event(e)
 
                     // Display cached content if remote fetching failed

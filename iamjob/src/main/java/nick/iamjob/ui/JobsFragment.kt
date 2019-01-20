@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_jobs.*
 import nick.core.util.visibleOrGone
+import nick.data.model.Search
 import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.R
 import nick.iamjob.util.OnPositionClicked
@@ -40,7 +41,8 @@ class JobsFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            viewModel.search()
+            search(onLoading = PositionsLoadingState.TabClickFetch,
+                onDoneLoading = PositionsLoadingState.TabClickDoneFetch)
         }
     }
 
@@ -55,6 +57,10 @@ class JobsFragment
         super.onViewCreated(view, savedInstanceState)
         recycler_view.adapter = adapter
         recycler_view.addOnScrollListener(scrollListener)
+        swipe_refresh.setOnRefreshListener {
+            search(onLoading = PositionsLoadingState.SwipeRefreshFetch,
+                onDoneLoading = PositionsLoadingState.SwipeRefreshDoneFetch)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -62,8 +68,10 @@ class JobsFragment
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is PositionsLoadingState.FetchingPositions -> progress_bar.visibleOrGone(true)
-                is PositionsLoadingState.DoneFetchingPositions -> progress_bar.visibleOrGone(false)
+                is PositionsLoadingState.TabClickFetch -> progress_bar.visibleOrGone(true)
+                is PositionsLoadingState.TabClickDoneFetch -> progress_bar.visibleOrGone(false)
+                is PositionsLoadingState.SwipeRefreshFetch -> Unit
+                is PositionsLoadingState.SwipeRefreshDoneFetch -> swipe_refresh.isRefreshing = false
             }
         })
 
@@ -93,5 +101,9 @@ class JobsFragment
                 )
             }
         }
+    }
+
+    fun search(search: Search = Search.EMPTY, onLoading: PositionsLoadingState, onDoneLoading: PositionsLoadingState) {
+        viewModel.search(search, onLoading, onDoneLoading)
     }
 }
