@@ -21,17 +21,17 @@ class PositionsRepository @Inject constructor(
             isFullTime,
             page
         ).flatMapCompletable { fetchedPositions ->
-            // Mark all cached positions as stale -- we don't want them showing up in search results
+            // Mark all fresh cached positions as stale -- we don't want them showing up in search results
             // if they're not part of the remotely fetched result set
             val cachedPositions = positionsDao.queryCachedFreshBlocking().map {
                 it.copy(isFresh = false)
-            }
+            }.toMutableList()
 
             // Apply cached position states to the newly fetched positions
-            val reconciledPositions = fetchedPositions.toMutableList().map { fetchedPosition ->
+            val reconciledPositions = fetchedPositions.map { fetchedPosition ->
                 val cachedPosition = cachedPositions.find { position ->
                     position.id == fetchedPosition.id
-                }
+                }?.also { cachedPositions.remove(it) }
 
                 fetchedPosition.copy(
                     isSaved = cachedPosition?.isSaved == true,
@@ -39,9 +39,12 @@ class PositionsRepository @Inject constructor(
                     hasViewed = cachedPosition?.hasViewed == true,
                     isFresh = true
                 )
+            }.toMutableList().also {
+                // Add all remaining stale cached positions so they can be updated in the local db
+                it.addAll(cachedPositions)
             }
 
-            // The insert part of this will also update any cached rows that were found in the fetched positions list
+            // Insert will replace (effectively updating) any positions with the same ID
             deleteAllNonCachableThenInsert(reconciledPositions)
         }
     }
@@ -52,7 +55,7 @@ class PositionsRepository @Inject constructor(
     fun updatePosition(position: Position): Completable =
         Completable.fromAction { positionsDao.update(position) }
 
-    fun querySavedPositions() = positionsDao.querySavedFresh()
+    fun querySavedPositions() = positionsDao.querySaved()
 
     fun queryFreshPositions() = positionsDao.queryFresh()
 }

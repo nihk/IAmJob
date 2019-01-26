@@ -15,6 +15,7 @@ import nick.iamjob.R
 // todo: long press PositionViewHolder to mark as unViewed (?)
 // todo: 'days ago' in PositionViewHolder. Color code for recency green -> red
 // todo: notifications tab to subscribe to favorite searches
+// todo: pagination
 class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

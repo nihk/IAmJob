@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">IAmJob</string>
+    <string name="app_name">i am job</string>
     <string name="jobs">Jobs</string>
     <string name="saved">Saved</string>
     <string name="notifications">Notifications</string>
     <string name="a_wild_error_appeared">A wild error message appeared!</string>
     <string name="something_went_wrong">Something went terribly wrong. Here\'s what someone wrote to try and explain the problem:\n\n%1$s</string>
+    <string name="apply_fiter">Apply filter</string>
 </resources>

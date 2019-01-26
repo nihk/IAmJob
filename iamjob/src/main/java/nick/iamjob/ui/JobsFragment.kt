@@ -20,13 +20,17 @@ import nick.ui.BaseFragment
 
 class JobsFragment
     : BaseFragment()
-    , OnPositionClickedListener {
+    , OnPositionClickedListener
+    , FilterPositionsDialogFragment.OnFilterDefinedListener {
 
     private val viewModel: PositionsViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
     }
 
     private val adapter = PositionsAdapter(this)
+
+    // TODO: add to saveInstanceState bundle
+    private var currentFilter = Search.EMPTY
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -40,9 +44,9 @@ class JobsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // fixme: process death is showing a blank screen
         if (savedInstanceState == null) {
-            search(onLoading = PositionsLoadingState.TabClickFetch,
-                onDoneLoading = PositionsLoadingState.TabClickDoneFetch)
+            search()
         }
     }
 
@@ -61,6 +65,10 @@ class JobsFragment
             search(onLoading = PositionsLoadingState.SwipeRefreshFetch,
                 onDoneLoading = PositionsLoadingState.SwipeRefreshDoneFetch)
         }
+        filter.setOnClickListener {
+            FilterPositionsDialogFragment.create()
+                .show(childFragmentManager, FilterPositionsDialogFragment.TAG)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -68,8 +76,8 @@ class JobsFragment
 
         viewModel.loadingState.observe(viewLifecycleOwner, Observer {
             when (it) {
-                is PositionsLoadingState.TabClickFetch -> progress_bar.visibleOrGone(true)
-                is PositionsLoadingState.TabClickDoneFetch -> progress_bar.visibleOrGone(false)
+                is PositionsLoadingState.SimpleFetch -> progress_bar.visibleOrGone(true)
+                is PositionsLoadingState.SimpleDoneFetch -> progress_bar.visibleOrGone(false)
                 is PositionsLoadingState.SwipeRefreshFetch -> Unit
                 is PositionsLoadingState.SwipeRefreshDoneFetch -> swipe_refresh.isRefreshing = false
             }
@@ -106,7 +114,13 @@ class JobsFragment
         }
     }
 
-    fun search(search: Search = Search.EMPTY, onLoading: PositionsLoadingState, onDoneLoading: PositionsLoadingState) {
+    fun search(search: Search = currentFilter,
+               onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
+               onDoneLoading: PositionsLoadingState = PositionsLoadingState.SimpleDoneFetch) {
         viewModel.search(search, onLoading, onDoneLoading)
+    }
+
+    override fun onFilterDefined(search: Search) {
+        search(search)
     }
 }
