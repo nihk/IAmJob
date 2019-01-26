@@ -1,5 +1,6 @@
 package nick.iamjob.ui
 
+import android.annotation.SuppressLint
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -9,7 +10,9 @@ import nick.data.model.Position
 import nick.iamjob.R
 import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
+import nick.ui.GlideApp
 
+// TODO: Need "days ago"
 class PositionViewHolder(
     view: View,
     private val onPositionClickedListener: OnPositionClickedListener
@@ -18,29 +21,18 @@ class PositionViewHolder(
     fun bind(position: Position) {
         with(itemView) {
             title.text = position.title
+            @SuppressLint("SetTextI18n")
             company.text = position.company
             location.text = position.location
+            time_ago.text = position.createdAt.toString()
 
-            @ColorInt val textColor = ContextCompat.getColor(context,
-                if (position.hasViewed) {
-                    R.color.hasViewedText
-                } else {
-                    R.color.hasNotViewedText
-                }
-            )
+            GlideApp.with(itemView)
+                .load(position.companyLogo)
+                .placeholder(R.drawable.ic_jobs)
+                .into(company_logo)
 
-            title.setTextColor(textColor)
-            company.setTextColor(textColor)
-            location.setTextColor(textColor)
-
-            save_position.isEnabled = true
-            save_position.setImageResource(
-                if (position.isSaved) {
-                    R.drawable.ic_saved_filled
-                } else {
-                    R.drawable.ic_saved
-                }
-            )
+            resetTextColors(position)
+            resetSaveIcon(position)
 
             setOnClickListener {
                 onPositionClickedListener.onPositionClicked(PositionAction.MoreDetails(position))
@@ -51,6 +43,45 @@ class PositionViewHolder(
                 // To prevent click spamming
                 save_position.isEnabled = false
             }
+        }
+    }
+
+    private fun resetTextColors(position: Position) {
+        with (itemView) {
+            @ColorInt val titleTextColor = ContextCompat.getColor(
+                context,
+                if (position.hasViewed) {
+                    R.color.lightGrey
+                } else {
+                    android.R.color.black
+                }
+            )
+
+            @ColorInt val subTextColor = ContextCompat.getColor(
+                context,
+                if (position.hasViewed) {
+                    R.color.lightGrey
+                } else {
+                    R.color.darkGrey
+                }
+            )
+
+            title.setTextColor(titleTextColor)
+            company.setTextColor(subTextColor)
+            location.setTextColor(subTextColor)
+        }
+    }
+
+    private fun resetSaveIcon(position: Position) {
+        with (itemView) {
+            save_position.isEnabled = true
+            save_position.setImageResource(
+                if (position.isSaved) {
+                    R.drawable.ic_saved_filled
+                } else {
+                    R.drawable.ic_saved
+                }
+            )
         }
     }
 }

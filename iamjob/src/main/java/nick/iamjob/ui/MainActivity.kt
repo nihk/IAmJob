@@ -16,6 +16,7 @@ import nick.iamjob.R
 // todo: 'days ago' in PositionViewHolder. Color code for recency green -> red
 // todo: notifications tab to subscribe to favorite searches
 // todo: pagination
+// todo: better themed colors - use adobe color
 class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
