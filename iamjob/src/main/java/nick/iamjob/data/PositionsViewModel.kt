@@ -11,8 +11,8 @@ import nick.core.util.Event
 import nick.core.util.applySchedulers
 import nick.data.model.Position
 import nick.data.model.Search
-import nick.iamjob.util.PositionsQuery
 import nick.iamjob.util.PositionsLoadingState
+import nick.iamjob.util.PositionsQuery
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,29 +33,38 @@ class PositionsViewModel @Inject constructor(
 
     val loadingState: LiveData<PositionsLoadingState> get() = _loadingState
     val error: LiveData<Event<Throwable>> get() = _error
+    val exhaustedPages = repository.exhaustedPages
 
-    fun search(search: Search, onLoading: PositionsLoadingState, onDoneLoading: PositionsLoadingState) {
-        repository.search(search)
+    fun search(
+        search: Search,
+        loadingState: PositionsLoadingState,
+        doneLoadingState: PositionsLoadingState
+    ) {
+        repository.search(search, loadingState)
             .applySchedulers()
             .subscribe(object : CompletableObserver {
 
                 override fun onSubscribe(d: Disposable) {
                     addDisposable(d)
-                    _loadingState.value = onLoading
+                    _loadingState.value = loadingState
                 }
 
                 override fun onComplete() {
-                    _loadingState.value = onDoneLoading
-                    queryPositions(PositionsQuery.FreshPositions)
+                    _loadingState.value = doneLoadingState
+                    if (loadingState !is PositionsLoadingState.Paginating) {
+                        queryPositions(PositionsQuery.FreshPositions)
+                    }
                 }
 
                 override fun onError(e: Throwable) {
                     Timber.e(e)
-                    _loadingState.value = onDoneLoading
+                    _loadingState.value = doneLoadingState
                     _error.value = Event(e)
 
-                    // Display cached content if remote fetching failed
-                    queryPositions(PositionsQuery.FreshPositions)
+                    if (loadingState !is PositionsLoadingState.Paginating) {
+                        // Display cached content if remote fetching failed
+                        queryPositions(PositionsQuery.FreshPositions)
+                    }
                 }
             })
     }
@@ -93,5 +102,22 @@ class PositionsViewModel @Inject constructor(
 
     fun queryPositions(positionsQuery: PositionsQuery) {
         this.positionsQuery.value = positionsQuery
+    }
+
+    fun maybePaginate(
+        search: Search,
+        visibleItemCount: Int,
+        lastVisibleItem: Int,
+        totalItemCount: Int,
+        itemsFromEndThreshold: Int = 10
+    ): Search {
+        return if (visibleItemCount + lastVisibleItem + itemsFromEndThreshold >= totalItemCount) {
+            val nextPage = search.copy(page = search.page + 1)
+            Timber.d("Paginating $nextPage")
+            search(nextPage, PositionsLoadingState.Paginating, PositionsLoadingState.DonePaginating)
+            nextPage
+        } else {
+            search
+        }
     }
 }

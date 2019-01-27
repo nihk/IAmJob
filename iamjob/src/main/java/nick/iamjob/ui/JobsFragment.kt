@@ -52,11 +52,29 @@ class JobsFragment
             } else if (dy < 0) {
                 filter.show()
             }
+
+            if (currentFilter.arePagesExhausted()
+                || positionsViewModel.loadingState.value is PositionsLoadingState.Loading
+            ) {
+                return
+            }
+
+            val layoutManager = recycler_view.layoutManager as LinearLayoutManager
+            val visibleItemCount = layoutManager.childCount
+            val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+            val totalItemCount = layoutManager.itemCount
+
+            currentFilter = positionsViewModel.maybePaginate(
+                currentFilter,
+                visibleItemCount,
+                lastVisibleItem,
+                totalItemCount
+            )
         }
     }
 
     private val onBackPressedCallback = OnBackPressedCallback {
-        if (currentFilter != Search.EMPTY) {
+        if (!currentFilter.isEmpty()) {
             onFilterDefined(Search.EMPTY, false)
             true
         } else {
@@ -96,9 +114,11 @@ class JobsFragment
         recycler_view.adapter = adapter
         recycler_view.addOnScrollListener(scrollListener)
         swipe_refresh.setOnRefreshListener {
-            search(currentFilter,
-                onLoading = PositionsLoadingState.SwipeRefreshFetch,
-                onDoneLoading = PositionsLoadingState.SwipeRefreshDoneFetch
+            currentFilter = currentFilter.toFirstPage()
+            search(
+                currentFilter,
+                onLoading = PositionsLoadingState.SwipeRefreshing,
+                onDoneLoading = PositionsLoadingState.DoneSwipeRefreshing
             )
         }
         filter.setOnClickListener {
@@ -117,9 +137,11 @@ class JobsFragment
         positionsViewModel.loadingState.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is PositionsLoadingState.SimpleFetch -> progress_bar.visibleOrGone(true)
-                is PositionsLoadingState.SimpleDoneFetch -> progress_bar.visibleOrGone(false)
-                is PositionsLoadingState.SwipeRefreshFetch -> Unit
-                is PositionsLoadingState.SwipeRefreshDoneFetch -> swipe_refresh.isRefreshing = false
+                is PositionsLoadingState.DoneSimpleFetch -> progress_bar.visibleOrGone(false)
+                is PositionsLoadingState.SwipeRefreshing -> Unit
+                is PositionsLoadingState.DoneSwipeRefreshing -> swipe_refresh.isRefreshing = false
+                is PositionsLoadingState.Paginating -> Unit
+                is PositionsLoadingState.DonePaginating -> Unit
             }
             no_results_message.visibleOrGone(false)
         })
@@ -134,6 +156,12 @@ class JobsFragment
         positionsViewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
             no_results_message.visibleOrGone(it.isEmpty())
+        })
+
+        positionsViewModel.exhaustedPages.observe(viewLifecycleOwner, Observer {
+            it?.getContentIfNotHandled()?.let {
+                currentFilter = currentFilter.toExhausted()
+            }
         })
 
         if (savedInstanceState != null) {
@@ -173,7 +201,7 @@ class JobsFragment
     fun search(
         search: Search,
         onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
-        onDoneLoading: PositionsLoadingState = PositionsLoadingState.SimpleDoneFetch
+        onDoneLoading: PositionsLoadingState = PositionsLoadingState.DoneSimpleFetch
     ) {
         positionsViewModel.search(search, onLoading, onDoneLoading)
     }
@@ -183,13 +211,13 @@ class JobsFragment
         setUiActiveFilter(currentFilter)
         search(currentFilter)
 
-        if (saveFilterLocally && search != Search.EMPTY) {
+        if (saveFilterLocally && !search.isEmpty()) {
             searchesViewModel.insert(search)
         }
     }
 
     private fun setUiActiveFilter(search: Search) {
-        active_filter_container.visibleOrGone(currentFilter != Search.EMPTY)
+        active_filter_container.visibleOrGone(!currentFilter.isEmpty())
         active_filter.text = filterStringFormatter.format(search)
     }
 }

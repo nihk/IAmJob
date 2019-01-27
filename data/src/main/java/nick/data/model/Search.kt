@@ -17,7 +17,7 @@ data class Search @JvmOverloads constructor(
     @ColumnInfo(name = COL_DESCRIPTION) val description: String,
     @ColumnInfo(name = COL_LOCATION) val location: String,
     @ColumnInfo(name = COL_IS_FULL_TIME) val isFullTime: Boolean,
-    @Ignore val page: Int = 0
+    @Ignore val page: Int = 1
 ) : Parcelable {
 
     companion object {
@@ -32,4 +32,15 @@ data class Search @JvmOverloads constructor(
         const val COL_LOCATION = "location"
         const val COL_IS_FULL_TIME = "is_full_time"
     }
+
+    // Ignores page
+    fun isEmpty(): Boolean {
+        return this.description == EMPTY.description
+                && this.location == EMPTY.location
+                && this.isFullTime == EMPTY.isFullTime
+    }
+
+    fun arePagesExhausted() = page == -1
+    fun toFirstPage() = copy(page = 1)
+    fun toExhausted() = copy(page = -1)
 }

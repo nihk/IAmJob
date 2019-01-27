@@ -17,7 +17,6 @@ import javax.inject.Inject
 
 // todo: use WorkManager to poll API once per day and check for new results?
 // todo: notifications tab to subscribe to favorite searches
-// todo: pagination
 // todo: endlessly struggle to do shared element transitions
 // todo: position fragment
 class MainActivity
