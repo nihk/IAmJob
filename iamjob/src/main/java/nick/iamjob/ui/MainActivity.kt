@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import nick.iamjob.R
 
 // todo: use WorkManager to poll API once per day and check for new results?
-// todo: favorite searches
 // todo: notifications tab to subscribe to favorite searches
 // todo: pagination
 // todo: better themed colors - use adobe color

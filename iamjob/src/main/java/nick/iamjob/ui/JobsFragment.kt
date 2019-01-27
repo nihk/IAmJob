@@ -16,19 +16,27 @@ import nick.core.util.visibleOrGone
 import nick.data.model.Search
 import nick.iamjob.R
 import nick.iamjob.data.PositionsViewModel
+import nick.iamjob.data.SearchesViewModel
 import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
 import nick.iamjob.util.PositionsQuery
 import nick.ui.BaseFragment
+import javax.inject.Inject
 
 class JobsFragment
     : BaseFragment()
     , OnPositionClickedListener
     , FilterPositionsDialogFragment.OnFilterDefinedListener {
 
-    private val viewModel: PositionsViewModel by lazy {
+    @Inject
+    lateinit var filterStringFormatter: FilterStringFormatter
+
+    private val positionsViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
+    }
+    private val searchesViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(SearchesViewModel::class.java)
     }
 
     private val adapter = PositionsAdapter(this)
@@ -96,7 +104,7 @@ class JobsFragment
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.loadingState.observe(viewLifecycleOwner, Observer {
+        positionsViewModel.loadingState.observe(viewLifecycleOwner, Observer {
             when (it) {
                 is PositionsLoadingState.SimpleFetch -> progress_bar.visibleOrGone(true)
                 is PositionsLoadingState.SimpleDoneFetch -> progress_bar.visibleOrGone(false)
@@ -106,21 +114,21 @@ class JobsFragment
             no_results_message.visibleOrGone(false)
         })
 
-        viewModel.error.observe(viewLifecycleOwner, Observer { event ->
+        positionsViewModel.error.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 ErrorDialogFragment.create(it.message)
                     .show(childFragmentManager, ErrorDialogFragment.TAG)
             }
         })
 
-        viewModel.positions.observe(viewLifecycleOwner, Observer {
+        positionsViewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
             no_results_message.visibleOrGone(it.isEmpty())
             setActiveFilter(currentFilter)
         })
 
         if (savedInstanceState != null) {
-            viewModel.queryPositions(PositionsQuery.FreshPositions)
+            positionsViewModel.queryPositions(PositionsQuery.FreshPositions)
         }
     }
 
@@ -137,9 +145,9 @@ class JobsFragment
     override fun onPositionClicked(positionAction: PositionAction) {
         with(positionAction) {
             when (this) {
-                is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)
+                is PositionAction.SaveOrUnsave -> positionsViewModel.saveOrUnsavePosition(position)
                 is PositionAction.MoreDetails -> {
-                    viewModel.setPositionViewed(position)
+                    positionsViewModel.setPositionViewed(position)
                     findNavController().navigate(
                         JobsFragmentDirections.toPosition(position)
                     )
@@ -154,25 +162,19 @@ class JobsFragment
         onDoneLoading: PositionsLoadingState = PositionsLoadingState.SimpleDoneFetch
     ) {
         currentFilter = search
-        viewModel.search(currentFilter, onLoading, onDoneLoading)
+        positionsViewModel.search(currentFilter, onLoading, onDoneLoading)
     }
 
     override fun onFilterDefined(search: Search, saveFilter: Boolean) {
         search(search)
 
-        if (saveFilter) {
-            // todo: save filter to FiltersDao
+        if (saveFilter && search != Search.EMPTY) {
+            searchesViewModel.insert(search)
         }
     }
 
     private fun setActiveFilter(search: Search) {
         active_filter_container.visibleOrGone(currentFilter != Search.EMPTY)
-        val activeFilterComponents = mutableListOf(
-            search.description,
-            search.location,
-            if (search.isFullTime) "Full time" else ""
-        ).also { it.removeAll { s -> s.isBlank() } }
-
-        active_filter.text = activeFilterComponents.joinToString(" | ")
+        active_filter.text = filterStringFormatter.format(search)
     }
 }
