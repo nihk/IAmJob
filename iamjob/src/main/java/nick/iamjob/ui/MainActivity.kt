@@ -10,10 +10,7 @@ import nick.iamjob.R
 // UI should ideally look something like:
 // https://blog.usejournal.com/android-material-design-components-backdrop-96a3044a3b2
 // todo: use WorkManager to poll API once per day and check for new results?
-// todo: filter by created date/sort by created date?
 // todo: favorite searches
-// todo: long press PositionViewHolder to mark as unViewed (?)
-// todo: 'days ago' in PositionViewHolder. Color code for recency green -> red
 // todo: notifications tab to subscribe to favorite searches
 // todo: pagination
 // todo: better themed colors - use adobe color

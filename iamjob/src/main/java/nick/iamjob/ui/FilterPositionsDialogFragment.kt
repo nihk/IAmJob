@@ -5,7 +5,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.synthetic.main.fragment_filter_positions_dialog.*
-import nick.data.model.Location
 import nick.data.model.Search
 import nick.iamjob.R
 
@@ -30,16 +29,11 @@ class FilterPositionsDialogFragment : DaggerDialogFragment() {
             customView(R.layout.fragment_filter_positions_dialog)
             positiveButton(R.string.apply_fiter) { dialog ->
                 with(dialog) {
-                    val description = description.text.toString().ifEmpty { null }
-                    val location = location.text.toString().ifEmpty { null }
-                    val isFullTime = full_time.isChecked
-                    val saveFilter = save_filter.isChecked
-
-                    listener.onFilterDefined(Search.EMPTY.copy(
-                        description = description,
-                        isFullTime = isFullTime,
-                        location = location?.let { Location(description = it) }
-                    ), saveFilter)
+                    listener.onFilterDefined(Search(
+                        description = description.text.toString(),
+                        location = location.text.toString(),
+                        isFullTime = full_time.isChecked
+                    ), save_filter.isChecked)
                 }
             }
         }

@@ -14,12 +14,10 @@ class PositionsRepository @Inject constructor(
 
     fun search(search: Search): Completable = with(search) {
         service.fetchPositions(
-            description,
-            location?.description,
-            location?.latitude,
-            location?.longitude,
-            isFullTime,
-            page
+            description = description.ifEmpty { null },
+            location = location.ifEmpty { null },
+            isFullTime = isFullTime,
+            page = page
         ).flatMapCompletable { fetchedPositions ->
             // Mark all cached positions as stale -- we don't want them showing up in search results
             // if they're not part of the remotely fetched result set
@@ -40,7 +38,7 @@ class PositionsRepository @Inject constructor(
                     isFresh = true
                 )
             }.toMutableList().also {
-                // Add all remaining stale cached positions so they can be updated in the local db
+                // Add all remaining stale cached positions so they can be updated in the local db as such
                 it.addAll(cachedPositions)
             }
 

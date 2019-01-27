@@ -163,8 +163,8 @@ class JobsFragment
     private fun setActiveFilter(search: Search) {
         active_filter_container.visibleOrGone(currentFilter != Search.EMPTY)
         val activeFilterComponents = mutableListOf(
-            search.description.orEmpty(),
-            search.location?.description.orEmpty(),
+            search.description,
+            search.location,
             if (search.isFullTime) "Full time" else ""
         ).also { it.removeAll { s -> s.isBlank() } }
 

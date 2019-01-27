@@ -5,10 +5,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Search(
-    val description: String? = null,
-    val location: Location? = null,
+    val description: String = "",
+    val location: String = "",
     val isFullTime: Boolean = false,
-    val page: Int? = null
+    val page: Int = 0
 ) : Parcelable {
 
     companion object {
