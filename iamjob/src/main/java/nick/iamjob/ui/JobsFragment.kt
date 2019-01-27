@@ -58,10 +58,10 @@ class JobsFragment
     private val onBackPressedCallback = OnBackPressedCallback {
         if (currentFilter != Search.EMPTY) {
             onFilterDefined(Search.EMPTY, false)
-            return@OnBackPressedCallback true
+            true
+        } else {
+            false
         }
-
-        false
     }
 
     companion object {
