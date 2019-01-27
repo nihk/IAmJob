@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_jobs.*
 import nick.core.util.visibleOrGone
 import nick.data.model.Search
-import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.R
+import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState

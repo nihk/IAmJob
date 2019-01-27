@@ -13,10 +13,10 @@ import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
 import nick.ui.GlideApp
 
-// TODO: Need "days ago"
 class PositionViewHolder(
     view: View,
-    private val onPositionClickedListener: OnPositionClickedListener
+    private val onPositionClickedListener: OnPositionClickedListener,
+    private val showFadedViewedPosition: Boolean
 ) : RecyclerView.ViewHolder(view) {
 
     fun bind(position: Position) {
@@ -32,8 +32,10 @@ class PositionViewHolder(
                 .placeholder(R.drawable.ic_jobs)
                 .into(company_logo)
 
-            resetTextColors(position)
-            resetSaveIcon(position)
+            if (showFadedViewedPosition) {
+                setTextColors(position)
+            }
+            setSaveIcon(position)
 
             setOnClickListener {
                 onPositionClickedListener.onPositionClicked(PositionAction.MoreDetails(position))
@@ -47,7 +49,7 @@ class PositionViewHolder(
         }
     }
 
-    private fun resetTextColors(position: Position) {
+    private fun setTextColors(position: Position) {
         with (itemView) {
             val alpha = if (position.hasViewed) 0.4f else 1.0f
 
@@ -68,7 +70,7 @@ class PositionViewHolder(
         }
     }
 
-    private fun resetSaveIcon(position: Position) {
+    private fun setSaveIcon(position: Position) {
         with (itemView) {
             save_position.isEnabled = true
             save_position.setImageResource(

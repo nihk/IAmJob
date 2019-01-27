@@ -6,4 +6,5 @@
     <string name="a_wild_error_appeared">A wild error message appeared!</string>
     <string name="something_went_wrong">Something went terribly wrong. Here\'s what someone wrote to try and explain the problem:\n\n%1$s</string>
     <string name="apply_fiter">Apply filter</string>
+    <string name="no_jobs_saved_description">It looks like you haven\'t saved any jobs yet. You can save jobs by tapping on bookmark icons next to an item in the Jobs tab.</string>
 </resources>
