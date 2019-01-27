@@ -7,6 +7,7 @@ import dagger.multibindings.IntoMap
 import nick.core.di.ViewModelFactoryModule
 import nick.core.di.ViewModelKey
 import nick.iamjob.data.PositionsViewModel
+import nick.iamjob.data.SearchesViewModel
 
 @Module(
     includes = [
@@ -19,4 +20,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PositionsViewModel::class)
     abstract fun positionsViewModel(positionsViewModel: PositionsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SearchesViewModel::class)
+    abstract fun searchesViewModel(searchesViewModel: SearchesViewModel): ViewModel
 }

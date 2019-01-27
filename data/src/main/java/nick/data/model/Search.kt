@@ -1,17 +1,35 @@
 package nick.data.model
 
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Search(
-    val description: String = "",
-    val location: String = "",
-    val isFullTime: Boolean = false,
-    val page: Int = 0
+@Entity(
+    tableName = Search.TABLE_NAME,
+    primaryKeys = [
+        Search.COL_DESCRIPTION, Search.COL_LOCATION, Search.COL_IS_FULL_TIME
+    ]
+)
+data class Search @JvmOverloads constructor(
+    @ColumnInfo(name = COL_DESCRIPTION) val description: String,
+    @ColumnInfo(name = COL_LOCATION) val location: String,
+    @ColumnInfo(name = COL_IS_FULL_TIME) val isFullTime: Boolean,
+    @Ignore val page: Int = 0
 ) : Parcelable {
 
     companion object {
-        val EMPTY = Search()
+        val EMPTY = Search(
+            description = "",
+            location = "",
+            isFullTime = false
+        )
+
+        const val TABLE_NAME = "searches"
+        const val COL_DESCRIPTION = "description"
+        const val COL_LOCATION = "location"
+        const val COL_IS_FULL_TIME = "is_full_time"
     }
 }

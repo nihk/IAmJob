@@ -1,12 +1,14 @@
 package nick.iamjob.data
 
 import io.reactivex.Completable
+import nick.core.di.ApplicationScope
 import nick.data.dao.PositionsDao
 import nick.data.model.Position
 import nick.data.model.Search
 import nick.networking.GitHubJobsService
 import javax.inject.Inject
 
+@ApplicationScope
 class PositionsRepository @Inject constructor(
     private val service: GitHubJobsService,
     private val positionsDao: PositionsDao

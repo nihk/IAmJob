@@ -10,7 +10,7 @@ import dagger.Provides
 import nick.core.di.ApplicationContext
 import nick.core.di.ApplicationScope
 import nick.data.BuildConfig
-import nick.data.PositionsDatabase
+import nick.data.JobsDatabase
 
 @Module
 object DataModule {
@@ -24,11 +24,11 @@ object DataModule {
     @ApplicationScope
     @Provides
     @JvmStatic
-    fun positionsDatabase(@ApplicationContext applicationContext: Context) =
+    fun jobsDatabase(@ApplicationContext applicationContext: Context) =
         Room.databaseBuilder(
             applicationContext,
-            PositionsDatabase::class.java,
-            PositionsDatabase.DATABASE_NAME
+            JobsDatabase::class.java,
+            JobsDatabase.DATABASE_NAME
         ).apply {
             if (BuildConfig.DEBUG) {
                 this.setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
@@ -38,5 +38,10 @@ object DataModule {
     @ApplicationScope
     @Provides
     @JvmStatic
-    fun positionsDao(database: PositionsDatabase) = database.positionsDao()
+    fun positionsDao(database: JobsDatabase) = database.positionsDao()
+
+    @ApplicationScope
+    @Provides
+    @JvmStatic
+    fun searchesDao(database: JobsDatabase) = database.searchesDao()
 }
