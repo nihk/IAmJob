@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 data class Search(
     val description: String? = null,
     val location: Location? = null,
-    val isFullTime: Boolean? = null,
+    val isFullTime: Boolean = false,
     val page: Int? = null
 ) : Parcelable {
 

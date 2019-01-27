@@ -7,4 +7,9 @@
     <string name="something_went_wrong">Something went terribly wrong. Here\'s what someone wrote to try and explain the problem:\n\n%1$s</string>
     <string name="apply_fiter">Apply filter</string>
     <string name="no_jobs_saved_description">It looks like you haven\'t saved any jobs yet. You can save jobs by tapping on bookmark icons next to an item in the Jobs tab.</string>
+    <string name="filter_description_hint">Title, benefits, company, expertise</string>
+    <string name="filter_location_hint">City, state, zip code, or country</string>
+    <string name="full_time">Full time</string>
+    <string name="save_filter">Save this filter</string>
+    <string name="no_results_message">We ain\'t found shit!</string>
 </resources>

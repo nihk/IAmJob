@@ -32,7 +32,6 @@ class JobsFragment
 
     private val adapter = PositionsAdapter(this)
 
-    // TODO: add to saveInstanceState bundle
     private var currentFilter = Search.EMPTY
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
@@ -45,11 +44,17 @@ class JobsFragment
         }
     }
 
+    companion object {
+        const val KEY_CURRENT_FILTER = "current_filter"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // fixme: process death is showing a blank screen
         if (savedInstanceState == null) {
             search()
+        } else {
+            currentFilter = savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
         }
     }
 
@@ -62,21 +67,29 @@ class JobsFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler_view.layoutManager = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            LinearLayoutManager(requireContext())
-        } else {
-            GridLayoutManager(requireContext(), 2)
-        }
+        recycler_view.layoutManager =
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    LinearLayoutManager(requireContext())
+                } else {
+                    GridLayoutManager(requireContext(), 2)
+                }
         recycler_view.adapter = adapter
         recycler_view.addOnScrollListener(scrollListener)
         swipe_refresh.setOnRefreshListener {
-            search(onLoading = PositionsLoadingState.SwipeRefreshFetch,
-                onDoneLoading = PositionsLoadingState.SwipeRefreshDoneFetch)
+            search(
+                onLoading = PositionsLoadingState.SwipeRefreshFetch,
+                onDoneLoading = PositionsLoadingState.SwipeRefreshDoneFetch
+            )
         }
         filter.setOnClickListener {
             FilterPositionsDialogFragment.create()
                 .show(childFragmentManager, FilterPositionsDialogFragment.TAG)
         }
+        clear_filter.setOnClickListener {
+            search(Search.EMPTY)
+            active_filter_container.visibleOrGone(false)
+        }
+        setActiveFilter(currentFilter)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -89,6 +102,7 @@ class JobsFragment
                 is PositionsLoadingState.SwipeRefreshFetch -> Unit
                 is PositionsLoadingState.SwipeRefreshDoneFetch -> swipe_refresh.isRefreshing = false
             }
+            no_results_message.visibleOrGone(false)
         })
 
         viewModel.error.observe(viewLifecycleOwner, Observer { event ->
@@ -100,7 +114,13 @@ class JobsFragment
 
         viewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+            no_results_message.visibleOrGone(it.isEmpty())
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(KEY_CURRENT_FILTER, currentFilter)
     }
 
     override fun onDestroyView() {
@@ -122,13 +142,32 @@ class JobsFragment
         }
     }
 
-    fun search(search: Search = currentFilter,
-               onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
-               onDoneLoading: PositionsLoadingState = PositionsLoadingState.SimpleDoneFetch) {
+    fun search(
+        search: Search = currentFilter,
+        onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
+        onDoneLoading: PositionsLoadingState = PositionsLoadingState.SimpleDoneFetch
+    ) {
         viewModel.search(search, onLoading, onDoneLoading)
     }
 
-    override fun onFilterDefined(search: Search) {
-        search(search)
+    override fun onFilterDefined(search: Search, saveFilter: Boolean) {
+        currentFilter = search
+        search(currentFilter)
+        setActiveFilter(search)
+
+        if (saveFilter) {
+            // todo: save filter to FiltersDao
+        }
+    }
+
+    private fun setActiveFilter(search: Search) {
+        active_filter_container.visibleOrGone(currentFilter != Search.EMPTY)
+        val activeFilters = mutableListOf(
+            search.description.orEmpty(),
+            search.location?.description.orEmpty(),
+            if (search.isFullTime) "Full time" else ""
+        ).also { it.removeAll { s -> s.isBlank() } }
+
+        active_filter.text = activeFilters.joinToString(" | ")
     }
 }
