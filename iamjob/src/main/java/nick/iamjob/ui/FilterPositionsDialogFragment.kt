@@ -1,9 +1,11 @@
 package nick.iamjob.ui
 
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.google.android.gms.tasks.Task
 import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.synthetic.main.fragment_filter_positions_dialog.*
 import kotlinx.android.synthetic.main.item_saved_filter.view.*
@@ -19,9 +22,13 @@ import nick.core.vm.ViewModelFactory
 import nick.data.model.Search
 import nick.iamjob.R
 import nick.iamjob.data.SearchesViewModel
+import nick.iamjob.util.LocationClient
+import nick.iamjob.util.LocationServicesProvider
 import javax.inject.Inject
 
-class FilterPositionsDialogFragment : DaggerDialogFragment() {
+class FilterPositionsDialogFragment
+    : DaggerDialogFragment()
+    , LocationClient {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -33,8 +40,12 @@ class FilterPositionsDialogFragment : DaggerDialogFragment() {
         ViewModelProviders.of(this, viewModelFactory).get(SearchesViewModel::class.java)
     }
 
-    private val listener by lazy {
+    private val parentFragmentListener by lazy {
         parentFragment as OnFilterDefinedListener
+    }
+
+    private val activityListener by lazy {
+        activity as LocationServicesProvider
     }
 
     private val adapter by lazy { SavedFiltersAdapter() }
@@ -55,7 +66,7 @@ class FilterPositionsDialogFragment : DaggerDialogFragment() {
             customView(R.layout.fragment_filter_positions_dialog, scrollable = true)
             positiveButton(R.string.apply_fiter) { dialog ->
                 with(dialog) {
-                    listener.onFilterDefined(
+                    parentFragmentListener.onFilterDefined(
                         Search(
                             description = description.text.toString(),
                             location = location.text.toString(),
@@ -68,6 +79,12 @@ class FilterPositionsDialogFragment : DaggerDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        dialog?.use_my_location?.setOnClickListener {
+            activityListener.requestLocation(this)
+            // To prevent spam clicks
+            it.isEnabled = false
+        }
 
         // Can't seem to use viewLifecycleOwner here - it crashes the app at runtime.
         searchesViewModel.searches.observe(this, Observer { savedFilters ->
@@ -84,11 +101,28 @@ class FilterPositionsDialogFragment : DaggerDialogFragment() {
 
             adapter.submitList(savedFilters)
         })
+
+        searchesViewModel.locality.observe(this, Observer { locality: String? ->
+            dialog?.use_my_location?.isEnabled = true
+            if (locality != null) {
+                dialog?.location?.setText(locality)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Couldn't get your last known location, sorry :(",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         searchesViewModel.searches.removeObservers(this)
+    }
+
+    override fun onLocationTaskReceived(location: Task<Location>) {
+        searchesViewModel.fetchLocation(location)
     }
 
     inner class SavedFiltersAdapter :
@@ -126,7 +160,7 @@ class FilterPositionsDialogFragment : DaggerDialogFragment() {
                 }
 
                 setOnClickListener {
-                    listener.onFilterDefined(search, false)
+                    parentFragmentListener.onFilterDefined(search, false)
                     dialog?.dismiss()
                 }
             }
