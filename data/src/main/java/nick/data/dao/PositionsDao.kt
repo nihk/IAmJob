@@ -19,8 +19,8 @@ abstract class PositionsDao : BaseDao<Position> {
     @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE ${Position.COL_IS_SAVED} = 1 $ORDER_BY_CREATED_AT")
     abstract fun querySaved(): LiveData<List<Position>>
 
-    @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE (${Position.COL_HAS_VIEWED} = 1 OR ${Position.COL_IS_SAVED} = 1) AND ${Position.COL_IS_FRESH} = 1")
-    abstract fun queryCachedFreshBlocking(): List<Position>
+    @Query("SELECT * FROM ${Position.TABLE_NAME} WHERE (${Position.COL_HAS_VIEWED} = 1 OR ${Position.COL_IS_SAVED} = 1)")
+    abstract fun queryCachedBlocking(): List<Position>
 
     @Query("DELETE FROM ${Position.TABLE_NAME} WHERE ${Position.COL_HAS_VIEWED} = 0 AND ${Position.COL_IS_SAVED} = 0")
     abstract fun deleteNonCachable()

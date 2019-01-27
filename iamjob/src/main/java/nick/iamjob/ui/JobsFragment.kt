@@ -52,7 +52,7 @@ class JobsFragment
         super.onCreate(savedInstanceState)
         // fixme: process death is showing a blank screen
         if (savedInstanceState == null) {
-            search()
+            search(currentFilter)
         } else {
             currentFilter = savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
         }
@@ -76,7 +76,7 @@ class JobsFragment
         recycler_view.adapter = adapter
         recycler_view.addOnScrollListener(scrollListener)
         swipe_refresh.setOnRefreshListener {
-            search(
+            search(currentFilter,
                 onLoading = PositionsLoadingState.SwipeRefreshFetch,
                 onDoneLoading = PositionsLoadingState.SwipeRefreshDoneFetch
             )
@@ -115,6 +115,7 @@ class JobsFragment
         viewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
             no_results_message.visibleOrGone(it.isEmpty())
+            setActiveFilter(currentFilter)
         })
     }
 
@@ -143,17 +144,16 @@ class JobsFragment
     }
 
     fun search(
-        search: Search = currentFilter,
+        search: Search,
         onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
         onDoneLoading: PositionsLoadingState = PositionsLoadingState.SimpleDoneFetch
     ) {
-        viewModel.search(search, onLoading, onDoneLoading)
+        currentFilter = search
+        viewModel.search(currentFilter, onLoading, onDoneLoading)
     }
 
     override fun onFilterDefined(search: Search, saveFilter: Boolean) {
-        currentFilter = search
-        search(currentFilter)
-        setActiveFilter(search)
+        search(search)
 
         if (saveFilter) {
             // todo: save filter to FiltersDao
@@ -162,12 +162,12 @@ class JobsFragment
 
     private fun setActiveFilter(search: Search) {
         active_filter_container.visibleOrGone(currentFilter != Search.EMPTY)
-        val activeFilters = mutableListOf(
+        val activeFilterComponents = mutableListOf(
             search.description.orEmpty(),
             search.location?.description.orEmpty(),
             if (search.isFullTime) "Full time" else ""
         ).also { it.removeAll { s -> s.isBlank() } }
 
-        active_filter.text = activeFilters.joinToString(" | ")
+        active_filter.text = activeFilterComponents.joinToString(" | ")
     }
 }

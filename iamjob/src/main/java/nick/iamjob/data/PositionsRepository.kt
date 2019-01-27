@@ -21,9 +21,9 @@ class PositionsRepository @Inject constructor(
             isFullTime,
             page
         ).flatMapCompletable { fetchedPositions ->
-            // Mark all fresh cached positions as stale -- we don't want them showing up in search results
+            // Mark all cached positions as stale -- we don't want them showing up in search results
             // if they're not part of the remotely fetched result set
-            val cachedPositions = positionsDao.queryCachedFreshBlocking().map {
+            val cachedPositions = positionsDao.queryCachedBlocking().map {
                 it.copy(isFresh = false)
             }.toMutableList()
 
