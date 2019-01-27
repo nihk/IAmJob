@@ -51,7 +51,7 @@ class FilterPositionsDialogFragment
     private val adapter by lazy { SavedFiltersAdapter() }
 
     interface OnFilterDefinedListener {
-        fun onFilterDefined(search: Search, saveFilter: Boolean)
+        fun onFilterDefined(search: Search, saveFilterLocally: Boolean)
     }
 
     companion object {

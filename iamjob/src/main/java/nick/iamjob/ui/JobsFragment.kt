@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -53,6 +55,15 @@ class JobsFragment
         }
     }
 
+    private val onBackPressedCallback = OnBackPressedCallback {
+        if (currentFilter != Search.EMPTY) {
+            onFilterDefined(Search.EMPTY, false)
+            return@OnBackPressedCallback true
+        }
+
+        false
+    }
+
     companion object {
         const val KEY_CURRENT_FILTER = "current_filter"
     }
@@ -95,10 +106,9 @@ class JobsFragment
                 .show(childFragmentManager, FilterPositionsDialogFragment.TAG)
         }
         clear_filter.setOnClickListener {
-            search(Search.EMPTY)
-            active_filter_container.visibleOrGone(false)
+            onFilterDefined(Search.EMPTY, false)
         }
-        setActiveFilter(currentFilter)
+        setUiActiveFilter(currentFilter)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -124,12 +134,14 @@ class JobsFragment
         positionsViewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
             no_results_message.visibleOrGone(it.isEmpty())
-            setActiveFilter(currentFilter)
         })
 
         if (savedInstanceState != null) {
             positionsViewModel.queryPositions(PositionsQuery.FreshPositions)
         }
+
+        val activity: FragmentActivity = requireActivity()
+        activity.addOnBackPressedCallback(onBackPressedCallback)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -139,6 +151,8 @@ class JobsFragment
 
     override fun onDestroyView() {
         recycler_view.removeOnScrollListener(scrollListener)
+        val activity: FragmentActivity = requireActivity()
+        activity.removeOnBackPressedCallback(onBackPressedCallback)
         super.onDestroyView()
     }
 
@@ -161,19 +175,20 @@ class JobsFragment
         onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
         onDoneLoading: PositionsLoadingState = PositionsLoadingState.SimpleDoneFetch
     ) {
-        currentFilter = search
-        positionsViewModel.search(currentFilter, onLoading, onDoneLoading)
+        positionsViewModel.search(search, onLoading, onDoneLoading)
     }
 
-    override fun onFilterDefined(search: Search, saveFilter: Boolean) {
-        search(search)
+    override fun onFilterDefined(search: Search, saveFilterLocally: Boolean) {
+        currentFilter = search
+        setUiActiveFilter(currentFilter)
+        search(currentFilter)
 
-        if (saveFilter && search != Search.EMPTY) {
+        if (saveFilterLocally && search != Search.EMPTY) {
             searchesViewModel.insert(search)
         }
     }
 
-    private fun setActiveFilter(search: Search) {
+    private fun setUiActiveFilter(search: Search) {
         active_filter_container.visibleOrGone(currentFilter != Search.EMPTY)
         active_filter.text = filterStringFormatter.format(search)
     }
