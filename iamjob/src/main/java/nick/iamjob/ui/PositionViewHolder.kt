@@ -1,6 +1,7 @@
 package nick.iamjob.ui
 
 import android.annotation.SuppressLint
+import android.text.format.DateUtils
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
@@ -24,7 +25,7 @@ class PositionViewHolder(
             @SuppressLint("SetTextI18n")
             company.text = position.company
             location.text = position.location
-            time_ago.text = position.createdAt.toString()
+            time_ago.text = DateUtils.getRelativeTimeSpanString(position.createdAt)
 
             GlideApp.with(itemView)
                 .load(position.companyLogo)
@@ -48,27 +49,22 @@ class PositionViewHolder(
 
     private fun resetTextColors(position: Position) {
         with (itemView) {
+            val alpha = if (position.hasViewed) 0.4f else 1.0f
+
             @ColorInt val titleTextColor = ContextCompat.getColor(
                 context,
                 if (position.hasViewed) {
-                    R.color.lightGrey
+                    R.color.darkGrey
                 } else {
                     android.R.color.black
                 }
             )
 
-            @ColorInt val subTextColor = ContextCompat.getColor(
-                context,
-                if (position.hasViewed) {
-                    R.color.lightGrey
-                } else {
-                    R.color.darkGrey
-                }
-            )
-
             title.setTextColor(titleTextColor)
-            company.setTextColor(subTextColor)
-            location.setTextColor(subTextColor)
+            title.alpha = alpha
+            company.alpha = alpha
+            location.alpha = alpha
+            time_ago.alpha = alpha
         }
     }
 

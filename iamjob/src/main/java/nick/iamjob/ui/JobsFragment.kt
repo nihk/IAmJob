@@ -1,5 +1,6 @@
 package nick.iamjob.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_jobs.*
 import nick.core.util.visibleOrGone
@@ -59,6 +62,11 @@ class JobsFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        recycler_view.layoutManager = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            LinearLayoutManager(requireContext())
+        } else {
+            GridLayoutManager(requireContext(), 2)
+        }
         recycler_view.adapter = adapter
         recycler_view.addOnScrollListener(scrollListener)
         swipe_refresh.setOnRefreshListener {
