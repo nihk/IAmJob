@@ -19,6 +19,7 @@ import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.util.OnPositionClickedListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
+import nick.iamjob.util.PositionsQuery
 import nick.ui.BaseFragment
 
 class JobsFragment
@@ -50,7 +51,7 @@ class JobsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // fixme: process death is showing a blank screen
+
         if (savedInstanceState == null) {
             search(currentFilter)
         } else {
@@ -117,6 +118,10 @@ class JobsFragment
             no_results_message.visibleOrGone(it.isEmpty())
             setActiveFilter(currentFilter)
         })
+
+        if (savedInstanceState != null) {
+            viewModel.queryPositions(PositionsQuery.FreshPositions)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
