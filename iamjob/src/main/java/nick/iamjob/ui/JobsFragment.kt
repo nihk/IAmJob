@@ -45,6 +45,8 @@ class JobsFragment
 
     private var currentFilter = Search.EMPTY
 
+    private var wasFabHiddenDuringDestroy = false
+
     private val scrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             if (dy > 0) {
@@ -121,6 +123,9 @@ class JobsFragment
                 onDoneLoading = PositionsLoadingState.DoneSwipeRefreshing
             )
         }
+        if (wasFabHiddenDuringDestroy) {
+            filter.hide()
+        }
         filter.setOnClickListener {
             FilterPositionsDialogFragment.create()
                 .show(childFragmentManager, FilterPositionsDialogFragment.TAG)
@@ -181,6 +186,7 @@ class JobsFragment
         recycler_view.removeOnScrollListener(scrollListener)
         val activity: FragmentActivity = requireActivity()
         activity.removeOnBackPressedCallback(onBackPressedCallback)
+        wasFabHiddenDuringDestroy = filter.isOrWillBeHidden
         super.onDestroyView()
     }
 
