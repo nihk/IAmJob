@@ -20,6 +20,7 @@ import javax.inject.Inject
 // todo: endlessly struggle to do shared element transitions
 // todo: position fragment
 // todo: need to scroll to top on filter action
+// todo: test coverage - compare with how android-sunflower app did its testing
 class MainActivity
     : DaggerAppCompatActivity()
     , LocationServicesProvider {

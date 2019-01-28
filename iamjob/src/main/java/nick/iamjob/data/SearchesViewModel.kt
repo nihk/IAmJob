@@ -49,8 +49,8 @@ class SearchesViewModel @Inject constructor(
         }
 
     fun fetchLocation(location: Task<Location>) {
-        location.addOnCompleteListener {
-            _locality.value = it.result?.let { location ->
+        location.addOnCompleteListener { task ->
+            _locality.value = task.result?.let { location ->
                 geocoder.getFromLocation(location.latitude, location.longitude, 1)
                     .firstOrNull()
                     ?.locality
