@@ -82,8 +82,6 @@ class FilterPositionsDialogFragment
 
         dialog?.use_my_location?.setOnClickListener {
             activityListener.requestLocation(this)
-            // To prevent spam clicks
-            it.isEnabled = false
         }
 
         // Can't seem to use viewLifecycleOwner here - it crashes the app at runtime.
@@ -103,7 +101,6 @@ class FilterPositionsDialogFragment
         })
 
         searchesViewModel.locality.observe(this, Observer { locality: String? ->
-            dialog?.use_my_location?.isEnabled = true
             if (locality != null) {
                 dialog?.location?.setText(locality)
             } else {
