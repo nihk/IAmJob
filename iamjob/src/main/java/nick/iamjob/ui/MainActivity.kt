@@ -5,7 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.android.support.DaggerAppCompatActivity
@@ -37,10 +37,9 @@ class MainActivity
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        (supportFragmentManager.findFragmentById(R.id.i_am_job_host) as? NavHostFragment)
-            ?.let {
-                bottom_navigation.setupWithNavController(it.navController)
-            }
+        Navigation.findNavController(this, R.id.i_am_job_host).let {
+            bottom_navigation.setupWithNavController(it)
+        }
     }
 
     override fun requestLocation(client: LocationClient) {

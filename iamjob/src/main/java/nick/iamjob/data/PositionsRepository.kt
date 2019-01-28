@@ -33,7 +33,6 @@ class PositionsRepository @Inject constructor(
             if (fetchedPositions.isEmpty()) {
                 Timber.d("Exhausted pages for: $search")
                 _exhausedPages.postValue(Event(Unit))
-                return@flatMapCompletable Completable.complete()
             }
 
             val cachedPositions = positionsDao.queryCachedBlocking().map {
