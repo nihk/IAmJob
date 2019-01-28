@@ -1,11 +1,14 @@
 package nick.iamjob.ui
 
-import android.location.Location
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
@@ -13,7 +16,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
-import com.google.android.gms.tasks.Task
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.synthetic.main.fragment_filter_positions_dialog.*
 import kotlinx.android.synthetic.main.item_saved_filter.view.*
@@ -22,13 +25,10 @@ import nick.core.vm.ViewModelFactory
 import nick.data.model.Search
 import nick.iamjob.R
 import nick.iamjob.data.SearchesViewModel
-import nick.iamjob.util.LocationClient
-import nick.iamjob.util.LocationServicesProvider
 import javax.inject.Inject
 
 class FilterPositionsDialogFragment
-    : DaggerDialogFragment()
-    , LocationClient {
+    : DaggerDialogFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -36,16 +36,15 @@ class FilterPositionsDialogFragment
     @Inject
     lateinit var filterStringFormatter: FilterStringFormatter
 
+    @Inject
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
     private val searchesViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(SearchesViewModel::class.java)
     }
 
-    private val parentFragmentListener by lazy {
+    private val listener by lazy {
         parentFragment as OnFilterDefinedListener
-    }
-
-    private val activityListener by lazy {
-        activity as LocationServicesProvider
     }
 
     private val adapter by lazy { SavedFiltersAdapter() }
@@ -56,6 +55,7 @@ class FilterPositionsDialogFragment
 
     companion object {
         val TAG: String = FilterPositionsDialogFragment::class.java.simpleName
+        private const val REQUEST_LOCATION = 7  // For good luck
 
         fun create() = FilterPositionsDialogFragment()
     }
@@ -66,7 +66,7 @@ class FilterPositionsDialogFragment
             customView(R.layout.fragment_filter_positions_dialog, scrollable = true)
             positiveButton(R.string.apply_fiter) { dialog ->
                 with(dialog) {
-                    parentFragmentListener.onFilterDefined(
+                    listener.onFilterDefined(
                         Search(
                             description = description.text.toString(),
                             location = location.text.toString(),
@@ -81,7 +81,7 @@ class FilterPositionsDialogFragment
         super.onActivityCreated(savedInstanceState)
 
         dialog?.use_my_location?.setOnClickListener {
-            activityListener.requestLocation(this)
+            requestLocationPermission()
         }
 
         // Can't seem to use viewLifecycleOwner here - it crashes the app at runtime.
@@ -118,8 +118,38 @@ class FilterPositionsDialogFragment
         searchesViewModel.searches.removeObservers(this)
     }
 
-    override fun onLocationTaskReceived(location: Task<Location>) {
-        searchesViewModel.fetchLocation(location)
+    private fun requestLocationPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                REQUEST_LOCATION
+            )
+        } else {
+            fetchLastLocation()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_LOCATION -> {
+                if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+                    fetchLastLocation()
+                }
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun fetchLastLocation() {
+        searchesViewModel.fetchLocation(fusedLocationProviderClient.lastLocation)
     }
 
     inner class SavedFiltersAdapter :
@@ -157,7 +187,7 @@ class FilterPositionsDialogFragment
                 }
 
                 setOnClickListener {
-                    parentFragmentListener.onFilterDefined(search, false)
+                    listener.onFilterDefined(search, false)
                     dialog?.dismiss()
                 }
             }
