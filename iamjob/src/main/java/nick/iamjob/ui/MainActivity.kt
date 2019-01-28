@@ -19,6 +19,7 @@ import javax.inject.Inject
 // todo: notifications tab to subscribe to favorite searches
 // todo: endlessly struggle to do shared element transitions
 // todo: position fragment
+// todo: need to scroll to top on filter action
 class MainActivity
     : DaggerAppCompatActivity()
     , LocationServicesProvider {
@@ -43,18 +44,19 @@ class MainActivity
     }
 
     override fun requestLocation(client: LocationClient) {
-        locationClient = client
-
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                 REQUEST_LOCATION
             )
+            locationClient = client
         } else {
-            messageLocationClient()
+            messageLocationClient(client)
         }
     }
 
@@ -65,18 +67,19 @@ class MainActivity
     ) {
         when (requestCode) {
             REQUEST_LOCATION -> {
-                if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
-                    messageLocationClient()
-                } else {
-                    locationClient = null
+                locationClient?.let {
+                    if (grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
+                        messageLocationClient(it)
+                    }
                 }
+
+                locationClient = null
             }
         }
     }
 
     @SuppressLint("MissingPermission")
-    private fun messageLocationClient() {
-        locationClient?.onLocationTaskReceived(fusedLocationProviderClient.lastLocation)
-        locationClient = null
+    private fun messageLocationClient(client: LocationClient) {
+        client.onLocationTaskReceived(fusedLocationProviderClient.lastLocation)
     }
 }
