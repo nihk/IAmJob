@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_position.*
 import kotlinx.android.synthetic.main.position_header.*
+import nick.core.util.visibleOrGone
 import nick.iamjob.R
 import nick.ui.BaseFragment
 import nick.ui.GlideApp
@@ -54,6 +55,13 @@ class PositionFragment : BaseFragment() {
             position_company_details.text = htmlWrapper.fromHtml(rawCompanyDetails)
             position_company_details.movementMethod = movementMethod
             posted_date.text = DateUtils.getRelativeTimeSpanString(createdAt)
+            if (howToApply.isNullOrBlank()) {
+                how_to_apply.visibleOrGone(true)
+            } else {
+                val rawHowToApply = resources.getString(R.string.how_to_apply, howToApply)
+                how_to_apply.text = htmlWrapper.fromHtml(howToApply!!).trim()
+                how_to_apply.movementMethod = movementMethod
+            }
 
             GlideApp.with(this@PositionFragment)
                 .load(companyLogo)

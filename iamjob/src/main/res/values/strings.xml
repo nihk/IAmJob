@@ -15,4 +15,5 @@
     <string name="share">Share</string>
     <string name="save">Save</string>
     <string name="company_details">&lt;a href=%1$s>%2$s&lt;/a></string>
+    <string name="how_to_apply">How to apply: %1$s</string>
 </resources>
