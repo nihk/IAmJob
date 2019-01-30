@@ -18,8 +18,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.android.support.DaggerDialogFragment
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_filter_positions_dialog.*
-import kotlinx.android.synthetic.main.item_saved_filter.view.*
+import kotlinx.android.synthetic.main.item_saved_filter.*
 import nick.core.util.visibleOrGone
 import nick.core.vm.ViewModelFactory
 import nick.data.model.Search
@@ -174,24 +175,23 @@ class FilterPositionsDialogFragment
             oldItem == newItem
     }
 
-    inner class SavedFilterViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class SavedFilterViewHolder(override val containerView: View)
+        : RecyclerView.ViewHolder(containerView)
+        , LayoutContainer {
 
         fun bind(search: Search) {
-            with(itemView) {
-                filter_description.text = filterStringFormatter.format(search)
-                remove_filter.isEnabled = true
-                remove_filter.setOnClickListener {
-                    // Prevent click spam
-                    remove_filter.isEnabled = false
-                    searchesViewModel.deleteSearch(search)
-                }
-
-                setOnClickListener {
-                    listener.onFilterDefined(search, false)
-                    dialog?.dismiss()
-                }
+            filter_description.text = filterStringFormatter.format(search)
+            remove_filter.isEnabled = true
+            remove_filter.setOnClickListener {
+                // Prevent click spam
+                remove_filter.isEnabled = false
+                searchesViewModel.deleteSearch(search)
             }
 
+            containerView.setOnClickListener {
+                listener.onFilterDefined(search, false)
+                dialog?.dismiss()
+            }
         }
     }
 }

@@ -6,7 +6,8 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_position.view.*
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_position.*
 import nick.data.model.Position
 import nick.iamjob.R
 import nick.iamjob.util.OnPositionClickedListener
@@ -14,72 +15,66 @@ import nick.iamjob.util.PositionAction
 import nick.ui.GlideApp
 
 class PositionViewHolder(
-    view: View,
+    override val containerView: View,
     private val onPositionClickedListener: OnPositionClickedListener,
     private val showFadedViewedPosition: Boolean
-) : RecyclerView.ViewHolder(view) {
+) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
     fun bind(position: Position) {
-        with(itemView) {
-            title.text = position.title
-            @SuppressLint("SetTextI18n")
-            company.text = position.company
-            location.text = position.location
-            time_ago.text = DateUtils.getRelativeTimeSpanString(position.createdAt)
+        title.text = position.title
+        @SuppressLint("SetTextI18n")
+        company.text = position.company
+        location.text = position.location
+        time_ago.text = DateUtils.getRelativeTimeSpanString(position.createdAt)
 
-            GlideApp.with(itemView)
-                .load(position.companyLogo)
-                .placeholder(R.drawable.ic_jobs)
-                .into(company_logo)
+        GlideApp.with(containerView)
+            .load(position.companyLogo)
+            .placeholder(R.drawable.ic_jobs)
+            .into(company_logo)
 
-            if (showFadedViewedPosition) {
-                setTextColors(position)
-            }
-            setSaveIcon(position)
+        if (showFadedViewedPosition) {
+            setTextColors(position)
+        }
+        setSaveIcon(position)
 
-            setOnClickListener {
-                onPositionClickedListener.onPositionClicked(PositionAction.MoreDetails(position))
-            }
+        containerView.setOnClickListener {
+            onPositionClickedListener.onPositionClicked(PositionAction.MoreDetails(position))
+        }
 
-            save_position.setOnClickListener {
-                onPositionClickedListener.onPositionClicked(PositionAction.SaveOrUnsave(position))
-                // To prevent click spamming
-                save_position.isEnabled = false
-            }
+        save_position.setOnClickListener {
+            onPositionClickedListener.onPositionClicked(PositionAction.SaveOrUnsave(position))
+            // To prevent click spamming
+            save_position.isEnabled = false
         }
     }
 
     private fun setTextColors(position: Position) {
-        with (itemView) {
-            val alpha = if (position.hasViewed) 0.4f else 1.0f
+        val alpha = if (position.hasViewed) 0.4f else 1.0f
 
-            @ColorInt val titleTextColor = ContextCompat.getColor(
-                context,
-                if (position.hasViewed) {
-                    R.color.darkGrey
-                } else {
-                    android.R.color.black
-                }
-            )
+        @ColorInt val titleTextColor = ContextCompat.getColor(
+            containerView.context,
+            if (position.hasViewed) {
+                R.color.darkGrey
+            } else {
+                android.R.color.black
+            }
+        )
 
-            title.setTextColor(titleTextColor)
-            title.alpha = alpha
-            company.alpha = alpha
-            location.alpha = alpha
-            time_ago.alpha = alpha
-        }
+        title.setTextColor(titleTextColor)
+        title.alpha = alpha
+        company.alpha = alpha
+        location.alpha = alpha
+        time_ago.alpha = alpha
     }
 
     private fun setSaveIcon(position: Position) {
-        with (itemView) {
-            save_position.isEnabled = true
-            save_position.setImageResource(
-                if (position.isSaved) {
-                    R.drawable.ic_saved_filled
-                } else {
-                    R.drawable.ic_saved
-                }
-            )
-        }
+        save_position.isEnabled = true
+        save_position.setImageResource(
+            if (position.isSaved) {
+                R.drawable.ic_saved_filled
+            } else {
+                R.drawable.ic_saved
+            }
+        )
     }
 }
