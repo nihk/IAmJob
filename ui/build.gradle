@@ -37,4 +37,7 @@ dependencies {
     api "com.afollestad.material-dialogs:core:$material_dialogs_version"
     api "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     api "android.arch.navigation:navigation-ui-ktx:$nav_version"
+
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 }

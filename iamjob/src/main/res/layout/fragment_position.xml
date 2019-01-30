@@ -60,6 +60,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:autoLink="web"
                 android:lineSpacingExtra="2dp"
                 android:lineSpacingMultiplier="1.1"
@@ -68,6 +69,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="To apply you need to do this one simple step To apply you need to do this one simple step To apply you need to do this one simple step To apply you need to do this one simple step To apply you need to do this one simple step" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

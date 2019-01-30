@@ -3,6 +3,7 @@ package nick.iamjob.ui
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.format.DateUtils
+import android.text.method.MovementMethod
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.navArgs
@@ -20,6 +21,9 @@ class PositionFragment : BaseFragment() {
 
     @Inject
     lateinit var htmlWrapper: HtmlWrapper
+
+    @Inject
+    lateinit var movementMethod: MovementMethod
 
     private val listener by lazy {
         requireContext() as ToolbarSetter
@@ -46,6 +50,9 @@ class PositionFragment : BaseFragment() {
             position_title.text = title
             position_description.text = htmlWrapper.fromHtml(description)
             position_location.text = location
+            val rawCompanyDetails = resources.getString(R.string.company_details, companyUrl, company)
+            position_company_details.text = htmlWrapper.fromHtml(rawCompanyDetails)
+            position_company_details.movementMethod = movementMethod
             posted_date.text = DateUtils.getRelativeTimeSpanString(createdAt)
 
             GlideApp.with(this@PositionFragment)

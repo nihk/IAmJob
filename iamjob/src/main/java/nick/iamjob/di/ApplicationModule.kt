@@ -13,13 +13,15 @@ import nick.core.di.ApplicationContext
 import nick.core.di.ApplicationScope
 import nick.data.di.DataModule
 import nick.networking.RemoteDataModule
+import nick.ui.UiModule
 import java.util.*
 
 @Module(
     includes = [
         ViewModelModule::class,
         RemoteDataModule::class,
-        DataModule::class
+        DataModule::class,
+        UiModule::class
     ]
 )
 class ApplicationModule {
@@ -46,5 +48,5 @@ class ApplicationModule {
     @ApplicationScope
     @Provides
     fun geocoder(@ApplicationContext applicationContext: Context): Geocoder =
-            Geocoder(applicationContext, Locale.getDefault())
+        Geocoder(applicationContext, Locale.getDefault())
 }
