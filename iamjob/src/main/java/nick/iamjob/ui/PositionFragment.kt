@@ -67,9 +67,17 @@ class PositionFragment : BaseFragment() {
         for (i in 0 until menu.size()) {
             menu.getItem(i).icon?.let {
                 it.mutate()
-                it.setColorFilter(ContextCompat.getColor(requireContext(), android.R.color.white),
-                    PorterDuff.Mode.SRC_ATOP)
+                it.setColorFilter(
+                    ContextCompat.getColor(requireContext(), android.R.color.white),
+                    PorterDuff.Mode.SRC_ATOP
+                )
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.share -> false
+        R.id.toggle_save -> false
+        else -> super.onOptionsItemSelected(item)
     }
 }
