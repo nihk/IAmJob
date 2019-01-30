@@ -1,16 +1,19 @@
 package nick.iamjob.ui
 
 import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.text.method.MovementMethod
 import android.view.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_position.*
 import kotlinx.android.synthetic.main.position_header.*
 import nick.core.util.visibleOrGone
 import nick.iamjob.R
+import nick.iamjob.data.PositionsViewModel
 import nick.ui.BaseFragment
 import nick.ui.GlideApp
 import nick.ui.HtmlWrapper
@@ -26,8 +29,16 @@ class PositionFragment : BaseFragment() {
     @Inject
     lateinit var movementMethod: MovementMethod
 
+    private val viewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
+    }
+
     private val listener by lazy {
         requireContext() as ToolbarSetter
+    }
+
+    private val white by lazy {
+        ContextCompat.getColor(requireContext(), android.R.color.white)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +62,8 @@ class PositionFragment : BaseFragment() {
             position_title.text = title
             position_description.text = htmlWrapper.fromHtml(description).trim()
             position_location.text = location
-            val rawCompanyDetails = resources.getString(R.string.company_details, companyUrl, company)
+            val rawCompanyDetails =
+                resources.getString(R.string.company_details, companyUrl, company)
             position_company_details.text = htmlWrapper.fromHtml(rawCompanyDetails)
             position_company_details.movementMethod = movementMethod
             posted_date.text = DateUtils.getRelativeTimeSpanString(createdAt)
@@ -75,19 +87,26 @@ class PositionFragment : BaseFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_position, menu)
         doHackToChangeMenuIconColors(menu)
+        menu.findItem(R.id.toggle_save)?.let {
+            setPositionSavedUiState(it, args.position.isSaved)
+        }
     }
 
     // Workaround for having a NoActionBar theme
     private fun doHackToChangeMenuIconColors(menu: Menu) {
         for (i in 0 until menu.size()) {
             menu.getItem(i).icon?.let {
-                it.mutate()
-                it.setColorFilter(
-                    ContextCompat.getColor(requireContext(), android.R.color.white),
-                    PorterDuff.Mode.SRC_ATOP
-                )
+                setDrawableWhite(it)
             }
         }
+    }
+
+    private fun setDrawableWhite(drawable: Drawable) {
+        drawable.mutate()
+        drawable.setColorFilter(
+            white,
+            PorterDuff.Mode.SRC_ATOP
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -96,7 +115,21 @@ class PositionFragment : BaseFragment() {
             true
         }
         R.id.share -> false
-        R.id.toggle_save -> false
+        R.id.toggle_save -> setPositionSavedUiState(item, !item.isChecked)
         else -> super.onOptionsItemSelected(item)
+    }
+
+    private fun setPositionSavedUiState(toggleSave: MenuItem, isSaved: Boolean): Boolean {
+        toggleSave.icon = ContextCompat.getDrawable(
+            requireContext(),
+            if (isSaved) {
+                R.drawable.ic_saved_filled
+            } else {
+                R.drawable.ic_saved
+            }
+        )?.also { setDrawableWhite(it) }
+        toggleSave.isChecked = isSaved
+
+        return true
     }
 }
