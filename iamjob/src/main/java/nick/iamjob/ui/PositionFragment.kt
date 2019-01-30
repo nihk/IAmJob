@@ -76,6 +76,10 @@ class PositionFragment : BaseFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> {
+            requireActivity().onBackPressed()
+            true
+        }
         R.id.share -> false
         R.id.toggle_save -> false
         else -> super.onOptionsItemSelected(item)
