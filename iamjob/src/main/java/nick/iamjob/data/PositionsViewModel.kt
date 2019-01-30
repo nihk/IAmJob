@@ -120,4 +120,6 @@ class PositionsViewModel @Inject constructor(
             search
         }
     }
+
+    fun positionById(id: String) = repository.positionById(id)
 }

@@ -7,16 +7,19 @@ import android.text.format.DateUtils
 import android.text.method.MovementMethod
 import android.view.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_position.*
 import kotlinx.android.synthetic.main.position_header.*
 import nick.core.util.visibleOrGone
+import nick.data.model.Position
 import nick.iamjob.R
 import nick.iamjob.data.PositionsViewModel
 import nick.ui.BaseFragment
 import nick.ui.GlideApp
 import nick.ui.HtmlWrapper
+import timber.log.Timber
 import javax.inject.Inject
 
 class PositionFragment : BaseFragment() {
@@ -41,6 +44,8 @@ class PositionFragment : BaseFragment() {
         ContextCompat.getColor(requireContext(), android.R.color.white)
     }
 
+    private var currentPositionState: Position? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -55,16 +60,18 @@ class PositionFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // todo: how to apply, etc.
-
         with(args.position) {
             toolbar_layout.title = title
             position_title.text = title
             position_description.text = htmlWrapper.fromHtml(description).trim()
             position_location.text = location
-            val rawCompanyDetails =
+            val companyDetails = if (companyUrl != null) {
                 resources.getString(R.string.company_details, companyUrl, company)
-            position_company_details.text = htmlWrapper.fromHtml(rawCompanyDetails)
+                    .let { htmlWrapper.fromHtml(it) }
+            } else {
+                company
+            }
+            position_company_details.text = companyDetails
             position_company_details.movementMethod = movementMethod
             posted_date.text = DateUtils.getRelativeTimeSpanString(createdAt)
             if (howToApply.isNullOrBlank()) {
@@ -82,6 +89,15 @@ class PositionFragment : BaseFragment() {
         }
 
         listener.setToolbar(toolbar, true)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel.positionById(args.position.id).observe(viewLifecycleOwner, Observer {
+            currentPositionState = it
+            Timber.d("Got updated Position from database. isSaved: ${it.isSaved}")
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -115,11 +131,21 @@ class PositionFragment : BaseFragment() {
             true
         }
         R.id.share -> false
-        R.id.toggle_save -> setPositionSavedUiState(item, !item.isChecked)
+        R.id.toggle_save -> {
+            // Only update the DB if the UI and model states are synched
+            if (currentPositionState?.isSaved == item.isChecked) {
+                setPositionSavedUiState(item, !item.isChecked)
+                viewModel.saveOrUnsavePosition(currentPositionState!!)
+                Timber.d("Toggling position saved state in database")
+            } else {
+                Timber.d("Currently in process of saving position, aborting toggle logic")
+            }
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
-    private fun setPositionSavedUiState(toggleSave: MenuItem, isSaved: Boolean): Boolean {
+    private fun setPositionSavedUiState(toggleSave: MenuItem, isSaved: Boolean) {
         toggleSave.icon = ContextCompat.getDrawable(
             requireContext(),
             if (isSaved) {
@@ -129,7 +155,5 @@ class PositionFragment : BaseFragment() {
             }
         )?.also { setDrawableWhite(it) }
         toggleSave.isChecked = isSaved
-
-        return true
     }
 }
