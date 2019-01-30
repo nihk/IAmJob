@@ -49,7 +49,7 @@ class PositionFragment : BaseFragment() {
         with(args.position) {
             toolbar_layout.title = title
             position_title.text = title
-            position_description.text = htmlWrapper.fromHtml(description)
+            position_description.text = htmlWrapper.fromHtml(description).trim()
             position_location.text = location
             val rawCompanyDetails = resources.getString(R.string.company_details, companyUrl, company)
             position_company_details.text = htmlWrapper.fromHtml(rawCompanyDetails)
@@ -58,7 +58,6 @@ class PositionFragment : BaseFragment() {
             if (howToApply.isNullOrBlank()) {
                 how_to_apply.visibleOrGone(true)
             } else {
-                val rawHowToApply = resources.getString(R.string.how_to_apply, howToApply)
                 how_to_apply.text = htmlWrapper.fromHtml(howToApply!!).trim()
                 how_to_apply.movementMethod = movementMethod
             }
