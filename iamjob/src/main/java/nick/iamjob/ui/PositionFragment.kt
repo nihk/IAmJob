@@ -56,7 +56,8 @@ class PositionFragment : BaseFragment() {
             position_company_details.movementMethod = movementMethod
             posted_date.text = DateUtils.getRelativeTimeSpanString(createdAt)
             if (howToApply.isNullOrBlank()) {
-                how_to_apply.visibleOrGone(true)
+                how_to_apply.visibleOrGone(false)
+                divider.visibleOrGone(false)
             } else {
                 how_to_apply.text = htmlWrapper.fromHtml(howToApply!!).trim()
                 how_to_apply.movementMethod = movementMethod
