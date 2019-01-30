@@ -12,4 +12,6 @@
     <string name="full_time">Full time</string>
     <string name="save_filter">Save this filter</string>
     <string name="no_results_message">We ain\'t found shit!</string>
+    <string name="share">Share</string>
+    <string name="save">Save</string>
 </resources>
