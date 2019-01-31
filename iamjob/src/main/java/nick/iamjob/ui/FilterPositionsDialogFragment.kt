@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
@@ -71,7 +70,8 @@ class FilterPositionsDialogFragment
                         Search(
                             description = description.text.toString(),
                             location = location.text.toString(),
-                            isFullTime = full_time.isChecked
+                            isFullTime = full_time.isChecked,
+                            isSubscribed = false
                         ), save_filter.isChecked
                     )
                 }
@@ -154,7 +154,7 @@ class FilterPositionsDialogFragment
     }
 
     inner class SavedFiltersAdapter :
-        ListAdapter<Search, SavedFilterViewHolder>(savedFiltersDiffCallback) {
+        ListAdapter<Search, SavedFilterViewHolder>(FiltersDiffCallback) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             LayoutInflater.from(parent.context)
@@ -164,15 +164,6 @@ class FilterPositionsDialogFragment
         override fun onBindViewHolder(holder: SavedFilterViewHolder, position: Int) {
             holder.bind(getItem(position))
         }
-    }
-
-    val savedFiltersDiffCallback = object : DiffUtil.ItemCallback<Search>() {
-
-        override fun areItemsTheSame(oldItem: Search, newItem: Search) =
-            oldItem == newItem
-
-        override fun areContentsTheSame(oldItem: Search, newItem: Search) =
-            oldItem == newItem
     }
 
     inner class SavedFilterViewHolder(override val containerView: View)
@@ -185,7 +176,7 @@ class FilterPositionsDialogFragment
             remove_filter.setOnClickListener {
                 // Prevent click spam
                 remove_filter.isEnabled = false
-                searchesViewModel.deleteSearch(search)
+                searchesViewModel.delete(search)
             }
 
             containerView.setOnClickListener {

@@ -16,7 +16,11 @@ class SearchesRepository @Inject constructor(
         dao.insert(search)
     }
 
-    fun deleteSearch(search: Search): Completable = Completable.fromAction {
+    fun delete(search: Search): Completable = Completable.fromAction {
         dao.delete(search)
+    }
+
+    fun updateSearch(search: Search): Completable = Completable.fromAction {
+        dao.update(search)
     }
 }

@@ -8,6 +8,6 @@ import nick.data.model.Search
 @Dao
 interface SearchesDao : BaseDao<Search> {
 
-    @Query("SELECT * FROM ${Search.TABLE_NAME}")
+    @Query("SELECT * FROM searches")
     fun queryAll(): LiveData<List<Search>>
 }

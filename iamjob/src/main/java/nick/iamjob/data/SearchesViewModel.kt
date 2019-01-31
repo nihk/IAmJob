@@ -28,8 +28,8 @@ class SearchesViewModel @Inject constructor(
             .subscribe(createSimpleCompletableObserver())
     }
 
-    fun deleteSearch(search: Search) {
-        repository.deleteSearch(search)
+    fun delete(search: Search) {
+        repository.delete(search)
             .applySchedulers()
             .subscribe(createSimpleCompletableObserver())
     }
@@ -56,5 +56,11 @@ class SearchesViewModel @Inject constructor(
                     ?.locality
             }
         }
+    }
+
+    fun updateSearch(search: Search) {
+        repository.updateSearch(search)
+            .applySchedulers()
+            .subscribe(createSimpleCompletableObserver())
     }
 }

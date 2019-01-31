@@ -17,6 +17,7 @@ data class Search @JvmOverloads constructor(
     @ColumnInfo(name = COL_DESCRIPTION) val description: String,
     @ColumnInfo(name = COL_LOCATION) val location: String,
     @ColumnInfo(name = COL_IS_FULL_TIME) val isFullTime: Boolean,
+    @ColumnInfo(name = COL_IS_SUBSCRIBED) val isSubscribed: Boolean,
     @Ignore val page: Int = 1
 ) : Parcelable {
 
@@ -24,16 +25,18 @@ data class Search @JvmOverloads constructor(
         val EMPTY = Search(
             description = "",
             location = "",
-            isFullTime = false
+            isFullTime = false,
+            isSubscribed = false
         )
 
         const val TABLE_NAME = "searches"
         const val COL_DESCRIPTION = "description"
         const val COL_LOCATION = "location"
         const val COL_IS_FULL_TIME = "is_full_time"
+        const val COL_IS_SUBSCRIBED = "is_subscribed"
     }
 
-    // Ignores page
+    // Ignores all other fields
     fun isEmpty(): Boolean {
         return this.description == EMPTY.description
                 && this.location == EMPTY.location
