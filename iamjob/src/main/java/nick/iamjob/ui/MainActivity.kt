@@ -9,10 +9,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import nick.iamjob.R
 
 // todo: use WorkManager to poll API once per day and check for new results?
-// todo: notifications tab to subscribe to favorite searches
 // todo: need to scroll to top on filter action
 // todo: test coverage - compare with how android-sunflower app did its testing
-// todo: share from PositionFragment shares the github URL
+// todo: can i use debounce operator for spam clicks?
 class MainActivity
     : DaggerAppCompatActivity()
     , ToolbarSetter {

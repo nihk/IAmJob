@@ -26,12 +26,13 @@ dependencies {
     implementation project(':core')
 
     api "androidx.core:core-ktx:$androidx_core_version"
-    api "androidx.activity:activity-ktx:$androidx_activity_version"
-    api "androidx.fragment:fragment-ktx:$androidx_fragment_version"
-    api "androidx.appcompat:appcompat:$androidx_appcompat_version"
+    api "androidx.activity:activity-ktx:$activity_version"
+    api "androidx.fragment:fragment-ktx:$fragment_version"
+    api "androidx.appcompat:appcompat:$appcompat_version"
     api "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    api "androidx.annotation:annotation:$annotation_version"
+    api "androidx.recyclerview:recyclerview:$recyclerview_version"
     api "com.google.android.material:material:$material_version"
-    api "com.github.chrisbanes:PhotoView:$photoview_version"
     api "com.github.bumptech.glide:glide:$glide_version"
     kapt "com.github.bumptech.glide:compiler:$glide_version"
     api "com.afollestad.material-dialogs:core:$material_dialogs_version"

@@ -67,7 +67,7 @@
 
     <TextView
         android:id="@+id/position_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
@@ -85,12 +85,13 @@
 
     <TextView
         android:id="@+id/position_company_details"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
+        android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="@id/position_location"
@@ -102,11 +103,12 @@
 
     <TextView
         android:id="@+id/position_location"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="12dp"
+        android:gravity="center"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"

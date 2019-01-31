@@ -11,7 +11,7 @@
     <string name="filter_location_hint">City, state, zip code, or country</string>
     <string name="full_time">Full time</string>
     <string name="save_filter">Save this filter</string>
-    <string name="no_results_message">We ain\'t found shit!</string>
+    <string name="no_results_message">No results were found</string>
     <string name="share">Share</string>
     <string name="save">Save</string>
     <string name="company_details">&lt;a href=%1$s>%2$s&lt;/a></string>

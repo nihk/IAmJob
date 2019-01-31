@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import nick.data.model.Position
 import nick.iamjob.R
-import nick.iamjob.ui.PositionViewHolder
 import nick.iamjob.util.OnPositionClickedListener
 
 class PositionsAdapter(
