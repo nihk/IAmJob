@@ -65,6 +65,7 @@ class PositionFragment : BaseFragment() {
             toolbar_layout.title = title
             position_title.text = title
             position_description.text = htmlWrapper.fromHtml(description).trim()
+            position_description.movementMethod = movementMethod
             position_location.text = location
             val companyDetails = if (companyUrl != null) {
                 resources.getString(R.string.company_details, companyUrl, company)
