@@ -1,5 +1,6 @@
 package nick.iamjob.ui
 
+import android.content.Intent
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -130,7 +131,19 @@ class PositionFragment : BaseFragment() {
             requireActivity().onBackPressed()
             true
         }
-        R.id.share -> false
+        R.id.share -> {
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                with(args.position) {
+                    putExtra(Intent.EXTRA_SUBJECT, "$title | $company")
+                    putExtra(Intent.EXTRA_TEXT, url)
+                }
+                type = "text/plain"
+            }.let {
+                startActivity(Intent.createChooser(it, resources.getText(R.string.share_with)))
+            }
+            true
+        }
         R.id.toggle_save -> {
             // Only update the DB if the UI and model states are synched
             if (currentPositionState?.isSaved == item.isChecked) {

@@ -19,6 +19,7 @@
     <string name="no_filters_message">Here you can subscribe to updates from your saved filters, but it looks like you haven\'t saved any yet! Click the floating button in the Jobs tab, define a filter, then check the \"Save filter\" checkbox and then they\'ll show up here.</string>
     <string name="notification_frequency">Notification frequency</string>
     <string name="subscription_description">Get notifications when filters you\'ve defined in the Jobs tab have yielded new search results.</string>
+    <string name="share_with">Share with:</string>
     <string-array name="notification_frequencies">
         <item>Daily</item>
         <item>Weekly</item>
