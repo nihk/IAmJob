@@ -19,9 +19,9 @@ interface BaseDao<T> {
     @Delete
     fun delete(entities: List<T>)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(entitiy: T)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(entities: List<T>)
 }

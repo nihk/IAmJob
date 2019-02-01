@@ -46,4 +46,5 @@ data class Search @JvmOverloads constructor(
     fun arePagesExhausted() = page == -1
     fun toFirstPage() = copy(page = 1)
     fun toExhausted() = copy(page = -1)
+    fun isFirstPage() = page == 1
 }

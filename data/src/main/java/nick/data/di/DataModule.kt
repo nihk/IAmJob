@@ -18,7 +18,7 @@ object DataModule {
     @ApplicationScope
     @Provides
     @JvmStatic
-    fun sharedPreferences(applicationContext: Context): SharedPreferences =
+    fun sharedPreferences(@ApplicationContext applicationContext: Context): SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(applicationContext)
 
     @ApplicationScope
