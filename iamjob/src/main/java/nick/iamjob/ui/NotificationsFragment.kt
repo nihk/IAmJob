@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ListAdapter
@@ -37,6 +38,20 @@ class NotificationsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.adapter = adapter
+        notification_interval_spinner.setSelection(viewModel.getNotificationFrequency())
+        notification_interval_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                viewModel.setNotificationFrequency(position)
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -94,7 +109,7 @@ class NotificationsFragment : BaseFragment() {
             }
 
             toggle_notification.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.insert(search.copy(isSubscribed = isChecked))
+                viewModel.update(search.copy(isSubscribed = isChecked))
             }
         }
     }

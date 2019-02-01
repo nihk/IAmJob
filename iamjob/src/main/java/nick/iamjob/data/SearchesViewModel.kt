@@ -34,6 +34,12 @@ class SearchesViewModel @Inject constructor(
             .subscribe(createSimpleCompletableObserver())
     }
 
+    fun update(search: Search) {
+        repository.updateSearch(search)
+            .applySchedulers()
+            .subscribe(createSimpleCompletableObserver())
+    }
+
     private fun createSimpleCompletableObserver(): CompletableObserver =
         object : CompletableObserver {
             override fun onSubscribe(d: Disposable) {
@@ -58,9 +64,9 @@ class SearchesViewModel @Inject constructor(
         }
     }
 
-    fun updateSearch(search: Search) {
-        repository.updateSearch(search)
-            .applySchedulers()
-            .subscribe(createSimpleCompletableObserver())
+    fun setNotificationFrequency(notificationFrequency: Int) {
+        repository.setNotificationFrequency(notificationFrequency)
     }
+
+    fun getNotificationFrequency() = repository.getNotificationFrequency()
 }
