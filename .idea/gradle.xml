@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/iamjob" />
+            <option value="$PROJECT_DIR$/location" />
             <option value="$PROJECT_DIR$/networking" />
             <option value="$PROJECT_DIR$/notification" />
             <option value="$PROJECT_DIR$/ui" />

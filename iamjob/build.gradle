@@ -36,6 +36,7 @@ dependencies {
     implementation project(':ui')
     implementation project(':data')
     implementation project(':networking')
+    implementation project(':location')
 
     implementation "com.android.support:multidex:$multidex_version"
     testImplementation "junit:junit:$junit_version"
@@ -43,8 +44,6 @@ dependencies {
     testImplementation "org.mockito:mockito-inline:$mockito_version"
     androidTestImplementation "androidx.test:runner:$test_runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
-
-    implementation "com.google.android.gms:play-services-location:$location_version"
 
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
