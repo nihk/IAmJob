@@ -10,7 +10,6 @@ import nick.iamjob.R
 import nick.ui.ToolbarSetter
 
 // todo: use WorkManager to poll API once per day and check for new results?
-// todo: need to scroll to top on filter action
 // todo: test coverage - compare with how android-sunflower app did its testing
 // todo: can i use debounce operator for spam clicks?
 class MainActivity

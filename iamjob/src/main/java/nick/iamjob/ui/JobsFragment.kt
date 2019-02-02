@@ -22,6 +22,7 @@ import nick.iamjob.vm.SearchesViewModel
 import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
+import nick.iamjob.util.ReplacesData
 import nick.ui.BaseFragment
 import nick.ui.ErrorDialogFragment
 import nick.ui.visibleOrGone
@@ -161,6 +162,7 @@ class JobsFragment
 
         positionsViewModel.positions.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+            scrollToTopAfterSubmission()
             no_results_message.visibleOrGone(it.isEmpty())
         })
 
@@ -176,6 +178,21 @@ class JobsFragment
 
         val activity: FragmentActivity = requireActivity()
         activity.addOnBackPressedCallback(onBackPressedCallback)
+    }
+
+    private fun scrollToTopAfterSubmission() {
+        positionsViewModel.loadingState.value?.let {
+            if (it is PositionsLoadingState.Done && it is ReplacesData) {
+                adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+
+                    override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                        super.onItemRangeRemoved(positionStart, itemCount)
+                        adapter.unregisterAdapterDataObserver(this)
+                        recycler_view?.smoothScrollToPosition(0)
+                    }
+                })
+            }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
