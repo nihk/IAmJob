@@ -7,6 +7,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import nick.iamjob.R
+import nick.ui.ToolbarSetter
 
 // todo: use WorkManager to poll API once per day and check for new results?
 // todo: need to scroll to top on filter action

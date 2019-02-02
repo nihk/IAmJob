@@ -12,11 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.item_notification_filter.*
-import nick.core.util.visibleOrGone
 import nick.data.model.Search
 import nick.iamjob.R
 import nick.iamjob.data.SearchesViewModel
 import nick.ui.BaseFragment
+import nick.ui.visibleOrGone
 
 class NotificationsFragment : BaseFragment() {
 

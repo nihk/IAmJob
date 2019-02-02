@@ -14,21 +14,22 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_jobs.*
-import nick.core.util.visibleOrGone
 import nick.data.model.Search
+import nick.data.util.PositionQuery
 import nick.iamjob.R
 import nick.iamjob.data.PositionsViewModel
 import nick.iamjob.data.SearchesViewModel
-import nick.iamjob.util.OnPositionClickedListener
+import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
-import nick.iamjob.util.PositionsQuery
 import nick.ui.BaseFragment
+import nick.ui.ErrorDialogFragment
+import nick.ui.visibleOrGone
 import javax.inject.Inject
 
 class JobsFragment
     : BaseFragment()
-    , OnPositionClickedListener
+    , OnPositionActionListener
     , FilterPositionsDialogFragment.OnFilterDefinedListener {
 
     @Inject
@@ -170,7 +171,7 @@ class JobsFragment
         })
 
         if (savedInstanceState != null) {
-            positionsViewModel.queryPositions(PositionsQuery.FreshPositions)
+            positionsViewModel.queryPositions(PositionQuery.FreshPositions)
         }
 
         val activity: FragmentActivity = requireActivity()
@@ -190,7 +191,7 @@ class JobsFragment
         super.onDestroyView()
     }
 
-    override fun onPositionClicked(positionAction: PositionAction) {
+    override fun onPositionAction(positionAction: PositionAction) {
         with(positionAction) {
             when (this) {
                 is PositionAction.SaveOrUnsave -> positionsViewModel.saveOrUnsavePosition(position)

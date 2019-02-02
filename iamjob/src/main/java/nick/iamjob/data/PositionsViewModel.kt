@@ -12,7 +12,7 @@ import nick.core.util.applySchedulers
 import nick.data.model.Position
 import nick.data.model.Search
 import nick.iamjob.util.PositionsLoadingState
-import nick.iamjob.util.PositionsQuery
+import nick.data.util.PositionQuery
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,12 +22,12 @@ class PositionsViewModel @Inject constructor(
 
     private val _loadingState = MutableLiveData<PositionsLoadingState>()
     private val _error = MutableLiveData<Event<Throwable>>()
-    private val positionsQuery = MutableLiveData<PositionsQuery>()
+    private val positionsQuery = MutableLiveData<PositionQuery>()
 
     val positions: LiveData<List<Position>> = Transformations.switchMap(positionsQuery) {
         when (it) {
-            is PositionsQuery.SavedPositions -> repository.querySavedPositions()
-            is PositionsQuery.FreshPositions -> repository.queryFreshPositions()
+            is PositionQuery.SavedPositions -> repository.querySavedPositions()
+            is PositionQuery.FreshPositions -> repository.queryFreshPositions()
         }
     }
 
@@ -52,7 +52,7 @@ class PositionsViewModel @Inject constructor(
                 override fun onComplete() {
                     _loadingState.value = doneLoadingState
                     if (loadingState !is PositionsLoadingState.Paginating) {
-                        queryPositions(PositionsQuery.FreshPositions)
+                        queryPositions(PositionQuery.FreshPositions)
                     }
                 }
 
@@ -63,7 +63,7 @@ class PositionsViewModel @Inject constructor(
 
                     if (loadingState !is PositionsLoadingState.Paginating) {
                         // Display cached content if remote fetching failed
-                        queryPositions(PositionsQuery.FreshPositions)
+                        queryPositions(PositionQuery.FreshPositions)
                     }
                 }
             })
@@ -100,8 +100,8 @@ class PositionsViewModel @Inject constructor(
             })
     }
 
-    fun queryPositions(positionsQuery: PositionsQuery) {
-        this.positionsQuery.value = positionsQuery
+    fun queryPositions(positionQuery: PositionQuery) {
+        this.positionsQuery.value = positionQuery
     }
 
     fun maybePaginate(

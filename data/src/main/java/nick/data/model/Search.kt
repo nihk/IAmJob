@@ -6,6 +6,8 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import kotlinx.android.parcel.Parcelize
 
+// fixme: this class conflates searches and filters. ideally a Filter class would be the @Entity,
+// with Search as an @Embedded field.
 @Parcelize
 @Entity(
     tableName = Search.TABLE_NAME,

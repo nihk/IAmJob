@@ -20,11 +20,11 @@ import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_filter_positions_dialog.*
 import kotlinx.android.synthetic.main.item_saved_filter.*
-import nick.core.util.visibleOrGone
 import nick.core.vm.ViewModelFactory
 import nick.data.model.Search
 import nick.iamjob.R
 import nick.iamjob.data.SearchesViewModel
+import nick.ui.visibleOrGone
 import javax.inject.Inject
 
 class FilterPositionsDialogFragment
@@ -85,7 +85,6 @@ class FilterPositionsDialogFragment
             requestLocationPermission()
         }
 
-        // Can't seem to use viewLifecycleOwner here - it crashes the app at runtime.
         searchesViewModel.searches.observe(this, Observer { savedFilters ->
             with(dialog?.saved_filters ?: return@Observer) {
                 if (savedFilters.isEmpty()) {

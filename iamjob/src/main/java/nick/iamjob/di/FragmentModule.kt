@@ -7,6 +7,7 @@ import nick.iamjob.ui.FilterPositionsDialogFragment
 import nick.iamjob.ui.PositionFragment
 import nick.iamjob.ui.JobsFragment
 import nick.iamjob.ui.SavedPositionsFragment
+import nick.ui.ErrorDialogFragment
 
 @Module
 abstract class FragmentModule {

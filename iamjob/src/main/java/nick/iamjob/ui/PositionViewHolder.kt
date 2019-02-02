@@ -10,13 +10,13 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_position.*
 import nick.data.model.Position
 import nick.iamjob.R
-import nick.iamjob.util.OnPositionClickedListener
+import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
 import nick.ui.GlideApp
 
 class PositionViewHolder(
     override val containerView: View,
-    private val onPositionClickedListener: OnPositionClickedListener,
+    private val onPositionActionListener: OnPositionActionListener,
     private val showFadedViewedPosition: Boolean
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
@@ -38,11 +38,11 @@ class PositionViewHolder(
         setSaveIcon(position)
 
         containerView.setOnClickListener {
-            onPositionClickedListener.onPositionClicked(PositionAction.MoreDetails(position))
+            onPositionActionListener.onPositionAction(PositionAction.MoreDetails(position))
         }
 
         save_position.setOnClickListener {
-            onPositionClickedListener.onPositionClicked(PositionAction.SaveOrUnsave(position))
+            onPositionActionListener.onPositionAction(PositionAction.SaveOrUnsave(position))
             // To prevent click spamming
             save_position.isEnabled = false
         }

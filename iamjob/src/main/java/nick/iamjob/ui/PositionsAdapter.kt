@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import nick.data.model.Position
 import nick.iamjob.R
-import nick.iamjob.util.OnPositionClickedListener
+import nick.iamjob.util.OnPositionActionListener
 
 class PositionsAdapter(
-    private val onPositionClickedListener: OnPositionClickedListener,
+    private val onPositionActionListener: OnPositionActionListener,
     private val showFadedViewedPosition: Boolean = true
 ) : ListAdapter<Position, PositionViewHolder>(PositionDiffCallback) {
 
@@ -18,7 +18,7 @@ class PositionsAdapter(
             .let {
                 PositionViewHolder(
                     it,
-                    onPositionClickedListener,
+                    onPositionActionListener,
                     showFadedViewedPosition
                 )
             }

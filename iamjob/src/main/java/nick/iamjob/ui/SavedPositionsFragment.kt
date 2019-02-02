@@ -8,18 +8,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_saved_positions.*
-import nick.core.util.visibleOrGone
 import nick.data.model.Position
+import nick.data.util.PositionQuery
 import nick.iamjob.R
 import nick.iamjob.data.PositionsViewModel
-import nick.iamjob.util.OnPositionClickedListener
+import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
-import nick.iamjob.util.PositionsQuery
 import nick.ui.BaseFragment
+import nick.ui.visibleOrGone
 
 class SavedPositionsFragment
     : BaseFragment()
-    , OnPositionClickedListener {
+    , OnPositionActionListener {
 
     private val viewModel: PositionsViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(PositionsViewModel::class.java)
@@ -49,10 +49,10 @@ class SavedPositionsFragment
                 progress_bar.visibleOrGone(false)
             })
 
-        viewModel.queryPositions(PositionsQuery.SavedPositions)
+        viewModel.queryPositions(PositionQuery.SavedPositions)
     }
 
-    override fun onPositionClicked(positionAction: PositionAction) {
+    override fun onPositionAction(positionAction: PositionAction) {
         with(positionAction) {
             when (this) {
                 is PositionAction.SaveOrUnsave -> viewModel.saveOrUnsavePosition(position)

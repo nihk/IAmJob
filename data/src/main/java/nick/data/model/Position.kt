@@ -24,9 +24,9 @@ data class Position(
     @ColumnInfo(name = COL_HAS_APPLIED) val hasApplied: Boolean,
     @ColumnInfo(name = COL_HAS_VIEWED) val hasViewed: Boolean,
     /**
-     * Positions in the database are ephemeral unless one of its states, e.g. isSaved, is set to true.
-     * That latter type of Position should show up in a newly fetched list of positions if it has the
-     * same Position.id as one of the incoming Positions that was fetched remotely. It should
+     * Positions in the database are removed once a new remote fetch is completed unless one of its
+     * states, e.g. isSaved, is set to true. That latter type of Position should show up with the newly
+     * fetched list of positions if it has the same Position.id as one of them. It should
      * otherwise not show up in that list. This isFresh field serves as a flag to distinguish whether
      * it should be shown in that list, based on the aforementioned logic.
      */

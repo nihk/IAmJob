@@ -1,9 +1,8 @@
-package nick.iamjob.ui
+package nick.ui
 
 import android.os.Bundle
 import com.afollestad.materialdialogs.MaterialDialog
 import dagger.android.support.DaggerDialogFragment
-import nick.iamjob.R
 
 class ErrorDialogFragment : DaggerDialogFragment() {
 

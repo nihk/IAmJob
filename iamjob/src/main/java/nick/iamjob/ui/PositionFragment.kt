@@ -13,13 +13,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_position.*
 import kotlinx.android.synthetic.main.position_header.*
-import nick.core.util.visibleOrGone
 import nick.data.model.Position
 import nick.iamjob.R
 import nick.iamjob.data.PositionsViewModel
-import nick.ui.BaseFragment
-import nick.ui.GlideApp
-import nick.ui.HtmlWrapper
+import nick.ui.*
 import timber.log.Timber
 import javax.inject.Inject
 

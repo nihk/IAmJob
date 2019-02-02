@@ -1,4 +1,4 @@
-package nick.iamjob.ui
+package nick.ui
 
 import androidx.appcompat.widget.Toolbar
 

@@ -7,6 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import nick.core.di.ApplicationContext
 import nick.core.di.ApplicationScope
 import nick.data.BuildConfig
@@ -15,7 +16,7 @@ import nick.data.JobsDatabase
 @Module
 object DataModule {
 
-    @ApplicationScope
+    @Reusable
     @Provides
     @JvmStatic
     fun sharedPreferences(@ApplicationContext applicationContext: Context): SharedPreferences =
@@ -35,12 +36,12 @@ object DataModule {
             }
         }.build()
 
-    @ApplicationScope
+    @Reusable
     @Provides
     @JvmStatic
     fun positionsDao(database: JobsDatabase) = database.positionsDao()
 
-    @ApplicationScope
+    @Reusable
     @Provides
     @JvmStatic
     fun searchesDao(database: JobsDatabase) = database.searchesDao()
