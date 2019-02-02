@@ -10,6 +10,7 @@ import nick.data.model.Position
 import nick.data.model.Search
 import nick.iamjob.util.PositionsLoadingState
 import nick.networking.GitHubJobsService
+import timber.log.Timber
 import javax.inject.Inject
 
 @ApplicationScope
@@ -28,6 +29,11 @@ class PositionsRepository @Inject constructor(
             isFullTime = isFullTime,
             page = page
         ).flatMapCompletable { fetchedPositions ->
+            if (fetchedPositions.isEmpty()) {
+                Timber.d("Exhausted pages for: $search")
+                _exhausedPages.postValue(Event(Unit))
+            }
+
             insertWhileReconcilingCachedPositions(fetchedPositions, search.isFirstPage())
         }
     }
