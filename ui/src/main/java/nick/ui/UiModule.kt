@@ -4,12 +4,12 @@ import android.text.method.LinkMovementMethod
 import android.text.method.MovementMethod
 import dagger.Module
 import dagger.Provides
-import nick.core.di.ApplicationScope
+import dagger.Reusable
 
 @Module
 object UiModule {
 
-    @ApplicationScope
+    @Reusable
     @Provides
     @JvmStatic
     fun linkMovementMethod(): MovementMethod = LinkMovementMethod.getInstance()

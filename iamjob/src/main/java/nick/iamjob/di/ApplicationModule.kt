@@ -10,13 +10,13 @@ import nick.core.di.ApplicationContext
 import nick.core.di.ApplicationScope
 import nick.data.di.DataModule
 import nick.location.LocationModule
-import nick.networking.RemoteDataModule
+import nick.networking.NetworkingModule
 import nick.ui.UiModule
 
 @Module(
     includes = [
         ViewModelModule::class,
-        RemoteDataModule::class,
+        NetworkingModule::class,
         DataModule::class,
         UiModule::class,
         LocationModule::class
@@ -32,9 +32,4 @@ class ApplicationModule {
     @ApplicationScope
     @Provides
     fun applicationResources(application: Application): Resources = application.resources
-
-    @ApplicationScope
-    @Provides
-    fun connectivityManager(@ApplicationContext applicationContext: Context) =
-        applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 }

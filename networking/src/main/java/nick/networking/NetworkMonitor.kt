@@ -1,4 +1,4 @@
-package nick.core.util
+package nick.networking
 
 import android.net.ConnectivityManager
 import nick.core.di.ApplicationScope
