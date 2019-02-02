@@ -3,7 +3,6 @@ package nick.iamjob.di
 import android.app.Application
 import android.content.Context
 import android.content.res.Resources
-import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
 import nick.core.di.ApplicationContext

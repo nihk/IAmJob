@@ -1,10 +1,10 @@
 package nick.iamjob.ui
 
-import nick.core.di.ApplicationScope
+import dagger.Reusable
 import nick.data.model.Search
 import javax.inject.Inject
 
-@ApplicationScope
+@Reusable
 class FilterStringFormatter @Inject constructor() {
 
     fun format(search: Search) = mutableListOf(

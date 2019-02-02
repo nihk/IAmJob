@@ -32,7 +32,7 @@ object DataModule {
             JobsDatabase.DATABASE_NAME
         ).apply {
             if (BuildConfig.DEBUG) {
-                this.setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
+                setJournalMode(RoomDatabase.JournalMode.TRUNCATE)
             }
         }.build()
 

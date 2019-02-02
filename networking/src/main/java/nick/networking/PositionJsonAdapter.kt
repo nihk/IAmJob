@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import nick.core.di.ApplicationScope
+import dagger.Reusable
 import nick.data.model.Position
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
-@ApplicationScope
+@Reusable
 class PositionJsonAdapter @Inject constructor() {
 
     companion object {

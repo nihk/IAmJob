@@ -1,10 +1,10 @@
 package nick.networking
 
 import android.net.ConnectivityManager
-import nick.core.di.ApplicationScope
+import dagger.Reusable
 import javax.inject.Inject
 
-@ApplicationScope
+@Reusable
 class NetworkMonitor @Inject constructor(
     private val connectivityManager: ConnectivityManager
 ) {
