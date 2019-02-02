@@ -33,7 +33,7 @@ class PositionsViewModel @Inject constructor(
 
     val loadingState: LiveData<PositionsLoadingState> get() = _loadingState
     val error: LiveData<Event<Throwable>> get() = _error
-    val exhaustedPages = repository.exhaustedPages
+    val noResultsFound = repository.noResultsFound
 
     fun search(
         search: Search,

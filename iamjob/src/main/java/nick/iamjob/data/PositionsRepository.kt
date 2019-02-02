@@ -8,7 +8,6 @@ import nick.core.util.Event
 import nick.data.dao.PositionsDao
 import nick.data.model.Position
 import nick.data.model.Search
-import nick.iamjob.util.PositionsLoadingState
 import nick.networking.GitHubJobsService
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,8 +18,8 @@ class PositionsRepository @Inject constructor(
     private val positionsDao: PositionsDao
 ) {
 
-    private val _exhausedPages = MutableLiveData<Event<Unit>>()
-    val exhaustedPages: LiveData<Event<Unit>> get() = _exhausedPages
+    private val _noResultsFound = MutableLiveData<Event<Unit>>()
+    val noResultsFound: LiveData<Event<Unit>> get() = _noResultsFound
 
     fun search(search: Search): Completable = with(search) {
         service.fetchPositions(
@@ -30,8 +29,8 @@ class PositionsRepository @Inject constructor(
             page = page
         ).flatMapCompletable { fetchedPositions ->
             if (fetchedPositions.isEmpty()) {
-                Timber.d("Exhausted pages for: $search")
-                _exhausedPages.postValue(Event(Unit))
+                Timber.d("No results found for: $search")
+                _noResultsFound.postValue(Event(Unit))
             }
 
             insertWhileReconcilingCachedPositions(fetchedPositions, search.isFirstPage())

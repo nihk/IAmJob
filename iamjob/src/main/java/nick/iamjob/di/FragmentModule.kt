@@ -3,10 +3,6 @@ package nick.iamjob.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import nick.iamjob.ui.*
-import nick.iamjob.ui.FilterPositionsDialogFragment
-import nick.iamjob.ui.PositionFragment
-import nick.iamjob.ui.JobsFragment
-import nick.iamjob.ui.SavedPositionsFragment
 import nick.ui.ErrorDialogFragment
 
 @Module

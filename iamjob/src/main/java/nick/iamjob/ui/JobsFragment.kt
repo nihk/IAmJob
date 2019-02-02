@@ -164,7 +164,7 @@ class JobsFragment
             no_results_message.visibleOrGone(it.isEmpty())
         })
 
-        positionsViewModel.exhaustedPages.observe(viewLifecycleOwner, Observer {
+        positionsViewModel.noResultsFound.observe(viewLifecycleOwner, Observer {
             it?.getContentIfNotHandled()?.let {
                 currentFilter = currentFilter.toExhausted()
             }
