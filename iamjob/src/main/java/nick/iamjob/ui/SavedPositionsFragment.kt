@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_saved_positions.*
 import nick.data.model.Position
 import nick.data.util.PositionQuery
 import nick.iamjob.R
-import nick.iamjob.data.PositionsViewModel
+import nick.iamjob.vm.PositionsViewModel
 import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
 import nick.ui.BaseFragment

@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.item_saved_filter.*
 import nick.core.vm.ViewModelFactory
 import nick.data.model.Search
 import nick.iamjob.R
-import nick.iamjob.data.SearchesViewModel
+import nick.iamjob.vm.SearchesViewModel
 import nick.ui.visibleOrGone
 import javax.inject.Inject
 

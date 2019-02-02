@@ -1,4 +1,4 @@
-package nick.iamjob.data
+package nick.iamjob.vm
 
 import android.location.Geocoder
 import android.location.Location
@@ -10,6 +10,7 @@ import io.reactivex.disposables.Disposable
 import nick.core.util.BaseRxViewModel
 import nick.core.util.applySchedulers
 import nick.data.model.Search
+import nick.repository.SearchesRepository
 import timber.log.Timber
 import javax.inject.Inject
 

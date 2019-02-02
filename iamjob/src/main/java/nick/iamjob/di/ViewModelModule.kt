@@ -6,8 +6,8 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import nick.core.di.ViewModelFactoryModule
 import nick.core.di.ViewModelKey
-import nick.iamjob.data.PositionsViewModel
-import nick.iamjob.data.SearchesViewModel
+import nick.iamjob.vm.PositionsViewModel
+import nick.iamjob.vm.SearchesViewModel
 
 @Module(
     includes = [

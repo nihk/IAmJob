@@ -1,4 +1,4 @@
-package nick.iamjob.data
+package nick.repository
 
 import android.content.SharedPreferences
 import io.reactivex.Completable

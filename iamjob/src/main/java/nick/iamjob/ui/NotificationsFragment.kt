@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.item_notification_filter.*
 import nick.data.model.Search
 import nick.iamjob.R
-import nick.iamjob.data.SearchesViewModel
+import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
 import nick.ui.visibleOrGone
 

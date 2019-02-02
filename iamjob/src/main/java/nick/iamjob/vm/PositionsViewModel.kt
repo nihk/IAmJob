@@ -1,4 +1,4 @@
-package nick.iamjob.data
+package nick.iamjob.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +13,7 @@ import nick.data.model.Position
 import nick.data.model.Search
 import nick.iamjob.util.PositionsLoadingState
 import nick.data.util.PositionQuery
+import nick.repository.PositionsRepository
 import timber.log.Timber
 import javax.inject.Inject
 

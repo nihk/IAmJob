@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_position.*
 import kotlinx.android.synthetic.main.position_header.*
 import nick.data.model.Position
 import nick.iamjob.R
-import nick.iamjob.data.PositionsViewModel
+import nick.iamjob.vm.PositionsViewModel
 import nick.ui.*
 import timber.log.Timber
 import javax.inject.Inject

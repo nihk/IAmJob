@@ -17,8 +17,8 @@ import kotlinx.android.synthetic.main.fragment_jobs.*
 import nick.data.model.Search
 import nick.data.util.PositionQuery
 import nick.iamjob.R
-import nick.iamjob.data.PositionsViewModel
-import nick.iamjob.data.SearchesViewModel
+import nick.iamjob.vm.PositionsViewModel
+import nick.iamjob.vm.SearchesViewModel
 import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
