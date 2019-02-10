@@ -31,7 +31,7 @@ abstract class SearchesDao : BaseDao<Search> {
     @Query(QUERY_ALL_SEARCHES)
     abstract fun queryAllBlocking(): List<Search>
 
-    @Query("UPDATE searches SET last_time_user_searched = :currentTimeInMillis WHERE description = :description AND location = :location AND is_full_time = :isFullTime")
+    @Query("UPDATE searches SET last_time_user_searched = :currentTimeInMillis, num_new_results = 0 WHERE description = :description AND location = :location AND is_full_time = :isFullTime")
     abstract fun updateLastTimeUserSearched(
         description: String,
         location: String,

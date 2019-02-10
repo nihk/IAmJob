@@ -18,6 +18,7 @@ object WorkModule {
         @ApplicationContext applicationContext: Context,
         configuration: Configuration
     ): WorkManager {
+        // todo: move this to an ApplicationInitializers class
         WorkManager.initialize(applicationContext, configuration)
         return WorkManager.getInstance()
     }

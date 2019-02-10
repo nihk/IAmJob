@@ -120,6 +120,11 @@ class NotificationsFragment : BaseFragment() {
                     filter_location.visibleOrGone(it.isNotBlank())
                 }
                 toggle_notification.isChecked = isSubscribed
+
+                if (numNewResults > 0) {
+                    new_content_container.visibleOrGone(true)
+                    new_content.text = getString(R.string.new_results, numNewResults)
+                }
             }
 
             containerView.setOnClickListener {
