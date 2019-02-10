@@ -105,9 +105,9 @@ class NotificationsFragment : BaseFragment() {
         RecyclerView.ViewHolder(containerView)
         , LayoutContainer {
 
-        // Cached as field so listeners don't hold onto the original, potentially state Search
+        // Cached as field so listeners don't hold onto the original, potentially stale Search
         // state that came via bind(Search)
-        var search: Search? = null
+        private var search: Search? = null
 
         fun bind(search: Search) {
             this.search = search
@@ -137,6 +137,9 @@ class NotificationsFragment : BaseFragment() {
 
             toggle_notification.setOnCheckedChangeListener { _, isChecked ->
                 Timber.d(search().toString())
+                // Workaround for this listener firing twice for some unknown reason
+                // See: https://stackoverflow.com/questions/3913687/checkbox-changes-value-twice
+                toggle_notification.setOnCheckedChangeListener(null)
                 viewModel.update(search().copy(isSubscribed = isChecked))
             }
         }
