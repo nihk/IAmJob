@@ -102,7 +102,7 @@ class JobsFragment
             } catch (throwable: Throwable) {
                 Search.EMPTY
             }
-            search(currentFilter)
+            searchThenUpdate(currentFilter)
         } else {
             savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
         }
@@ -223,10 +223,13 @@ class JobsFragment
         positionsViewModel.search(search, onLoading, onDoneLoading)
     }
 
-    override fun onFilterDefined(search: Search, saveFilterLocally: Boolean) {
-        currentFilter = search
-        setUiActiveFilter(currentFilter)
-        search(currentFilter)
+    fun searchThenUpdate(
+        search: Search,
+        onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
+        onDoneLoading: PositionsLoadingState = PositionsLoadingState.DoneSimpleFetch,
+        saveFilterLocally: Boolean = false
+    ) {
+        search(search, onLoading, onDoneLoading)
 
         if (!search.isEmpty()) {
             if (saveFilterLocally) {
@@ -235,6 +238,12 @@ class JobsFragment
                 searchesViewModel.updateLastTimeUserSearched(search)
             }
         }
+    }
+
+    override fun onFilterDefined(search: Search, saveFilterLocally: Boolean) {
+        currentFilter = search
+        setUiActiveFilter(currentFilter)
+        searchThenUpdate(search, saveFilterLocally = saveFilterLocally)
     }
 
     private fun setUiActiveFilter(search: Search) {
