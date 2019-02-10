@@ -30,13 +30,14 @@
             android:drawableEnd="@drawable/ic_go"
             android:drawablePadding="8dp"
             android:gravity="center"
-            android:textColor="@color/mintGreen"
+            android:textColor="@color/colorAccent"
             app:layout_constrainedWidth="true"
             tools:text="54 new results!" />
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/filter_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"

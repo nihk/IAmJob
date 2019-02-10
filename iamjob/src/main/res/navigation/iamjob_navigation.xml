@@ -17,6 +17,11 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="search"
+            app:argType="nick.data.model.Search"
+            android:defaultValue="@null"
+            app:nullable="true" />
     </fragment>
 
     <fragment
@@ -44,6 +49,14 @@
     <fragment
         android:id="@+id/notifications_dest"
         android:name="nick.iamjob.ui.NotificationsFragment"
-        android:label="NotificationsFragment" />
+        android:label="NotificationsFragment" >
+        <action
+            android:id="@+id/to_jobs"
+            app:destination="@id/jobs_dest"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
 </navigation>

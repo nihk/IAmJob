@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,12 +18,11 @@ import kotlinx.android.synthetic.main.fragment_jobs.*
 import nick.data.model.Search
 import nick.data.util.PositionQuery
 import nick.iamjob.R
-import nick.iamjob.vm.PositionsViewModel
-import nick.iamjob.vm.SearchesViewModel
 import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
 import nick.iamjob.util.PositionsLoadingState
-import nick.iamjob.util.ReplacesData
+import nick.iamjob.vm.PositionsViewModel
+import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
 import nick.ui.ErrorDialogFragment
 import nick.ui.visibleOrGone
@@ -32,6 +32,8 @@ class JobsFragment
     : BaseFragment()
     , OnPositionActionListener
     , FilterPositionsDialogFragment.OnFilterDefinedListener {
+
+    private val args by navArgs<JobsFragmentArgs>()
 
     @Inject
     lateinit var filterStringFormatter: FilterStringFormatter
@@ -94,9 +96,15 @@ class JobsFragment
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
+            // Hack workaround for JobsFragment not always having non-null arguments
+            currentFilter = try {
+                args.search!!
+            } catch (throwable: Throwable) {
+                Search.EMPTY
+            }
             search(currentFilter)
         } else {
-            currentFilter = savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
+            savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
         }
     }
 
@@ -109,12 +117,13 @@ class JobsFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         recycler_view.layoutManager =
-                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    LinearLayoutManager(requireContext())
-                } else {
-                    GridLayoutManager(requireContext(), 2)
-                }
+            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                LinearLayoutManager(requireContext())
+            } else {
+                GridLayoutManager(requireContext(), 2)
+            }
         recycler_view.adapter = adapter
         recycler_view.addOnScrollListener(scrollListener)
         swipe_refresh.setOnRefreshListener {

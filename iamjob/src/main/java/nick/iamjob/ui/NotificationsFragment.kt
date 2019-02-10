@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.ExistingWorkPolicy
@@ -123,11 +124,16 @@ class NotificationsFragment : BaseFragment() {
 
                 if (numNewResults > 0) {
                     new_content_container.visibleOrGone(true)
+                    new_content_container.setOnClickListener {
+                        findNavController().navigate(
+                            NotificationsFragmentDirections.toJobs().setSearch(search)
+                        )
+                    }
                     new_content.text = getString(R.string.new_results, numNewResults)
                 }
             }
 
-            containerView.setOnClickListener {
+            filter_container.setOnClickListener {
                 toggle_notification.toggle()
             }
 
