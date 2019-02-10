@@ -11,7 +11,7 @@ import nick.data.di.DataModule
 import nick.location.LocationModule
 import nick.networking.NetworkingModule
 import nick.ui.UiModule
-import nick.work.WorkModule
+import nick.work.di.WorkModule
 
 @Module(
     includes = [

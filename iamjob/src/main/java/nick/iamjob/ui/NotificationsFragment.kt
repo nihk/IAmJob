@@ -20,7 +20,7 @@ import nick.iamjob.R
 import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
 import nick.ui.visibleOrGone
-import nick.work.CheckNewPositionsWorker
+import nick.work.worker.CheckNewPositionsWorker
 import javax.inject.Inject
 
 class NotificationsFragment : BaseFragment() {

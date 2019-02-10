@@ -1,4 +1,4 @@
-package nick.work
+package nick.work.di
 
 import androidx.work.ListenableWorker
 import dagger.MapKey

@@ -1,4 +1,4 @@
-package nick.work
+package nick.work.di
 
 import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Module

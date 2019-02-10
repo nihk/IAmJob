@@ -1,4 +1,4 @@
-package nick.work
+package nick.work.worker
 
 import android.content.Context
 import androidx.work.ListenableWorker

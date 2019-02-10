@@ -1,8 +1,10 @@
-package nick.work
+package nick.work.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import nick.work.worker.CheckNewPositionsWorker
+import nick.work.worker.ChildWorkerFactory
 
 @Module(includes = [WorkerFactoryModule::class])
 abstract class WorkerModule {

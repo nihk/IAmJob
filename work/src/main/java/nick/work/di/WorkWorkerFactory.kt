@@ -1,9 +1,10 @@
-package nick.work
+package nick.work.di
 
 import android.content.Context
 import androidx.work.ListenableWorker
 import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
+import nick.work.worker.ChildWorkerFactory
 import javax.inject.Inject
 import javax.inject.Provider
 
