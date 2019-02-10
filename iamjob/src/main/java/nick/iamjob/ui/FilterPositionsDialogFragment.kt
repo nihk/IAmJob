@@ -20,6 +20,7 @@ import dagger.android.support.DaggerDialogFragment
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_filter_positions_dialog.*
 import kotlinx.android.synthetic.main.item_saved_filter.*
+import nick.core.util.CurrentTime
 import nick.core.vm.ViewModelFactory
 import nick.data.model.Search
 import nick.iamjob.R
@@ -38,6 +39,9 @@ class FilterPositionsDialogFragment
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    @Inject
+    lateinit var currentTime: CurrentTime
 
     private val searchesViewModel by lazy {
         ViewModelProviders.of(this, viewModelFactory).get(SearchesViewModel::class.java)
@@ -71,7 +75,9 @@ class FilterPositionsDialogFragment
                             description = description.text.toString(),
                             location = location.text.toString(),
                             isFullTime = full_time.isChecked,
-                            isSubscribed = false
+                            isSubscribed = false,
+                            hasNewResults = false,
+                            lastTimeUserSearched = currentTime.inMillis()
                         ), save_filter.isChecked
                     )
                 }
