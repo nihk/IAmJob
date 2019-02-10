@@ -3,10 +3,8 @@ package nick.work
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import nick.work.ChildWorkerFactory
-import nick.work.WorkerKey
 
-@Module
+@Module(includes = [WorkerFactoryModule::class])
 abstract class WorkerModule {
 
     @Binds

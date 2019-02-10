@@ -23,6 +23,7 @@ android {
 
 dependencies {
     implementation project(':core')
+    implementation project(':work')
 
     api "android.arch.work:work-runtime-ktx:$work_version"
 

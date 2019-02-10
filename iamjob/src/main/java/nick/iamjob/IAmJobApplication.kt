@@ -20,6 +20,8 @@ class IAmJobApplication : DaggerApplication() {
             Timber.plant(Timber.DebugTree())
         }
 
+        // todo: move all these initializations into an ApplicationInitializations class, and
+        // leverage dagger2 multibindings @IntoSet to facilitate that
         WorkManager.initialize(this, configuration)
     }
 
