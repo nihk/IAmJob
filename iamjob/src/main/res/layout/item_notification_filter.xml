@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp">
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/new_content_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"
@@ -26,10 +28,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:padding="8dp"
             android:drawableEnd="@drawable/ic_go"
             android:drawablePadding="8dp"
             android:gravity="center"
+            android:padding="8dp"
             android:textColor="@color/colorAccent"
             app:layout_constrainedWidth="true"
             tools:text="54 new results!" />
@@ -40,7 +42,10 @@
         android:id="@+id/filter_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="1dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"

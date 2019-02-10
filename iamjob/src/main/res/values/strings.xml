@@ -23,5 +23,5 @@
         <item>Weekly</item>
         <item>Monthly</item>
     </string-array>
-    <string name="new_results">%1$d new result(s)!</string>
+    <string name="new_results">%1$d new jobs(s)!</string>
 </resources>

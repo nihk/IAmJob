@@ -19,8 +19,8 @@
             app:popExitAnim="@anim/slide_out_right" />
         <argument
             android:name="search"
-            app:argType="nick.data.model.Search"
             android:defaultValue="@null"
+            app:argType="nick.data.model.Search"
             app:nullable="true" />
     </fragment>
 
@@ -49,7 +49,7 @@
     <fragment
         android:id="@+id/notifications_dest"
         android:name="nick.iamjob.ui.NotificationsFragment"
-        android:label="NotificationsFragment" >
+        android:label="NotificationsFragment">
         <action
             android:id="@+id/to_jobs"
             app:destination="@id/jobs_dest"
