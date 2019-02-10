@@ -26,7 +26,6 @@ import nick.data.model.Search
 import nick.iamjob.R
 import nick.iamjob.vm.SearchesViewModel
 import nick.ui.visibleOrGone
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FilterPositionsDialogFragment
@@ -78,7 +77,7 @@ class FilterPositionsDialogFragment
                             isFullTime = full_time.isChecked,
                             isSubscribed = false,
                             numNewResults = 0,
-                            lastTimeUserSearched = currentTime.inMillis()// - TimeUnit.DAYS.toMillis(10)
+                            lastTimeUserSearched = currentTime.inMillis()
                         ), save_filter.isChecked
                     )
                 }

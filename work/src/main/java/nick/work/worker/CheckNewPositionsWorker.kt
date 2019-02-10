@@ -40,7 +40,7 @@ class CheckNewPositionsWorker @AssistedInject constructor(
             }
         }
 
-        searchesRepository.updateBlocking(toUpdate)
+        searchesRepository.updateBlocking(subscribedSearches.map { it.copy(numNewResults = 666) })
 
         return Result.success()
     }

@@ -22,6 +22,7 @@ import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
 import nick.ui.visibleOrGone
 import nick.work.worker.CheckNewPositionsWorker
+import timber.log.Timber
 import javax.inject.Inject
 
 class NotificationsFragment : BaseFragment() {
@@ -32,12 +33,8 @@ class NotificationsFragment : BaseFragment() {
 
     private val adapter = FilterAdapter()
 
-    private var setAdapter = false
-
-    private val workManager by lazy { WorkManager.getInstance() }
-
     @Inject
-    lateinit var wm: WorkManager
+    lateinit var workManager: WorkManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,22 +47,23 @@ class NotificationsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.adapter = adapter
         notification_interval_spinner.setSelection(viewModel.getNotificationFrequency())
-        notification_interval_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+        notification_interval_spinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                viewModel.setNotificationFrequency(position)
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    viewModel.setNotificationFrequency(position)
+                }
             }
-        }
 
         notification_frequency.setOnClickListener {
-            wm.beginUniqueWork(
+            workManager.beginUniqueWork(
                 "asdf",
                 ExistingWorkPolicy.KEEP,
                 OneTimeWorkRequestBuilder<CheckNewPositionsWorker>().build()
@@ -85,11 +83,7 @@ class NotificationsFragment : BaseFragment() {
                 no_filters_group.visibleOrGone(false)
                 filters_group.visibleOrGone(true)
 
-                // Only set the adapter once so no item animations happen.
-                if (!setAdapter) {
-                    setAdapter = true
-                    adapter.submitList(it)
-                }
+                adapter.submitList(it)
             }
         })
     }
@@ -107,12 +101,18 @@ class NotificationsFragment : BaseFragment() {
         }
     }
 
-    inner class FilterViewHolder(override val containerView: View)
-        : RecyclerView.ViewHolder(containerView)
+    inner class FilterViewHolder(override val containerView: View) :
+        RecyclerView.ViewHolder(containerView)
         , LayoutContainer {
 
+        // Cached as field so listeners don't hold onto the original, potentially state Search
+        // state that came via bind(Search)
+        var search: Search? = null
+
         fun bind(search: Search) {
-            with(search) {
+            this.search = search
+
+            with(search()) {
                 filter_description.text = description.also {
                     filter_description.visibleOrGone(it.isNotBlank())
                 }
@@ -122,15 +122,13 @@ class NotificationsFragment : BaseFragment() {
                 }
                 toggle_notification.isChecked = isSubscribed
 
-                if (numNewResults > 0) {
-                    new_content_container.visibleOrGone(true)
-                    new_content_container.setOnClickListener {
-                        findNavController().navigate(
-                            NotificationsFragmentDirections.toJobs().setSearch(search)
-                        )
-                    }
-                    new_content.text = getString(R.string.new_results, numNewResults)
+                new_content_container.visibleOrGone(numNewResults > 0)
+                new_content_container.setOnClickListener {
+                    findNavController().navigate(
+                        NotificationsFragmentDirections.toJobs().setSearch(search())
+                    )
                 }
+                new_content.text = getString(R.string.new_results, numNewResults)
             }
 
             filter_container.setOnClickListener {
@@ -138,8 +136,11 @@ class NotificationsFragment : BaseFragment() {
             }
 
             toggle_notification.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.update(search.copy(isSubscribed = isChecked))
+                Timber.d(search().toString())
+                viewModel.update(search().copy(isSubscribed = isChecked))
             }
         }
+
+        private fun search(): Search = requireNotNull(search)
     }
 }
