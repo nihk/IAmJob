@@ -32,6 +32,8 @@ class SearchesRepository @Inject constructor(
         dao.update(search)
     }
 
+    fun updateBlocking(searches: List<Search>) = dao.update(searches)
+
     fun updateLastTimeUserSearched(search: Search): Completable = Completable.fromAction {
         with(search) {
             dao.updateLastTimeUserSearched(description, location, isFullTime, currentTime.inMillis())

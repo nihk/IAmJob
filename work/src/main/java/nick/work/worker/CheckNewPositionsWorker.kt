@@ -5,18 +5,14 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import io.reactivex.SingleObserver
-import io.reactivex.disposables.Disposable
-import nick.core.util.CurrentTime
 import nick.data.model.Position
+import nick.data.model.Search
 import nick.repository.PositionsRepository
 import nick.repository.SearchesRepository
-import timber.log.Timber
 
 class CheckNewPositionsWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParameters: WorkerParameters,
-    private val currentTime: CurrentTime,
     private val positionsRepository: PositionsRepository,
     private val searchesRepository: SearchesRepository
 ) : Worker(context, workerParameters) {
@@ -25,28 +21,27 @@ class CheckNewPositionsWorker @AssistedInject constructor(
     interface Factory : ChildWorkerFactory
 
     override fun doWork(): Result {
-        val queryAllBlocking = searchesRepository.queryAllBlocking().filter {
-            it.isSubscribed
+        val subscribedSearches = searchesRepository.queryAllBlocking()
+            .filter(Search::isSubscribed)
+
+        val toUpdate = mutableListOf<Search>()
+
+        subscribedSearches.forEach { search ->
+            val positions: List<Position> = positionsRepository.search(search)
+                .onErrorReturnItem(emptyList())
+                .blockingGet()
+
+            val numNewResults = positions.filter {
+                    position ->  position.createdAt > search.lastTimeUserSearched
+            }.size
+
+            if (numNewResults > 0) {
+                toUpdate.add(search.copy(numNewResults = numNewResults))
+            }
         }
-        queryAllBlocking.forEach {
-            positionsRepository.search(it)
-                .subscribe(object : SingleObserver<List<Position>> {
 
-                    override fun onSubscribe(d: Disposable) {
-                    }
+        searchesRepository.updateBlocking(toUpdate)
 
-                    override fun onSuccess(t: List<Position>) {
-                        t.forEach { position ->
-                            Timber.d("${it.description} - ${it.location}: ${position.company}")
-                        }
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Timber.e(e)
-                    }
-
-                })
-        }
         return Result.success()
     }
 }

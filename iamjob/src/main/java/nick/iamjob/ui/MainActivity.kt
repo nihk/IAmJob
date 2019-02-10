@@ -16,6 +16,7 @@ import nick.ui.ToolbarSetter
 // todo: logo of app for activity window background or just a color background at least
 // todo: add state to Search object - hasNewResults.
 // todo: work module for all the AssistedInject logic
+// todo: crashlytics
 class MainActivity
     : DaggerAppCompatActivity()
     , ToolbarSetter {
