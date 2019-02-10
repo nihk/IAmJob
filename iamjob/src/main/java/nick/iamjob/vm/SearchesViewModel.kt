@@ -36,7 +36,19 @@ class SearchesViewModel @Inject constructor(
     }
 
     fun update(search: Search) {
-        repository.updateSearch(search)
+        repository.update(search)
+            .applySchedulers()
+            .subscribe(createSimpleCompletableObserver())
+    }
+
+    fun updateLastTimeUserSearched(search: Search) {
+        repository.updateLastTimeUserSearched(search)
+            .applySchedulers()
+            .subscribe(createSimpleCompletableObserver())
+    }
+
+    fun insertOrUpdate(search: Search) {
+        repository.insertOrUpdateLastTimeUserSearched(search)
             .applySchedulers()
             .subscribe(createSimpleCompletableObserver())
     }

@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import kotlinx.android.extensions.LayoutContainer
@@ -63,9 +64,11 @@ class NotificationsFragment : BaseFragment() {
         }
 
         notification_frequency.setOnClickListener {
-            wm.enqueue(
+            wm.beginUniqueWork(
+                "asdf",
+                ExistingWorkPolicy.KEEP,
                 OneTimeWorkRequestBuilder<CheckNewPositionsWorker>().build()
-            )
+            ).enqueue()
         }
     }
 

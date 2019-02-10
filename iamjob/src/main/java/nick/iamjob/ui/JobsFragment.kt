@@ -219,8 +219,12 @@ class JobsFragment
         setUiActiveFilter(currentFilter)
         search(currentFilter)
 
-        if (saveFilterLocally && !search.isEmpty()) {
-            searchesViewModel.insert(search)
+        if (!search.isEmpty()) {
+            if (saveFilterLocally) {
+                searchesViewModel.insertOrUpdate(search)
+            } else {
+                searchesViewModel.updateLastTimeUserSearched(search)
+            }
         }
     }
 

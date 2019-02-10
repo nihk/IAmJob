@@ -41,7 +41,7 @@ class PositionsViewModel @Inject constructor(
         loadingState: PositionsLoadingState,
         doneLoadingState: PositionsLoadingState
     ) {
-        repository.search(search)
+        repository.searchThenInsert(search)
             .applySchedulers()
             .subscribe(object : CompletableObserver {
 

@@ -18,7 +18,7 @@ data class Search @JvmOverloads constructor(
     @ColumnInfo(name = COL_LOCATION) val location: String,
     @ColumnInfo(name = COL_IS_FULL_TIME) val isFullTime: Boolean,
     @ColumnInfo(name = COL_IS_SUBSCRIBED) val isSubscribed: Boolean,
-    @ColumnInfo(name = COL_HAS_NEW_RESULTS) val hasNewResults: Boolean,
+    @ColumnInfo(name = COL_NUM_NEW_RESULTS) val numNewResults: Int,
     @ColumnInfo(name = COL_LAST_TIME_USER_SEARCHED) val lastTimeUserSearched: Long,
     @Ignore val page: Int = 1
 ) : Parcelable {
@@ -29,7 +29,7 @@ data class Search @JvmOverloads constructor(
             location = "",
             isFullTime = false,
             isSubscribed = false,
-            hasNewResults = false,
+            numNewResults = 0,
             lastTimeUserSearched = 0L
         )
 
@@ -38,7 +38,7 @@ data class Search @JvmOverloads constructor(
         const val COL_LOCATION = "location"
         const val COL_IS_FULL_TIME = "is_full_time"
         const val COL_IS_SUBSCRIBED = "is_subscribed"
-        const val COL_HAS_NEW_RESULTS = "has_new_results"
+        const val COL_NUM_NEW_RESULTS = "num_new_results"
         const val COL_LAST_TIME_USER_SEARCHED = "last_time_user_searched"
     }
 

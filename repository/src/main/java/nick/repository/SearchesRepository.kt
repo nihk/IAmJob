@@ -3,6 +3,7 @@ package nick.repository
 import android.content.SharedPreferences
 import io.reactivex.Completable
 import nick.core.di.ApplicationScope
+import nick.core.util.CurrentTime
 import nick.data.dao.SearchesDao
 import nick.data.model.Search
 import javax.inject.Inject
@@ -10,7 +11,8 @@ import javax.inject.Inject
 @ApplicationScope
 class SearchesRepository @Inject constructor(
     private val dao: SearchesDao,
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
+    private val currentTime: CurrentTime
 ) {
     val searches = dao.queryAll()
 
@@ -26,8 +28,18 @@ class SearchesRepository @Inject constructor(
         dao.delete(search)
     }
 
-    fun updateSearch(search: Search): Completable = Completable.fromAction {
+    fun update(search: Search): Completable = Completable.fromAction {
         dao.update(search)
+    }
+
+    fun updateLastTimeUserSearched(search: Search): Completable = Completable.fromAction {
+        with(search) {
+            dao.updateLastTimeUserSearched(description, location, isFullTime, currentTime.inMillis())
+        }
+    }
+
+    fun insertOrUpdateLastTimeUserSearched(search: Search): Completable = Completable.fromAction {
+        dao.insertOrUpdateLastTimeUserSearched(search, currentTime.inMillis())
     }
 
     fun setNotificationFrequency(notificationFrequency: Int) {
@@ -39,4 +51,6 @@ class SearchesRepository @Inject constructor(
     fun getNotificationFrequency(): Int = sharedPreferences.getInt(
         KEY_NOTIFICATION_FREQUENCY, 0
     )
+
+    fun queryAllBlocking() = dao.queryAllBlocking()
 }

@@ -76,7 +76,7 @@ class FilterPositionsDialogFragment
                             location = location.text.toString(),
                             isFullTime = full_time.isChecked,
                             isSubscribed = false,
-                            hasNewResults = false,
+                            numNewResults = 0,
                             lastTimeUserSearched = currentTime.inMillis()
                         ), save_filter.isChecked
                     )
