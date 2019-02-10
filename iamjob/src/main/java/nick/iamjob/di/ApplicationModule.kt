@@ -10,7 +10,6 @@ import nick.core.di.ApplicationScope
 import nick.data.di.DataModule
 import nick.location.LocationModule
 import nick.networking.NetworkingModule
-import nick.notification.NotificationModule
 import nick.ui.UiModule
 import nick.work.WorkModule
 
@@ -21,8 +20,7 @@ import nick.work.WorkModule
         DataModule::class,
         UiModule::class,
         LocationModule::class,
-        WorkModule::class,
-        NotificationModule::class
+        WorkModule::class
     ]
 )
 class ApplicationModule {

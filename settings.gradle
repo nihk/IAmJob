@@ -1,1 +1,1 @@
-include ':iamjob', ':core', ':data', ':networking', ':ui', ':notification', ':location', ':repository', ':work'
+include ':iamjob', ':core', ':data', ':networking', ':ui', ':location', ':repository', ':work'

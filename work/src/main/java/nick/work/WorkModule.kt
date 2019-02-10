@@ -1,18 +1,26 @@
 package nick.work
 
+import android.content.Context
 import androidx.work.Configuration
 import androidx.work.WorkManager
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
+import nick.core.di.ApplicationContext
+import nick.core.di.ApplicationScope
 
 @Module(includes = [WorkAssistedModule::class, WorkerModule::class])
 object WorkModule {
 
-    @Reusable
+    @ApplicationScope
     @Provides
     @JvmStatic
-    fun workManager() = WorkManager.getInstance()
+    fun workManager(
+        @ApplicationContext applicationContext: Context,
+        configuration: Configuration
+    ): WorkManager {
+        WorkManager.initialize(applicationContext, configuration)
+        return WorkManager.getInstance()
+    }
 
     @Provides
     @JvmStatic
