@@ -10,10 +10,12 @@ import nick.iamjob.R
 import nick.ui.ToolbarSetter
 
 // todo: use WorkManager to poll API once per day and check for new results? then deep-link to notifications tab to show new results
+// todo: cached search click needs to update last time user searched field
 // todo: test coverage - compare with how android-sunflower app did its testing
 // todo: can i use debounce operator for spam clicks?
 // todo: logo of app for activity window background or just a color background at least
 // todo: add state to Search object - hasNewResults.
+// todo: work module for all the AssistedInject logic
 class MainActivity
     : DaggerAppCompatActivity()
     , ToolbarSetter {

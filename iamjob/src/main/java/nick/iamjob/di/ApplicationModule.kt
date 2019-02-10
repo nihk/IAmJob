@@ -10,8 +10,8 @@ import nick.core.di.ApplicationScope
 import nick.data.di.DataModule
 import nick.location.LocationModule
 import nick.networking.NetworkingModule
-import nick.notification.NotificationModule
 import nick.ui.UiModule
+import nick.work.WorkModule
 
 @Module(
     includes = [
@@ -20,7 +20,7 @@ import nick.ui.UiModule
         DataModule::class,
         UiModule::class,
         LocationModule::class,
-        NotificationModule::class
+        WorkModule::class
     ]
 )
 class ApplicationModule {

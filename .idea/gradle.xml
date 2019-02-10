@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/notification" />
             <option value="$PROJECT_DIR$/repository" />
             <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/work" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

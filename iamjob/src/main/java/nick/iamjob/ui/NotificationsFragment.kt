@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.item_notification_filter.*
@@ -17,6 +19,8 @@ import nick.iamjob.R
 import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
 import nick.ui.visibleOrGone
+import nick.work.CheckNewPositionsWorker
+import javax.inject.Inject
 
 class NotificationsFragment : BaseFragment() {
 
@@ -27,6 +31,11 @@ class NotificationsFragment : BaseFragment() {
     private val adapter = FilterAdapter()
 
     private var setAdapter = false
+
+    private val workManager by lazy { WorkManager.getInstance() }
+
+    @Inject
+    lateinit var wm: WorkManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +60,12 @@ class NotificationsFragment : BaseFragment() {
             ) {
                 viewModel.setNotificationFrequency(position)
             }
+        }
+
+        notification_frequency.setOnClickListener {
+            wm.enqueue(
+                OneTimeWorkRequestBuilder<CheckNewPositionsWorker>().build()
+            )
         }
     }
 

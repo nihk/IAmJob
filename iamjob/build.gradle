@@ -39,6 +39,7 @@ dependencies {
     implementation project(':location')
     implementation project(':repository')
     implementation project(':notification')
+    implementation project(':work')
 
     implementation "com.android.support:multidex:$multidex_version"
     testImplementation "junit:junit:$junit_version"

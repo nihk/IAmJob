@@ -33,6 +33,7 @@ ext {
     room_version = "2.1.0-alpha04"
     work_version = "1.0.0-beta05"
     dagger_version = "2.20"
+    assisted_inject_version = "0.3.2"
     exoplayer_version = "2.9.0"
     retrofit_version = "2.4.0"
     moshi_version = "1.8.0"
