@@ -9,6 +9,7 @@ import nick.data.model.Position
 import nick.data.model.Search
 import nick.repository.PositionsRepository
 import nick.repository.SearchesRepository
+import timber.log.Timber
 
 class CheckNewPositionsWorker @AssistedInject constructor(
     @Assisted context: Context,
@@ -40,7 +41,10 @@ class CheckNewPositionsWorker @AssistedInject constructor(
             }
         }
 
-        searchesRepository.updateBlocking(subscribedSearches.map { it.copy(numNewResults = 666) })
+        Timber.d("Found new results for ${toUpdate.size} saved filters")
+        searchesRepository.updateBlocking(toUpdate)
+
+        // todo: if toUpdate.size > 0, then create a notification that deep links to NotificationFragment
 
         return Result.success()
     }

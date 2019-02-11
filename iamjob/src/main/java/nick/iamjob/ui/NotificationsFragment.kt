@@ -10,9 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.item_notification_filter.*
@@ -20,11 +18,15 @@ import nick.data.model.Search
 import nick.iamjob.R
 import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
+import nick.ui.DefaultAdapterItemSelectedListener
 import nick.ui.visibleOrGone
 import nick.work.worker.CheckNewPositionsWorker
-import timber.log.Timber
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+const val NAME_CHECK_NEW_RESULTS_WORK = "check_new_results_work"
+
+// todo: start work manager periodic work right away. the only thing needing to change the work is the notification frequency
 class NotificationsFragment : BaseFragment() {
 
     private val viewModel by lazy {
@@ -48,9 +50,7 @@ class NotificationsFragment : BaseFragment() {
         recycler_view.adapter = adapter
         notification_interval_spinner.setSelection(viewModel.getNotificationFrequency())
         notification_interval_spinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
+            object : DefaultAdapterItemSelectedListener() {
 
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
@@ -63,11 +63,7 @@ class NotificationsFragment : BaseFragment() {
             }
 
         notification_frequency.setOnClickListener {
-            workManager.beginUniqueWork(
-                "asdf",
-                ExistingWorkPolicy.KEEP,
-                OneTimeWorkRequestBuilder<CheckNewPositionsWorker>().build()
-            ).enqueue()
+            subscribeToFilters()
         }
     }
 
@@ -86,6 +82,33 @@ class NotificationsFragment : BaseFragment() {
                 adapter.submitList(it)
             }
         })
+    }
+
+    private fun subscribeToFilters() {
+        val notificationFrequencyPosition = notification_interval_spinner.selectedItemPosition
+
+        // todo: encapsulate these values somewhere else
+        val days = when (notificationFrequencyPosition) {
+//            0 -> 1L
+//            1 -> 7L
+//            2 -> 30L
+            0 -> 15L
+            1 -> 15L
+            2 -> 15L
+            else -> error("Unknown position: $notificationFrequencyPosition")
+        }
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        workManager.enqueueUniquePeriodicWork(
+            NAME_CHECK_NEW_RESULTS_WORK,
+            ExistingPeriodicWorkPolicy.REPLACE,
+            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(days, TimeUnit.MINUTES)
+                .setConstraints(constraints)
+                .build()
+        )
     }
 
     inner class FilterAdapter
@@ -136,7 +159,6 @@ class NotificationsFragment : BaseFragment() {
             }
 
             toggle_notification.setOnCheckedChangeListener { _, isChecked ->
-                Timber.d(search().toString())
                 // Workaround for this listener firing twice for some unknown reason
                 // See: https://stackoverflow.com/questions/3913687/checkbox-changes-value-twice
                 toggle_notification.setOnCheckedChangeListener(null)
