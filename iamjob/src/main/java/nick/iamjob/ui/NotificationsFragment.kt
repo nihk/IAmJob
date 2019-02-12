@@ -105,7 +105,7 @@ class NotificationsFragment : BaseFragment() {
         workManager.enqueueUniquePeriodicWork(
             NAME_CHECK_NEW_RESULTS_WORK,
             ExistingPeriodicWorkPolicy.REPLACE,
-            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(days, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(days, TimeUnit.MINUTES, 5, TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
         )

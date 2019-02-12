@@ -64,6 +64,7 @@
                 android:lineSpacingExtra="2dp"
                 android:lineSpacingMultiplier="1.1"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:textIsSelectable="true"
                 app:layout_constraintBottom_toTopOf="@+id/divider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
