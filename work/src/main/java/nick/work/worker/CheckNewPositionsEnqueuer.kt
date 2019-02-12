@@ -16,17 +16,13 @@ class CheckNewPositionsEnqueuer @Inject constructor(
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()
 
-    fun enqueueWork(daysInterval: Long, cancelPreviousWork: Boolean = false) {
-        Timber.d("Enqueuing work for daysInterval: $daysInterval")
-
-        if (cancelPreviousWork) {
-            workManager.cancelUniqueWork(NAME_CHECK_NEW_RESULTS_WORK)
-        }
+    fun enqueueWork(daysInterval: Long) {
+        Timber.d("Maybe enqueuing work for daysInterval: $daysInterval")
 
         workManager.enqueueUniquePeriodicWork(
             NAME_CHECK_NEW_RESULTS_WORK,
             ExistingPeriodicWorkPolicy.KEEP,
-            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(daysInterval, TimeUnit.DAYS/*, 5, TimeUnit.MINUTES*/)
+            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(daysInterval, TimeUnit.DAYS, 5, TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
         )
