@@ -12,6 +12,7 @@
     <string name="no_results_message">No results were found</string>
     <string name="share">Share</string>
     <string name="save">Save</string>
+    <string name="unsave">Unsave</string>
     <string name="company_details">&lt;a href=%1$s>%2$s&lt;/a></string>
     <string name="how_to_apply">How to apply: %1$s</string>
     <string name="no_filters_message">Here you can subscribe to updates from your saved filters, but it looks like you haven\'t saved any yet! Click the floating button in the Jobs tab, define a filter, then check the \"Save filter\" checkbox and then they\'ll show up here.</string>

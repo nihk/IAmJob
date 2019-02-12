@@ -165,6 +165,15 @@ class PositionFragment : BaseFragment() {
                 R.drawable.ic_saved
             }
         )?.also { setDrawableWhite(it) }
+
+        toggleSave.title = getString(
+            if (isSaved) {
+                R.string.unsave
+            } else {
+                R.string.save
+            }
+        )
+
         toggleSave.isChecked = isSaved
     }
 }
