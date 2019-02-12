@@ -40,7 +40,7 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="action_notifications_dest_to_jobs_dest">
+                            <entry key="to_jobs">
                               <value>
                                 <LayoutPositions />
                               </value>

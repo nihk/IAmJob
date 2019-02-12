@@ -44,6 +44,8 @@ class SearchesRepository @Inject constructor(
         dao.insertOrUpdateLastTimeUserSearched(search, currentTime.inMillis())
     }
 
+    fun queryAllBlocking() = dao.queryAllBlocking()
+
     fun setNotificationFrequency(notificationFrequency: Int) {
         sharedPreferences.edit()
             .putInt(KEY_NOTIFICATION_FREQUENCY, notificationFrequency)
@@ -53,6 +55,4 @@ class SearchesRepository @Inject constructor(
     fun getNotificationFrequency(): Int = sharedPreferences.getInt(
         KEY_NOTIFICATION_FREQUENCY, 0
     )
-
-    fun queryAllBlocking() = dao.queryAllBlocking()
 }

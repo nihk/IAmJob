@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.*
+import androidx.work.Operation
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import kotlinx.android.synthetic.main.item_notification_filter.*
@@ -20,13 +20,10 @@ import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
 import nick.ui.DefaultAdapterItemSelectedListener
 import nick.ui.visibleOrGone
-import nick.work.worker.CheckNewPositionsWorker
-import java.util.concurrent.TimeUnit
+import nick.work.worker.CheckNewPositionsEnqueuer
+import timber.log.Timber
 import javax.inject.Inject
 
-const val NAME_CHECK_NEW_RESULTS_WORK = "check_new_results_work"
-
-// todo: start work manager periodic work right away. the only thing needing to change the work is the notification frequency
 class NotificationsFragment : BaseFragment() {
 
     private val viewModel by lazy {
@@ -36,7 +33,9 @@ class NotificationsFragment : BaseFragment() {
     private val adapter = FilterAdapter()
 
     @Inject
-    lateinit var workManager: WorkManager
+    lateinit var checkNewPositionsEnqueuer: CheckNewPositionsEnqueuer
+
+    private var ignoreFirstTime = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,13 +57,21 @@ class NotificationsFragment : BaseFragment() {
                     position: Int,
                     id: Long
                 ) {
+                    // This callback will get hit on initialization. Ignore it the first time.
+                    if (ignoreFirstTime) {
+                        ignoreFirstTime = false
+                        return
+                    }
                     viewModel.setNotificationFrequency(position)
+                    val operationState = checkNewPositionsEnqueuer.cancelWork()
+                    operationState.observe(viewLifecycleOwner, Observer {
+                        if (it is Operation.State.SUCCESS) {
+                            Timber.d("Successfully cancelled work")
+                            enqueueWork(position)
+                        }
+                    })
                 }
             }
-
-        notification_frequency.setOnClickListener {
-            subscribeToFilters()
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -82,33 +89,21 @@ class NotificationsFragment : BaseFragment() {
                 adapter.submitList(it)
             }
         })
+
+        // Start the periodic work immediately as the default - daily. If the user has no
+        // subscriptions, this is just a no-op.
+        enqueueWork(0)
     }
 
-    private fun subscribeToFilters() {
-        val notificationFrequencyPosition = notification_interval_spinner.selectedItemPosition
+    private fun enqueueWork(position: Int) {
+        checkNewPositionsEnqueuer.enqueueWork(getDaysInterval(position))
+    }
 
-        // todo: encapsulate these values somewhere else
-        val days = when (notificationFrequencyPosition) {
-//            0 -> 1L
-//            1 -> 7L
-//            2 -> 30L
-            0 -> 15L
-            1 -> 15L
-            2 -> 15L
-            else -> error("Unknown position: $notificationFrequencyPosition")
-        }
-
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-
-        workManager.enqueueUniquePeriodicWork(
-            NAME_CHECK_NEW_RESULTS_WORK,
-            ExistingPeriodicWorkPolicy.REPLACE,
-            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(days, TimeUnit.MINUTES, 5, TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-        )
+    private fun getDaysInterval(position: Int) = when (position) {
+        0 -> 1L
+        1 -> 7L
+        2 -> 30L
+        else -> error("Unknown position: $position")
     }
 
     inner class FilterAdapter

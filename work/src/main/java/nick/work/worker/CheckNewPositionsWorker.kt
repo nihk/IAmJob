@@ -22,6 +22,7 @@ class CheckNewPositionsWorker @AssistedInject constructor(
     interface Factory : ChildWorkerFactory
 
     override fun doWork(): Result {
+        Timber.d("Starting work to check for new positions")
         val subscribedSearches = searchesRepository.queryAllBlocking()
             .filter(Search::isSubscribed)
 
