@@ -12,6 +12,7 @@ import nick.core.util.applySchedulers
 import nick.data.model.Search
 import nick.repository.SearchesRepository
 import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 class SearchesViewModel @Inject constructor(
@@ -69,10 +70,14 @@ class SearchesViewModel @Inject constructor(
 
     fun fetchLocation(location: Task<Location>) {
         location.addOnCompleteListener { task ->
-            _locality.value = task.result?.let { location ->
-                geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                    .firstOrNull()
-                    ?.locality
+            _locality.value = task.result?.let {
+                try {
+                    geocoder.getFromLocation(it.latitude, it.longitude, 1)
+                        .firstOrNull()
+                        ?.locality
+                } catch (e: IOException) {
+                    null
+                }
             }
         }
     }
