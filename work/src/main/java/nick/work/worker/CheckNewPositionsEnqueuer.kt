@@ -1,5 +1,6 @@
 package nick.work.worker
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
 import androidx.lifecycle.LiveData
@@ -19,10 +20,16 @@ class CheckNewPositionsEnqueuer @Inject constructor(
         .setRequiredNetworkType(NetworkType.CONNECTED)
         .build()
 
-    fun enqueueWork(daysInterval: Long, @NavigationRes navigationRes: Int, @IdRes destinationId: Int) {
+    fun enqueueWork(
+        daysInterval: Long,
+        @DrawableRes smallIcon: Int,
+        @NavigationRes navigationRes: Int,
+        @IdRes destinationId: Int
+    ) {
         Timber.d("Maybe enqueuing work for daysInterval: $daysInterval")
 
         val inputData = Data.Builder()
+            .putInt(CheckNewPositionsWorker.KEY_SMALL_ICON, smallIcon)
             .putInt(CheckNewPositionsWorker.KEY_NAVIGATION_RES, navigationRes)
             .putInt(CheckNewPositionsWorker.KEY_DESTINATION_ID, destinationId)
             .build()

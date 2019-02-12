@@ -1,9 +1,9 @@
 package nick.work.worker
 
 import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
-import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
@@ -12,6 +12,7 @@ import nick.data.model.Position
 import nick.data.model.Search
 import nick.repository.PositionsRepository
 import nick.repository.SearchesRepository
+import nick.work.util.NotificationUtil
 import timber.log.Timber
 
 class CheckNewPositionsWorker @AssistedInject constructor(
@@ -27,6 +28,7 @@ class CheckNewPositionsWorker @AssistedInject constructor(
     companion object {
         const val KEY_NAVIGATION_RES = "navigation_graph"
         const val KEY_DESTINATION_ID = "destination_id"
+        const val KEY_SMALL_ICON = "small_icon"
     }
 
     override fun doWork(): Result {
@@ -54,13 +56,14 @@ class CheckNewPositionsWorker @AssistedInject constructor(
             Timber.d("${toUpdate.size} saved filters were found to have new results")
             searchesRepository.updateBlocking(toUpdate)
             with(inputData) {
+                @DrawableRes val smallIcon = getInt(KEY_SMALL_ICON, -1)
                 @NavigationRes val navigationRes = getInt(KEY_NAVIGATION_RES, -1)
                 @IdRes val destinationId = getInt(KEY_DESTINATION_ID, -1)
 
-                if (navigationRes == -1 || destinationId == -1) {
-                    error("navigation ids weren't set properly")
+                if (smallIcon == -1 || navigationRes == -1 || destinationId == -1) {
+                    error("Resource ids weren't set properly")
                 } else {
-                    postDeepLinkNotification(navigationRes, destinationId)
+                    postDeepLinkNotification(smallIcon, navigationRes, destinationId)
                 }
             }
         }
@@ -68,10 +71,11 @@ class CheckNewPositionsWorker @AssistedInject constructor(
         return Result.success()
     }
 
-    private fun postDeepLinkNotification(@NavigationRes navigationRes: Int, @IdRes destination: Int) {
-        val pendingIntent = NavDeepLinkBuilder(applicationContext)
-            .setGraph(navigationRes)
-            .setDestination(destination)
-            .createPendingIntent()
+    private fun postDeepLinkNotification(
+        @DrawableRes smallIcon: Int,
+        @NavigationRes navigationRes: Int,
+        @IdRes destination: Int
+    ) {
+        NotificationUtil.postDeepLinkNotification(applicationContext, smallIcon, navigationRes, destination)
     }
 }

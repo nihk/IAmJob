@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
 import androidx.lifecycle.Observer
@@ -98,11 +99,26 @@ class NotificationsFragment : BaseFragment() {
     }
 
     private fun enqueueWork(position: Int) {
-        enqueueWork(position, R.navigation.iamjob_navigation, R.id.notifications_dest)
+        enqueueWork(
+            position,
+            R.drawable.ic_launcher_foreground,
+            R.navigation.iamjob_navigation,
+            R.id.notifications_dest
+        )
     }
 
-    private fun enqueueWork(position: Int, @NavigationRes navigationRes: Int, @IdRes destinationId: Int) {
-        checkNewPositionsEnqueuer.enqueueWork(getDaysInterval(position), navigationRes, destinationId)
+    private fun enqueueWork(
+        position: Int,
+        @DrawableRes smallIcon: Int,
+        @NavigationRes navigationRes: Int,
+        @IdRes destinationId: Int
+    ) {
+        checkNewPositionsEnqueuer.enqueueWork(
+            getDaysInterval(position),
+            smallIcon,
+            navigationRes,
+            destinationId
+        )
     }
 
     private fun getDaysInterval(position: Int) = when (position) {
