@@ -35,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textIsSelectable="true"
             app:layout_constrainedWidth="true"
             tools:text="Senior Android Developer plus some really long extra text" />
 
@@ -43,7 +42,6 @@
             android:id="@+id/company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textIsSelectable="true"
             app:layout_constrainedWidth="true"
             tools:text="Google" />
 
@@ -51,7 +49,6 @@
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textIsSelectable="true"
             app:layout_constrainedWidth="true"
             tools:text="Toronto, Canada" />
 
@@ -73,7 +70,6 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:textIsSelectable="true"
         android:textSize="12sp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
