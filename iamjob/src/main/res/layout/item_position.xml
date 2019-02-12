@@ -26,7 +26,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/save_position"
+        app:layout_constraintEnd_toStartOf="@+id/barrier"
         app:layout_constraintStart_toEndOf="@id/company_logo"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -52,24 +52,40 @@
             app:layout_constrainedWidth="true"
             tools:text="Toronto, Canada" />
 
-        <TextView
-            android:id="@+id/time_ago"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="12sp"
-            app:layout_constrainedWidth="true"
-            tools:text="36 days ago" />
-
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="time_ago,save_position"
+        tools:layout_editor_absoluteX="403dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/time_ago"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/barrier"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="36 days ago" />
 
     <ImageView
         android:id="@+id/save_position"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/text_container"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_ago"
         app:srcCompat="@drawable/ic_saved" />
 
     <View
