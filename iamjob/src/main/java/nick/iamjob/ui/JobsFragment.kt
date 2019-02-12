@@ -164,8 +164,10 @@ class JobsFragment
 
         positionsViewModel.error.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
-                ErrorDialogFragment.create(it.message)
-                    .show(childFragmentManager, ErrorDialogFragment.TAG)
+                if (childFragmentManager.findFragmentByTag(ErrorDialogFragment.TAG) == null) {
+                    ErrorDialogFragment.create(it.message)
+                        .show(childFragmentManager, ErrorDialogFragment.TAG)
+                }
             }
         })
 
