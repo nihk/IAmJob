@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.annotation.IdRes
+import androidx.annotation.NavigationRes
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -96,7 +98,11 @@ class NotificationsFragment : BaseFragment() {
     }
 
     private fun enqueueWork(position: Int) {
-        checkNewPositionsEnqueuer.enqueueWork(getDaysInterval(position))
+        enqueueWork(position, R.navigation.iamjob_navigation, R.id.notifications_dest)
+    }
+
+    private fun enqueueWork(position: Int, @NavigationRes navigationRes: Int, @IdRes destinationId: Int) {
+        checkNewPositionsEnqueuer.enqueueWork(getDaysInterval(position), navigationRes, destinationId)
     }
 
     private fun getDaysInterval(position: Int) = when (position) {

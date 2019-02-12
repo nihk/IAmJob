@@ -1,6 +1,9 @@
 package nick.work.worker
 
 import android.content.Context
+import androidx.annotation.IdRes
+import androidx.annotation.NavigationRes
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
@@ -21,6 +24,11 @@ class CheckNewPositionsWorker @AssistedInject constructor(
     @AssistedInject.Factory
     interface Factory : ChildWorkerFactory
 
+    companion object {
+        const val KEY_NAVIGATION_RES = "navigation_graph"
+        const val KEY_DESTINATION_ID = "destination_id"
+    }
+
     override fun doWork(): Result {
         Timber.d("Starting work to check for new positions")
         val subscribedSearches = searchesRepository.queryAllBlocking()
@@ -33,8 +41,8 @@ class CheckNewPositionsWorker @AssistedInject constructor(
                 .onErrorReturnItem(emptyList())
                 .blockingGet()
 
-            val numNewResults = positions.filter {
-                    position ->  position.createdAt > search.lastTimeUserSearched
+            val numNewResults = positions.filter { position ->
+                position.createdAt > search.lastTimeUserSearched
             }.size
 
             if (numNewResults > 0) {
@@ -42,11 +50,28 @@ class CheckNewPositionsWorker @AssistedInject constructor(
             }
         }
 
-        Timber.d("Found new results for ${toUpdate.size} saved filters")
-        searchesRepository.updateBlocking(toUpdate)
+        if (toUpdate.isNotEmpty()) {
+            Timber.d("${toUpdate.size} saved filters were found to have new results")
+            searchesRepository.updateBlocking(toUpdate)
+            with(inputData) {
+                @NavigationRes val navigationRes = getInt(KEY_NAVIGATION_RES, -1)
+                @IdRes val destinationId = getInt(KEY_DESTINATION_ID, -1)
 
-        // todo: if toUpdate.size > 0, then create a notification that deep links to NotificationFragment
+                if (navigationRes == -1 || destinationId == -1) {
+                    error("navigation ids weren't set properly")
+                } else {
+                    postDeepLinkNotification(navigationRes, destinationId)
+                }
+            }
+        }
 
         return Result.success()
+    }
+
+    private fun postDeepLinkNotification(@NavigationRes navigationRes: Int, @IdRes destination: Int) {
+        val pendingIntent = NavDeepLinkBuilder(applicationContext)
+            .setGraph(navigationRes)
+            .setDestination(destination)
+            .createPendingIntent()
     }
 }
