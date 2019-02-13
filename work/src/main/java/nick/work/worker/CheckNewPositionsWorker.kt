@@ -8,17 +8,12 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import nick.data.model.Position
-import nick.data.model.Search
-import nick.repository.PositionsRepository
-import nick.repository.SearchesRepository
 import timber.log.Timber
 
 class CheckNewPositionsWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParameters: WorkerParameters,
-    private val positionsRepository: PositionsRepository,
-    private val searchesRepository: SearchesRepository,
+    private val searchUpdater: SearchUpdater,
     private val newPositionsNotifier: NewPositionsNotifier
 ) : Worker(context, workerParameters) {
 
@@ -33,28 +28,12 @@ class CheckNewPositionsWorker @AssistedInject constructor(
 
     override fun doWork(): Result {
         Timber.d("Starting work to check for new positions")
-        val subscribedSearches = searchesRepository.queryAllBlocking()
-            .filter(Search::isSubscribed)
 
-        val toUpdate = mutableListOf<Search>()
-
-        subscribedSearches.forEach { search ->
-            val positions: List<Position> = positionsRepository.search(search)
-                .onErrorReturnItem(emptyList())
-                .blockingGet()
-
-            val numNewResults = positions.filter { position ->
-                position.createdAt > search.lastTimeUserSearched
-            }.size
-
-            if (numNewResults > 0) {
-                toUpdate.add(search.copy(numNewResults = numNewResults))
-            }
-        }
+        val toUpdate = searchUpdater.findSearchesNeedingUpdating()
 
         if (toUpdate.isNotEmpty()) {
             Timber.d("${toUpdate.size} saved filters were found to have new results")
-            searchesRepository.updateBlocking(toUpdate)
+            searchUpdater.updateSearches(toUpdate)
             with(inputData) {
                 @DrawableRes val smallIcon = getInt(KEY_SMALL_ICON, -1)
                 @NavigationRes val navigationRes = getInt(KEY_NAVIGATION_RES, -1)
