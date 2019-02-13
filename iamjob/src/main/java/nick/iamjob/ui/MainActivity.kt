@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import nick.iamjob.R
 import nick.ui.ToolbarSetter
 
-// todo: test coverage - compare with how android-sunflower app did its testing
 class MainActivity
     : DaggerAppCompatActivity()
     , ToolbarSetter {
