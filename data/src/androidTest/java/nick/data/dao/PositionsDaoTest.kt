@@ -69,4 +69,18 @@ class PositionsDaoTest {
 
         Assert.assertNull(deletedEphemeralPosition)
     }
+
+    @Test
+    fun insertWhileReconcilingCachedPositions_numFreshPositions() {
+        val viewedPosition = createPosition("1", hasViewed = true)
+        val savedPosition = createPosition("2", isSaved = true)
+        val ephemeralPosition = createPosition("3")
+        positionsDao.insert(listOf(viewedPosition, savedPosition, ephemeralPosition))
+
+        val newPosition = createPosition("2")
+        positionsDao.insertWhileReconcilingCachedPositions(listOf(newPosition), true)
+        val freshPositions = getValue(positionsDao.queryFresh())
+
+        Assert.assertEquals(1, freshPositions.size)
+    }
 }
