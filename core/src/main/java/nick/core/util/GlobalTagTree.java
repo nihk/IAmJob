@@ -1,4 +1,4 @@
-package nick.iamjob.util;
+package nick.core.util;
 
 import android.util.Log;
 

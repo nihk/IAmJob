@@ -20,7 +20,8 @@ import nick.work.di.WorkModule
         DataModule::class,
         UiModule::class,
         LocationModule::class,
-        WorkModule::class
+        WorkModule::class,
+        InitializerModule::class
     ]
 )
 class ApplicationModule {
