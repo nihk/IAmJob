@@ -36,6 +36,7 @@
                     tools:text="android | toronto" />
 
                 <ImageView
+                    android:contentDescription="@string/clear_filter_content_desc"
                     android:id="@+id/clear_filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
