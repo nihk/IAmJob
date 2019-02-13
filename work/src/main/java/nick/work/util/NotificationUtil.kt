@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
 
+// fixme: these constants aren't very generic
 const val CHANNEL_NAME = "New positions"
 const val CHANNEL_DESCRIPTION =
     "Results for your subscriptions that have appeared since your last search"
