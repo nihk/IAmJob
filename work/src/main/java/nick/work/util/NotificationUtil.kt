@@ -10,15 +10,7 @@ import androidx.annotation.NavigationRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
-
-// fixme: these constants aren't very generic
-const val CHANNEL_NAME = "New positions"
-const val CHANNEL_DESCRIPTION =
-    "Results for your subscriptions that have appeared since your last search"
-const val CHANNEL_ID = "new_positions"
-const val NOTIFICATION_ID = 0x666
-const val NOTIFICATION_TITLE = "New positions!"
-const val NOTIFICATION_MESSAGE = "Looks like some new positions have been posted."
+import nick.work.R
 
 object NotificationUtil {
 
@@ -30,8 +22,12 @@ object NotificationUtil {
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance)
-            channel.description = CHANNEL_DESCRIPTION
+            val channel = NotificationChannel(
+                context.getString(R.string.channel_id),
+                context.getString(R.string.channel_name),
+                importance
+            )
+            channel.description = context.getString(R.string.channel_description)
 
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -44,15 +40,16 @@ object NotificationUtil {
             .setDestination(destination)
             .createPendingIntent()
 
-        val builder: NotificationCompat.Builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(smallIcon)
-            .setContentTitle(NOTIFICATION_TITLE)
-            .setContentText(NOTIFICATION_MESSAGE)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setVibrate(LongArray(0))
-            .setContentIntent(pendingIntent)
+        val builder: NotificationCompat.Builder =
+            NotificationCompat.Builder(context, context.getString(R.string.channel_id))
+                .setSmallIcon(smallIcon)
+                .setContentTitle(context.getString(R.string.notification_title))
+                .setContentText(context.getString(R.string.notification_message))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setVibrate(LongArray(0))
+                .setContentIntent(pendingIntent)
 
         NotificationManagerCompat.from(context)
-            .notify(NOTIFICATION_ID, builder.build())
+            .notify(context.resources.getInteger(R.integer.notification_id), builder.build())
     }
 }

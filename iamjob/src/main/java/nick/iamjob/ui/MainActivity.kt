@@ -11,7 +11,8 @@ import nick.ui.ToolbarSetter
 
 // todo: test coverage - compare with how android-sunflower app did its testing
 // todo: logo of app for activity window background or just a color background at least
-// todo: crashlytics
+// todo: confirm notifications are working
+// todo: application icon
 class MainActivity
     : DaggerAppCompatActivity()
     , ToolbarSetter {

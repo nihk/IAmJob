@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">work</string>
+    <string name="channel_name">New jobs</string>
+    <string name="channel_description">Results for your subscriptions that have appeared since your last search</string>
+    <string name="channel_id">new_positions</string>
+    <string name="notification_title">New jobs!</string>
+    <string name="notification_message">"Looks like some new positions have been posted."</string>
 </resources>
