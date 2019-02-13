@@ -101,7 +101,7 @@ class NotificationsFragment : BaseFragment() {
     private fun enqueueWork(position: Int) {
         enqueueWork(
             position,
-            R.drawable.ic_launcher_foreground,
+            R.drawable.ic_jobs,
             R.navigation.iamjob_navigation,
             R.id.notifications_dest
         )
