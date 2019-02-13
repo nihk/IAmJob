@@ -27,7 +27,7 @@ abstract class PositionsDao : BaseDao<Position> {
     abstract fun deleteNonCached()
 
     @Query("SELECT * FROM positions WHERE id = :id")
-    abstract fun positionById(id: String): LiveData<Position>
+    abstract fun positionById(id: String): LiveData<Position?>
 
     @Query("SELECT * FROM positions WHERE id IN (:ids)")
     abstract fun positionsByIdsBlocking(ids: List<String>): List<Position>

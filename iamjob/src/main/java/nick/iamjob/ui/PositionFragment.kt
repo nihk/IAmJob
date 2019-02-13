@@ -95,7 +95,7 @@ class PositionFragment : BaseFragment() {
 
         viewModel.positionById(args.position.id).observe(viewLifecycleOwner, Observer {
             currentPositionState = it
-            Timber.d("Got updated Position from database. isSaved: ${it.isSaved}")
+            Timber.d("Got updated Position from database. isSaved: ${it?.isSaved}")
         })
     }
 
