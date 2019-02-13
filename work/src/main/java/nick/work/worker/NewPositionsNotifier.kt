@@ -1,4 +1,4 @@
-package nick.work.util
+package nick.work.worker
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,12 +10,15 @@ import androidx.annotation.NavigationRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.NavDeepLinkBuilder
+import nick.core.di.ApplicationContext
 import nick.work.R
+import javax.inject.Inject
 
-object NotificationUtil {
+class NewPositionsNotifier @Inject constructor(
+    @ApplicationContext private val applicationContext: Context
+) {
 
     fun postDeepLinkNotification(
-        context: Context,
         @DrawableRes smallIcon: Int,
         @NavigationRes navigationRes: Int,
         @IdRes destination: Int
@@ -23,33 +26,33 @@ object NotificationUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(
-                context.getString(R.string.channel_id),
-                context.getString(R.string.channel_name),
+                applicationContext.getString(R.string.channel_id),
+                applicationContext.getString(R.string.channel_name),
                 importance
             )
-            channel.description = context.getString(R.string.channel_description)
+            channel.description = applicationContext.getString(R.string.channel_description)
 
             val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+                applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
             notificationManager?.createNotificationChannel(channel)
         }
 
-        val pendingIntent = NavDeepLinkBuilder(context)
+        val pendingIntent = NavDeepLinkBuilder(applicationContext)
             .setGraph(navigationRes)
             .setDestination(destination)
             .createPendingIntent()
 
         val builder: NotificationCompat.Builder =
-            NotificationCompat.Builder(context, context.getString(R.string.channel_id))
+            NotificationCompat.Builder(applicationContext, applicationContext.getString(R.string.channel_id))
                 .setSmallIcon(smallIcon)
-                .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(context.getString(R.string.notification_message))
+                .setContentTitle(applicationContext.getString(R.string.notification_title))
+                .setContentText(applicationContext.getString(R.string.notification_message))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVibrate(LongArray(0))
                 .setContentIntent(pendingIntent)
 
-        NotificationManagerCompat.from(context)
-            .notify(context.resources.getInteger(R.integer.notification_id), builder.build())
+        NotificationManagerCompat.from(applicationContext)
+            .notify(applicationContext.resources.getInteger(R.integer.notification_id), builder.build())
     }
 }

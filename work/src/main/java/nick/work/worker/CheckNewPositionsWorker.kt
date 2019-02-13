@@ -12,14 +12,14 @@ import nick.data.model.Position
 import nick.data.model.Search
 import nick.repository.PositionsRepository
 import nick.repository.SearchesRepository
-import nick.work.util.NotificationUtil
 import timber.log.Timber
 
 class CheckNewPositionsWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParameters: WorkerParameters,
     private val positionsRepository: PositionsRepository,
-    private val searchesRepository: SearchesRepository
+    private val searchesRepository: SearchesRepository,
+    private val newPositionsNotifier: NewPositionsNotifier
 ) : Worker(context, workerParameters) {
 
     @AssistedInject.Factory
@@ -76,6 +76,10 @@ class CheckNewPositionsWorker @AssistedInject constructor(
         @NavigationRes navigationRes: Int,
         @IdRes destination: Int
     ) {
-        NotificationUtil.postDeepLinkNotification(applicationContext, smallIcon, navigationRes, destination)
+        newPositionsNotifier.postDeepLinkNotification(
+            smallIcon,
+            navigationRes,
+            destination
+        )
     }
 }
