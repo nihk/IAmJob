@@ -52,5 +52,7 @@ class PositionsRepository @Inject constructor(
 
     fun queryFreshPositions() = positionsDao.queryFresh()
 
+    fun queryCachedPositionsBlocking() = positionsDao.queryCachedBlocking()
+
     fun positionById(id: String) = positionsDao.positionById(id)
 }

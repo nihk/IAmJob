@@ -17,13 +17,16 @@ class SearchUpdater @Inject constructor(
         val subscribedSearches = searchesRepository.queryAllBlocking()
             .filter(Search::isSubscribed)
 
+        val cachedPositions = positionsRepository.queryCachedPositionsBlocking()
+
         subscribedSearches.forEach { search ->
-            val positions: List<Position> = positionsRepository.search(search)
+            val fetchedPositions: List<Position> = positionsRepository.search(search)
                 .onErrorReturnItem(emptyList())
                 .blockingGet()
 
-            val numNewResults = positions.filter { position ->
-                position.createdAt > search.lastTimeUserSearched
+            val numNewResults = fetchedPositions.filter { fetchedPosition ->
+                fetchedPosition.createdAt > search.lastTimeUserSearched
+                        && !isCachedPosition(fetchedPosition, cachedPositions)
             }.size
 
             if (numNewResults > 0) {
@@ -33,6 +36,9 @@ class SearchUpdater @Inject constructor(
 
         return toUpdate
     }
+
+    private fun isCachedPosition(position: Position, cachedPositions: List<Position>) =
+        cachedPositions.find { it.id == position.id } != null
 
     fun updateSearches(searches: List<Search>) {
         searchesRepository.updateBlocking(searches)

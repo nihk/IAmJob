@@ -26,6 +26,9 @@ abstract class PositionsDao : BaseDao<Position> {
     @Query("DELETE FROM positions WHERE has_viewed = 0 AND is_saved = 0")
     abstract fun deleteNonCached()
 
+    @Query("SELECT * FROM positions WHERE is_saved = 1 OR has_viewed = 1")
+    abstract fun queryCachedBlocking(): List<Position>
+
     @Query("SELECT * FROM positions WHERE id = :id")
     abstract fun positionById(id: String): LiveData<Position?>
 
