@@ -8,8 +8,8 @@ abstract class BaseRxViewModel : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
 
-    protected fun addDisposable(d: Disposable) {
-        compositeDisposable.add(d)
+    protected fun addDisposable(d: Disposable?) {
+        d?.let { compositeDisposable.add(it) }
     }
 
     override fun onCleared() {
