@@ -51,6 +51,7 @@ class NewPositionsNotifier @Inject constructor(
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVibrate(LongArray(0))
                 .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
 
         NotificationManagerCompat.from(applicationContext)
             .notify(applicationContext.resources.getInteger(R.integer.notification_id), builder.build())
