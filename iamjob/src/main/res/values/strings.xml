@@ -24,7 +24,7 @@
         <item>Weekly</item>
         <item>Monthly</item>
     </string-array>
-    <string name="new_results">%1$d new jobs(s)!</string>
+    <string name="new_results">%1$d new job(s)!</string>
     <string name="clear_filter_content_desc">Clear filter</string>
     <string name="toggle_subscription_content_desc">Toggle subscription</string>
     <string name="save_position_content_desc">Save position</string>
