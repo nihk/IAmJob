@@ -12,7 +12,6 @@ import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.Spy
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 
@@ -25,7 +24,6 @@ class PositionsViewModelTest {
     @Mock
     lateinit var repository: PositionsRepository
 
-    @Spy
     @InjectMocks
     lateinit var viewModel: PositionsViewModel
 
