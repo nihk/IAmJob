@@ -4,11 +4,13 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavDeepLinkBuilder
 import nick.core.di.ApplicationContext
 import nick.work.R
@@ -21,7 +23,8 @@ class NewPositionsNotifier @Inject constructor(
     fun postDeepLinkNotification(
         @DrawableRes smallIcon: Int,
         @NavigationRes navigationRes: Int,
-        @IdRes destination: Int
+        @IdRes destination: Int,
+        @ColorRes color: Int
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val importance = NotificationManager.IMPORTANCE_HIGH
@@ -51,6 +54,7 @@ class NewPositionsNotifier @Inject constructor(
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVibrate(LongArray(0))
                 .setContentIntent(pendingIntent)
+                .setColor(ContextCompat.getColor(applicationContext, color))
                 .setAutoCancel(true)
 
         NotificationManagerCompat.from(applicationContext)

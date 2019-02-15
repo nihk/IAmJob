@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
@@ -103,7 +104,8 @@ class NotificationsFragment : BaseFragment() {
             position,
             R.drawable.ic_jobs,
             R.navigation.iamjob_navigation,
-            R.id.notifications_dest
+            R.id.notifications_dest,
+            R.color.colorAccent
         )
     }
 
@@ -111,13 +113,15 @@ class NotificationsFragment : BaseFragment() {
         position: Int,
         @DrawableRes smallIcon: Int,
         @NavigationRes navigationRes: Int,
-        @IdRes destinationId: Int
+        @IdRes destinationId: Int,
+        @ColorRes color: Int
     ) {
         checkNewPositionsEnqueuer.enqueueWork(
             getDaysInterval(position),
             smallIcon,
             navigationRes,
-            destinationId
+            destinationId,
+            color
         )
     }
 

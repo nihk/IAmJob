@@ -1,5 +1,6 @@
 package nick.work.worker
 
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
@@ -24,7 +25,8 @@ class CheckNewPositionsEnqueuer @Inject constructor(
         daysInterval: Long,
         @DrawableRes smallIcon: Int,
         @NavigationRes navigationRes: Int,
-        @IdRes destinationId: Int
+        @IdRes destinationId: Int,
+        @ColorRes color: Int
     ) {
         Timber.d("Maybe enqueuing work for daysInterval: $daysInterval")
 
@@ -32,6 +34,7 @@ class CheckNewPositionsEnqueuer @Inject constructor(
             .putInt(CheckNewPositionsWorker.KEY_SMALL_ICON, smallIcon)
             .putInt(CheckNewPositionsWorker.KEY_NAVIGATION_RES, navigationRes)
             .putInt(CheckNewPositionsWorker.KEY_DESTINATION_ID, destinationId)
+            .putInt(CheckNewPositionsWorker.KEY_COLOR, color)
             .build()
 
         workManager.enqueueUniquePeriodicWork(

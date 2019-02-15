@@ -1,6 +1,7 @@
 package nick.work.worker
 
 import android.content.Context
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.NavigationRes
@@ -24,6 +25,7 @@ class CheckNewPositionsWorker @AssistedInject constructor(
         const val KEY_NAVIGATION_RES = "navigation_graph"
         const val KEY_DESTINATION_ID = "destination_id"
         const val KEY_SMALL_ICON = "small_icon"
+        const val KEY_COLOR = "color"
     }
 
     override fun doWork(): Result {
@@ -38,11 +40,12 @@ class CheckNewPositionsWorker @AssistedInject constructor(
                 @DrawableRes val smallIcon = getInt(KEY_SMALL_ICON, -1)
                 @NavigationRes val navigationRes = getInt(KEY_NAVIGATION_RES, -1)
                 @IdRes val destinationId = getInt(KEY_DESTINATION_ID, -1)
+                @ColorRes val color = getInt(KEY_COLOR, -1)
 
-                if (smallIcon == -1 || navigationRes == -1 || destinationId == -1) {
+                if (smallIcon == -1 || navigationRes == -1 || destinationId == -1 || color == -1) {
                     error("Resource ids weren't set properly")
                 } else {
-                    postDeepLinkNotification(smallIcon, navigationRes, destinationId)
+                    postDeepLinkNotification(smallIcon, navigationRes, destinationId, color)
                 }
             }
         }
@@ -53,12 +56,14 @@ class CheckNewPositionsWorker @AssistedInject constructor(
     private fun postDeepLinkNotification(
         @DrawableRes smallIcon: Int,
         @NavigationRes navigationRes: Int,
-        @IdRes destination: Int
+        @IdRes destination: Int,
+        @ColorRes color: Int
     ) {
         newPositionsNotifier.postDeepLinkNotification(
             smallIcon,
             navigationRes,
-            destination
+            destination,
+            color
         )
     }
 }
