@@ -10,3 +10,6 @@
 /captures
 .externalNativeBuild
 iamjob_keystore.jks
+deployment_cert.der
+upload_cert.der
+private_key.pepk
