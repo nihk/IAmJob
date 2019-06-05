@@ -29,6 +29,10 @@ android {
     androidExtensions {
         experimental true
     }
+    packagingOptions {
+        exclude 'META-INF/main.kotlin_module'
+        exclude 'META-INF/core_release.kotlin_module'
+    }
 }
 
 dependencies {
