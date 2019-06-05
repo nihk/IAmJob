@@ -40,7 +40,7 @@ ext {
     junit_version = "4.12"
     test_runner_version = "1.1.1"
     espresso_version = "3.2.0"
-    material_version = "1.1.0-alpha07"
+    material_version = "1.0.0"
     constraint_layout_version = "2.0.0-beta1"
     glide_version = "4.9.0"
     appcompat_version = "1.1.0-beta01"

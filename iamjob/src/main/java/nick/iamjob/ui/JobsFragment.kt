@@ -79,12 +79,11 @@ class JobsFragment
         }
     }
 
-    private val onBackPressedCallback = OnBackPressedCallback {
-        if (!currentFilter.isEmpty()) {
-            onFilterDefined(Search.EMPTY, false)
-            true
-        } else {
-            false
+    private val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            if (!currentFilter.isEmpty()) {
+                onFilterDefined(Search.EMPTY, false)
+            }
         }
     }
 
@@ -175,8 +174,7 @@ class JobsFragment
             }
         })
 
-        val activity: FragmentActivity = requireActivity()
-        activity.addOnBackPressedCallback(onBackPressedCallback)
+        activity?.onBackPressedDispatcher?.addCallback(onBackPressedCallback)
     }
 
     private fun onPositionsFound(positions: List<Position>?) {
@@ -191,8 +189,7 @@ class JobsFragment
 
     override fun onDestroyView() {
         recycler_view.removeOnScrollListener(scrollListener)
-        val activity: FragmentActivity = requireActivity()
-        activity.removeOnBackPressedCallback(onBackPressedCallback)
+        onBackPressedCallback.isEnabled = false
         wasFabHiddenDuringDestroy = filter.isOrWillBeHidden
         super.onDestroyView()
     }
@@ -238,6 +235,7 @@ class JobsFragment
 
     private fun setUiActiveFilter(search: Search) {
         active_filter_container.visibleOrGone(!currentFilter.isEmpty())
+        onBackPressedCallback.isEnabled = !currentFilter.isEmpty()
         active_filter.text = filterStringFormatter.format(search)
     }
 }
