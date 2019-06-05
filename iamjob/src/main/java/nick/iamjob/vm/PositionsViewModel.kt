@@ -7,12 +7,11 @@ import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.Disposable
 import nick.core.util.BaseRxViewModel
-import nick.core.util.Event
+import nick.core.util.NetworkBoundResource
+import nick.core.util.Resource
 import nick.core.util.applySchedulers
 import nick.data.model.Position
 import nick.data.model.Search
-import nick.iamjob.util.PositionsLoadingState
-import nick.data.util.PositionQuery
 import nick.repository.PositionsRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -21,53 +20,41 @@ class PositionsViewModel @Inject constructor(
     private val repository: PositionsRepository
 ) : BaseRxViewModel() {
 
-    private val _loadingState = MutableLiveData<PositionsLoadingState>()
-    private val _error = MutableLiveData<Event<Throwable>>()
-    private val positionsQuery = MutableLiveData<PositionQuery>()
+    private val searchLiveData = MutableLiveData<Search>()
+    private var networkBoundResource: NetworkBoundResource<List<Position>, List<Position>>? = null
+    val positions: LiveData<Resource<List<Position>>> = Transformations.switchMap(searchLiveData) {
+        searchPositions(it)
+    }
+    val savedPositions = repository.querySavedPositions()
+    val noResultsFound = repository.noResultsFound
 
-    val positions: LiveData<List<Position>> = Transformations.switchMap(positionsQuery) {
-        when (it) {
-            is PositionQuery.SavedPositions -> repository.querySavedPositions()
-            is PositionQuery.FreshPositions -> repository.queryFreshPositions()
+    private fun searchPositions(search: Search): LiveData<Resource<List<Position>>> {
+        networkBoundResource?.cancel()
+        return repository.searchPositions(search).let {
+            networkBoundResource = it
+            it.asLiveData()
         }
     }
 
-    val loadingState: LiveData<PositionsLoadingState> get() = _loadingState
-    val error: LiveData<Event<Throwable>> get() = _error
-    val noResultsFound = repository.noResultsFound
+    fun setSearch(search: Search) {
+        this.searchLiveData.value = search
+    }
 
-    fun search(
+    fun maybePaginate(
         search: Search,
-        loadingState: PositionsLoadingState,
-        doneLoadingState: PositionsLoadingState
-    ) {
-        repository.searchThenInsert(search)
-            .applySchedulers()
-            .subscribe(object : CompletableObserver {
-
-                override fun onSubscribe(d: Disposable) {
-                    addDisposable(d)
-                    _loadingState.value = loadingState
-                }
-
-                override fun onComplete() {
-                    _loadingState.value = doneLoadingState
-                    if (loadingState !is PositionsLoadingState.Paginating) {
-                        queryPositions(PositionQuery.FreshPositions)
-                    }
-                }
-
-                override fun onError(e: Throwable) {
-                    Timber.e(e)
-                    _loadingState.value = doneLoadingState
-                    _error.value = Event(e)
-
-                    if (loadingState !is PositionsLoadingState.Paginating) {
-                        // Display cached content if remote fetching failed
-                        queryPositions(PositionQuery.FreshPositions)
-                    }
-                }
-            })
+        visibleItemCount: Int,
+        lastVisibleItem: Int,
+        totalItemCount: Int,
+        itemsFromEndThreshold: Int = 10
+    ): Search {
+        return if (visibleItemCount + lastVisibleItem + itemsFromEndThreshold >= totalItemCount) {
+            val nextPage = search.copy(page = search.page + 1)
+            Timber.d("Paginating $nextPage")
+            setSearch(nextPage)
+            nextPage
+        } else {
+            search
+        }
     }
 
     fun saveOrUnsavePosition(position: Position) {
@@ -96,30 +83,8 @@ class PositionsViewModel @Inject constructor(
 
                 override fun onError(e: Throwable) {
                     Timber.e(e)
-                    _error.value = Event(e)
                 }
             })
-    }
-
-    fun queryPositions(positionQuery: PositionQuery) {
-        this.positionsQuery.value = positionQuery
-    }
-
-    fun maybePaginate(
-        search: Search,
-        visibleItemCount: Int,
-        lastVisibleItem: Int,
-        totalItemCount: Int,
-        itemsFromEndThreshold: Int = 10
-    ): Search {
-        return if (visibleItemCount + lastVisibleItem + itemsFromEndThreshold >= totalItemCount) {
-            val nextPage = search.copy(page = search.page + 1)
-            Timber.d("Paginating $nextPage")
-            search(nextPage, PositionsLoadingState.Paginating, PositionsLoadingState.DonePaginating)
-            nextPage
-        } else {
-            search
-        }
     }
 
     fun positionById(id: String) = repository.positionById(id)

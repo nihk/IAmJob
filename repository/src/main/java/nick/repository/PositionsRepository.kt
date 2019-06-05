@@ -6,6 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import nick.core.di.ApplicationScope
 import nick.core.util.Event
+import nick.core.util.NetworkBoundResource
 import nick.data.dao.PositionsDao
 import nick.data.model.Position
 import nick.data.model.Search
@@ -55,4 +56,27 @@ class PositionsRepository @Inject constructor(
     fun queryCachedPositionsBlocking() = positionsDao.queryCachedBlocking()
 
     fun positionById(id: String) = positionsDao.positionById(id)
+
+    fun searchPositions(search: Search): NetworkBoundResource<List<Position>, List<Position>> {
+        return object : NetworkBoundResource<List<Position>, List<Position>>() {
+
+            override fun loadFromDb(): LiveData<List<Position>> {
+                return queryFreshPositions()
+            }
+
+            override fun createCall(): Single<List<Position>> = with(search) {
+                search(search)
+                    .doOnSuccess {
+                        if (it.isEmpty()) {
+                            Timber.d("No results found for: $search")
+                            _noResultsFound.postValue(Event(Unit))
+                        }
+                    }
+            }
+
+            override fun saveCallResult(item: List<Position>): Completable {
+                return insertWhileReconcilingCachedPositions(item, search.isFirstPage())
+            }
+        }
+    }
 }

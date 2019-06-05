@@ -9,11 +9,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_saved_positions.*
 import nick.data.model.Position
-import nick.data.util.PositionQuery
 import nick.iamjob.R
-import nick.iamjob.vm.PositionsViewModel
 import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
+import nick.iamjob.vm.PositionsViewModel
 import nick.ui.BaseFragment
 import nick.ui.visibleOrGone
 
@@ -41,15 +40,13 @@ class SavedPositionsFragment
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.positions.observe(
+        viewModel.savedPositions.observe(
             viewLifecycleOwner,
             Observer { savedPositions: List<Position>? ->
                 adapter.submitList(savedPositions)
                 nothing_saved_container.visibleOrGone(savedPositions.isNullOrEmpty())
                 progress_bar.visibleOrGone(false)
             })
-
-        viewModel.queryPositions(PositionQuery.SavedPositions)
     }
 
     override fun onPositionAction(positionAction: PositionAction) {

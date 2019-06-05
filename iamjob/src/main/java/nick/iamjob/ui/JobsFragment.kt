@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_jobs.*
+import nick.core.util.Resource
+import nick.data.model.Position
 import nick.data.model.Search
-import nick.data.util.PositionQuery
 import nick.iamjob.R
 import nick.iamjob.util.OnPositionActionListener
 import nick.iamjob.util.PositionAction
-import nick.iamjob.util.PositionsLoadingState
 import nick.iamjob.vm.PositionsViewModel
 import nick.iamjob.vm.SearchesViewModel
 import nick.ui.BaseFragment
@@ -60,7 +60,7 @@ class JobsFragment
             }
 
             if (currentFilter.arePagesExhausted()
-                || positionsViewModel.loadingState.value is PositionsLoadingState.Loading
+                || positionsViewModel.positions.value is Resource.Loading
             ) {
                 return
             }
@@ -102,9 +102,8 @@ class JobsFragment
             } catch (throwable: Throwable) {
                 Search.EMPTY
             }
-            searchThenUpdate(currentFilter)
         } else {
-            savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
+            currentFilter = savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
         }
     }
 
@@ -128,11 +127,7 @@ class JobsFragment
         recycler_view.addOnScrollListener(scrollListener)
         swipe_refresh.setOnRefreshListener {
             currentFilter = currentFilter.toFirstPage()
-            search(
-                currentFilter,
-                onLoading = PositionsLoadingState.SwipeRefreshing,
-                onDoneLoading = PositionsLoadingState.DoneSwipeRefreshing
-            )
+            search(currentFilter)
         }
         if (wasFabHiddenDuringDestroy) {
             filter.hide()
@@ -150,30 +145,26 @@ class JobsFragment
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        positionsViewModel.loadingState.observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is PositionsLoadingState.SimpleFetch -> progress_bar.visibleOrGone(true)
-                is PositionsLoadingState.DoneSimpleFetch -> progress_bar.visibleOrGone(false)
-                is PositionsLoadingState.SwipeRefreshing -> Unit
-                is PositionsLoadingState.DoneSwipeRefreshing -> swipe_refresh.isRefreshing = false
-                is PositionsLoadingState.Paginating -> Unit
-                is PositionsLoadingState.DonePaginating -> Unit
-            }
-            no_results_message.visibleOrGone(false)
-        })
 
-        positionsViewModel.error.observe(viewLifecycleOwner, Observer { event ->
-            event.getContentIfNotHandled()?.let {
-                if (childFragmentManager.findFragmentByTag(ErrorDialogFragment.TAG) == null) {
-                    ErrorDialogFragment.create(it.message)
-                        .show(childFragmentManager, ErrorDialogFragment.TAG)
+        positionsViewModel.positions.observe(viewLifecycleOwner, Observer { resource: Resource<List<Position>> ->
+            when (resource) {
+                is Resource.Loading -> {
+                    swipe_refresh.isRefreshing = true
+                    resource.data?.let(adapter::submitList)
+                }
+                is Resource.Success -> with(resource) {
+                    onPositionsFound(data)
+                    no_results_message.visibleOrGone(data.isNullOrEmpty())
+                }
+                is Resource.Failure -> with(resource) {
+                    onPositionsFound(data)
+
+                    if (childFragmentManager.findFragmentByTag(ErrorDialogFragment.TAG) == null) {
+                        ErrorDialogFragment.create(throwable.message)
+                            .show(childFragmentManager, ErrorDialogFragment.TAG)
+                    }
                 }
             }
-        })
-
-        positionsViewModel.positions.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-            no_results_message.visibleOrGone(it.isEmpty())
         })
 
         positionsViewModel.noResultsFound.observe(viewLifecycleOwner, Observer {
@@ -182,12 +173,15 @@ class JobsFragment
             }
         })
 
-        if (savedInstanceState != null) {
-            positionsViewModel.queryPositions(PositionQuery.FreshPositions)
-        }
+        search(currentFilter)
 
         val activity: FragmentActivity = requireActivity()
         activity.addOnBackPressedCallback(onBackPressedCallback)
+    }
+
+    private fun onPositionsFound(positions: List<Position>?) {
+        swipe_refresh.isRefreshing = false
+        adapter.submitList(positions)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -217,21 +211,15 @@ class JobsFragment
         }
     }
 
-    fun search(
-        search: Search,
-        onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
-        onDoneLoading: PositionsLoadingState = PositionsLoadingState.DoneSimpleFetch
-    ) {
-        positionsViewModel.search(search, onLoading, onDoneLoading)
+    fun search(search: Search) {
+        positionsViewModel.setSearch(search)
     }
 
     fun searchThenUpdate(
         search: Search,
-        onLoading: PositionsLoadingState = PositionsLoadingState.SimpleFetch,
-        onDoneLoading: PositionsLoadingState = PositionsLoadingState.DoneSimpleFetch,
         saveFilterLocally: Boolean = false
     ) {
-        search(search, onLoading, onDoneLoading)
+        search(search)
 
         if (!search.isEmpty()) {
             if (saveFilterLocally) {
