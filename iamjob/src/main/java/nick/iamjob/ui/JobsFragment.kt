@@ -105,6 +105,8 @@ class JobsFragment
         } else {
             currentFilter = savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
         }
+
+        search(currentFilter)
     }
 
     override fun onCreateView(
@@ -172,8 +174,6 @@ class JobsFragment
                 currentFilter = currentFilter.toExhausted()
             }
         })
-
-        search(currentFilter)
 
         val activity: FragmentActivity = requireActivity()
         activity.addOnBackPressedCallback(onBackPressedCallback)
