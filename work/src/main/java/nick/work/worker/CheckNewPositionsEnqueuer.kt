@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val NAME_CHECK_NEW_RESULTS_WORK = "check_new_results_work"
-private const val FLEX_TIME_INTERVAL = 5L
 
 class CheckNewPositionsEnqueuer @Inject constructor(
     private val workManager: WorkManager
@@ -40,7 +39,8 @@ class CheckNewPositionsEnqueuer @Inject constructor(
         workManager.enqueueUniquePeriodicWork(
             NAME_CHECK_NEW_RESULTS_WORK,
             ExistingPeriodicWorkPolicy.KEEP,
-            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(daysInterval, TimeUnit.DAYS, FLEX_TIME_INTERVAL, TimeUnit.MINUTES)
+            PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(daysInterval, TimeUnit.DAYS)
+                .setInitialDelay(daysInterval, TimeUnit.DAYS)
                 .setConstraints(constraints)
                 .setInputData(inputData)
                 .build()

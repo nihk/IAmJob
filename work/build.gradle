@@ -27,7 +27,7 @@ dependencies {
     implementation project(':data')
     implementation project(':networking')
 
-    api "android.arch.work:work-runtime-ktx:$work_version"
+    api "androidx.work:work-runtime-ktx:$work_version"
 
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"

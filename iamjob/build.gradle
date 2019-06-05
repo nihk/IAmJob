@@ -10,8 +10,8 @@ android {
         applicationId "nick.iamjob"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.0.1"
+        versionCode 8
+        versionName "1.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -40,7 +40,7 @@ dependencies {
     implementation project(':repository')
     implementation project(':work')
 
-    implementation "com.android.support:multidex:$multidex_version"
+    implementation "androidx.multidex:multidex:$multidex_version"
     testImplementation "junit:junit:$junit_version"
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation "org.mockito:mockito-inline:$mockito_version"
