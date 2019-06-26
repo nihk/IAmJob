@@ -105,7 +105,7 @@ class JobsFragment
             currentFilter = savedInstanceState.getParcelable(KEY_CURRENT_FILTER) ?: Search.EMPTY
         }
 
-        search(currentFilter)
+        searchThenUpdate(currentFilter)
     }
 
     override fun onCreateView(
@@ -128,7 +128,7 @@ class JobsFragment
         recycler_view.addOnScrollListener(scrollListener)
         swipe_refresh.setOnRefreshListener {
             currentFilter = currentFilter.toFirstPage()
-            search(currentFilter)
+            searchThenUpdate(currentFilter)
         }
         if (wasFabHiddenDuringDestroy) {
             filter.hide()

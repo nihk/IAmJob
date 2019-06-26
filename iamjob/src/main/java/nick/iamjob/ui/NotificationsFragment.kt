@@ -152,11 +152,12 @@ class NotificationsFragment : BaseFragment() {
         // Cached as field so listeners don't hold onto the original, potentially stale Search
         // state that came via bind(Search)
         private var search: Search? = null
+        private val searchNotNull: Search get() = requireNotNull(search)
 
         fun bind(search: Search) {
             this.search = search
 
-            with(search()) {
+            with(searchNotNull) {
                 filter_description.text = description.also {
                     filter_description.visibleOrGone(it.isNotBlank())
                 }
@@ -169,7 +170,7 @@ class NotificationsFragment : BaseFragment() {
                 new_content_container.visibleOrGone(numNewResults > 0)
                 new_content_container.setOnClickListener {
                     findNavController().navigate(
-                        NotificationsFragmentDirections.toJobs().setSearch(search())
+                        NotificationsFragmentDirections.toJobs().setSearch(searchNotNull)
                     )
                 }
                 new_content.text = getString(R.string.new_results, numNewResults)
@@ -183,10 +184,8 @@ class NotificationsFragment : BaseFragment() {
                 // Workaround for this listener firing twice for some unknown reason
                 // See: https://stackoverflow.com/questions/3913687/checkbox-changes-value-twice
                 toggle_notification.setOnCheckedChangeListener(null)
-                viewModel.update(search().copy(isSubscribed = isChecked))
+                viewModel.update(searchNotNull.copy(isSubscribed = isChecked))
             }
         }
-
-        private fun search(): Search = requireNotNull(search)
     }
 }
