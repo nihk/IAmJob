@@ -23,6 +23,11 @@ data class Search @JvmOverloads constructor(
     @Ignore val page: Int = 1
 ) : Parcelable {
 
+    val isEmpty: Boolean
+        get() = this.description == EMPTY.description
+                && this.location == EMPTY.location
+                && this.isFullTime == EMPTY.isFullTime
+
     companion object {
         val EMPTY = Search(
             description = "",
@@ -40,13 +45,6 @@ data class Search @JvmOverloads constructor(
         const val COL_IS_SUBSCRIBED = "is_subscribed"
         const val COL_NUM_NEW_RESULTS = "num_new_results"
         const val COL_LAST_TIME_USER_SEARCHED = "last_time_user_searched"
-    }
-
-    // Ignores all other fields
-    fun isEmpty(): Boolean {
-        return this.description == EMPTY.description
-                && this.location == EMPTY.location
-                && this.isFullTime == EMPTY.isFullTime
     }
 
     fun arePagesExhausted() = page == -1

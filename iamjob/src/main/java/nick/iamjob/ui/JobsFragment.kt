@@ -81,7 +81,7 @@ class JobsFragment
 
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
-            if (!currentFilter.isEmpty()) {
+            if (!currentFilter.isEmpty) {
                 onFilterDefined(Search.EMPTY, false)
             }
         }
@@ -218,7 +218,7 @@ class JobsFragment
     ) {
         search(search)
 
-        if (!search.isEmpty()) {
+        if (!search.isEmpty) {
             if (saveFilterLocally) {
                 searchesViewModel.insertOrUpdate(search)
             } else {
@@ -234,8 +234,8 @@ class JobsFragment
     }
 
     private fun setUiActiveFilter(search: Search) {
-        active_filter_container.visibleOrGone(!currentFilter.isEmpty())
-        onBackPressedCallback.isEnabled = !currentFilter.isEmpty()
+        active_filter_container.visibleOrGone(!currentFilter.isEmpty)
+        onBackPressedCallback.isEnabled = !currentFilter.isEmpty
         active_filter.text = filterStringFormatter.format(search)
     }
 }
