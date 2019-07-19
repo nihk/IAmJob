@@ -17,7 +17,5 @@ class IAmJobApplication : DaggerApplication() {
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> =
-        DaggerApplicationComponent.builder()
-            .application(this)
-            .build()
+        DaggerApplicationComponent.factory().application(this)
 }

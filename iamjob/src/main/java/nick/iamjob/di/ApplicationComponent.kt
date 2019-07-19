@@ -18,12 +18,8 @@ import nick.iamjob.IAmJobApplication
 )
 interface ApplicationComponent : AndroidInjector<IAmJobApplication> {
 
-    @Component.Builder
-    interface Builder {
-
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        fun build(): ApplicationComponent
+    @Component.Factory
+    interface Factory {
+        fun application(@BindsInstance application: Application): ApplicationComponent
     }
 }
