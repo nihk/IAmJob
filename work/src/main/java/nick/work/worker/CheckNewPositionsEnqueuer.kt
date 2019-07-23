@@ -25,7 +25,8 @@ class CheckNewPositionsEnqueuer @Inject constructor(
         @DrawableRes smallIcon: Int,
         @NavigationRes navigationRes: Int,
         @IdRes destinationId: Int,
-        @ColorRes color: Int
+        @ColorRes color: Int,
+        replaceExistingWork: Boolean
     ) {
         Timber.d("Maybe enqueuing work for daysInterval: $daysInterval")
 
@@ -36,9 +37,15 @@ class CheckNewPositionsEnqueuer @Inject constructor(
             .putInt(CheckNewPositionsWorker.KEY_COLOR, color)
             .build()
 
+        val existingPeriodicWorkPolicy = if (replaceExistingWork) {
+            ExistingPeriodicWorkPolicy.REPLACE
+        } else {
+            ExistingPeriodicWorkPolicy.KEEP
+        }
+
         workManager.enqueueUniquePeriodicWork(
             NAME_CHECK_NEW_RESULTS_WORK,
-            ExistingPeriodicWorkPolicy.KEEP,
+            existingPeriodicWorkPolicy,
             PeriodicWorkRequestBuilder<CheckNewPositionsWorker>(daysInterval, TimeUnit.DAYS)
                 .setInitialDelay(daysInterval, TimeUnit.DAYS)
                 .setConstraints(constraints)

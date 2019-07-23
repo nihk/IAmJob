@@ -71,7 +71,7 @@ class NotificationsFragment : BaseFragment() {
                     operationState.observe(viewLifecycleOwner, Observer {
                         if (it is Operation.State.SUCCESS) {
                             Timber.d("Successfully cancelled work")
-                            enqueueWork(position)
+                            enqueueWork(position, replaceExistingWork = true)
                         }
                     })
                 }
@@ -96,16 +96,17 @@ class NotificationsFragment : BaseFragment() {
 
         // Start the periodic work immediately as the default - daily. If the user has no
         // subscriptions, this is just a no-op.
-        enqueueWork(0)
+        enqueueWork(0, false)
     }
 
-    private fun enqueueWork(position: Int) {
+    private fun enqueueWork(position: Int, replaceExistingWork: Boolean) {
         enqueueWork(
             position,
             R.drawable.ic_jobs,
             R.navigation.iamjob_navigation,
             R.id.notifications_dest,
-            R.color.colorAccent
+            R.color.colorAccent,
+            replaceExistingWork
         )
     }
 
@@ -114,14 +115,16 @@ class NotificationsFragment : BaseFragment() {
         @DrawableRes smallIcon: Int,
         @NavigationRes navigationRes: Int,
         @IdRes destinationId: Int,
-        @ColorRes color: Int
+        @ColorRes color: Int,
+        replaceExistingWork: Boolean
     ) {
         checkNewPositionsEnqueuer.enqueueWork(
             getDaysInterval(position),
             smallIcon,
             navigationRes,
             destinationId,
-            color
+            color,
+            replaceExistingWork
         )
     }
 
