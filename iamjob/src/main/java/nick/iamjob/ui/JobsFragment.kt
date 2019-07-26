@@ -156,6 +156,7 @@ class JobsFragment
                 is Resource.Success -> with(resource) {
                     onPositionsFound(data)
                     no_results_message.visibleOrGone(data.isNullOrEmpty())
+                    scrollToTop()
                 }
                 is Resource.Failure -> with(resource) {
                     onPositionsFound(data)
@@ -175,6 +176,17 @@ class JobsFragment
         })
 
         activity?.onBackPressedDispatcher?.addCallback(onBackPressedCallback)
+    }
+
+    private fun scrollToTop() {
+        if (!positionsViewModel.shouldScrollToTop) {
+            return
+        }
+
+        // Wait for ListAdapter::submitList to finish
+        recycler_view.post {
+            recycler_view.smoothScrollToPosition(0)
+        }
     }
 
     private fun onPositionsFound(positions: List<Position>?) {
@@ -209,6 +221,7 @@ class JobsFragment
     }
 
     fun search(search: Search) {
+        positionsViewModel.shouldScrollToTop = true
         positionsViewModel.setSearch(search)
     }
 

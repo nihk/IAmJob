@@ -27,6 +27,7 @@ class PositionsViewModel @Inject constructor(
     }
     val savedPositions = repository.querySavedPositions()
     val noResultsFound = repository.noResultsFound
+    var shouldScrollToTop = true
 
     private fun searchPositions(search: Search): LiveData<Resource<List<Position>>> {
         networkBoundResource?.cancel()
@@ -51,6 +52,7 @@ class PositionsViewModel @Inject constructor(
             val nextPage = search.copy(page = search.page + 1)
             Timber.d("Paginating $nextPage")
             setSearch(nextPage)
+            shouldScrollToTop = false
             nextPage
         } else {
             search
